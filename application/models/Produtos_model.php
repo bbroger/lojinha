@@ -25,4 +25,32 @@ class Produtos_model extends CI_Model
     $data[coluna do banco]= valor;
         $this->db->insert_batch('list_value', $data);
     */
+
+    public function tabela_produtos()
+    {
+        $this->db->select('*')->from('produtos')->order_by('id_produto', 'DESC');
+
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+
+    public function salvar_produto($data)
+    {
+        $this->db->insert('produtos', $data);
+    }
+
+    public function editar_produto($data, $id)
+    {
+        $this->db->where('id_produto', $id);
+        $this->db->update('produtos', $data);
+
+        if($this->db->affected_rows() > 0)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 }
