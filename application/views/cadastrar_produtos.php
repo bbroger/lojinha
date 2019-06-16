@@ -101,7 +101,7 @@
                                 <div class="form-row">
                                     <div class="col">
                                         <label for="valor">Valor</label>
-                                        <input type="text" class="form-control" id="valor" data-thousands="." value="" placeholder="">
+                                        <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="">
                                     </div>
                                     <div class="col">
                                         <label for="quantidade">Quantidade</label>

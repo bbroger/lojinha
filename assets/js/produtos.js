@@ -115,7 +115,7 @@ $("#salvar_produto").click(function () {
         data: {
             nome: nome.val(),
             descricao: descricao.val(),
-            valor: valor.val(),
+            valor: valor.val().replace(",", ""),
             quantidade: quantidade.val()
         },
         dataType: "Json"
