@@ -53,14 +53,14 @@ class Produtos extends CI_Controller
 
     public function editar_produto()
     {
-        $this->form_validation->set_rules("id_produto", "<b>ID produto</b>", "trim|required|max_length[11]");
-        $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]|max_length[255]");
-        $this->form_validation->set_rules("descricao", "<b>Nome Descrição</b>", "trim|min_length[3]|max_length[255]");
-        $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|required|decimal|min_length[3]|max_length[6]");
-        $this->form_validation->set_rules("quantidade", "<b>Quantidade</b>", "trim|integer|max_length[11]");
+        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]");
+        $this->form_validation->set_rules("nome", "Nome", "trim|required|min_length[3]|max_length[255]");
+        $this->form_validation->set_rules("descricao", "Descrição", "trim|min_length[3]|max_length[255]");
+        $this->form_validation->set_rules("valor", "Valor", "trim|required|decimal|min_length[3]");
+        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|integer|max_length[11]");
 
         if (!$this->form_validation->run()) {
-            $data['msg'] = validation_errors();
+            $data['msg'] = validation_errors(" "," ");
             $data['status'] = false;
             echo json_encode($data);
 
@@ -78,7 +78,7 @@ class Produtos extends CI_Controller
                 $data['status'] = true;
                 echo json_encode($data);
             } else{
-                $data_erro['msg'] = "Erro! O id_produto não foi localizado";
+                $data_erro['msg'] = "Erro! O id_produto ($id_produto) não foi localizado";
                 $data_erro['status'] = false;
                 echo json_encode($data_erro);
             }

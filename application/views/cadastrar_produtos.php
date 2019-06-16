@@ -28,14 +28,14 @@
         </button>
         <div class="navbar-collapse justify-content-md-center collapse" id="navbarsExample10" style="">
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url(); ?>">Caixa</a>
+                </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Centered nav only <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#">Cadastrar produto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Disabled</a>
+                    <a class="nav-link disabled" href="#">Relatórios</a>
                 </li>
             </ul>
         </div>

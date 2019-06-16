@@ -26,25 +26,25 @@ function tabela_produto() {
 
 function edit(id_produto) {
     var id_produtoNome = $("#nome" + id_produto);
-    var inputNome = "<input type='text' class='form-control' value='" + id_produtoNome.html() + "'>";
+    var inputNome = "<input type='text' class='form-control editRow" + id_produto + "' value='" + id_produtoNome.html() + "'>";
     id_produtoNome.html("");
     id_produtoNome.html(inputNome);
 
     var id_produtoDescricao = $("#descricao" + id_produto);
-    var inputDescricao = "<input type='text' class='form-control' value='" + id_produtoDescricao.html() + "'>";
+    var inputDescricao = "<input type='text' class='form-control editRow" + id_produto + "' value='" + id_produtoDescricao.html() + "'>";
     id_produtoDescricao.html("");
     id_produtoDescricao.html(inputDescricao);
 
     var id_produtoValor = $("#valor" + id_produto);
     var pegaValor = id_produtoValor.html().replace(",", ".").replace("R$ ", "");
-    var inputValor = "<input type='text' class='form-control' style='width: 70%; margin: auto auto;' data-decimal='.' id='money" + id_produto + "' value='" + pegaValor + "'>";
+    var inputValor = "<input type='text' class='form-control editRow" + id_produto + "' style='width: 70%; margin: auto auto;' data-decimal='.' id='money" + id_produto + "' value='" + pegaValor + "'>";
     id_produtoValor.html("");
     id_produtoValor.html(inputValor);
     $("#money" + id_produto).maskMoney();
 
     var id_produtoQtd = $("#quantidade" + id_produto);
     var valorQtd = id_produtoQtd.html();
-    var inputQtd = "<input type='number' class='form-control' style='width: 50%; margin: auto auto;' value='" + valorQtd + "'>";
+    var inputQtd = "<input type='number' class='form-control editRow" + id_produto + "' style='width: 50%; margin: auto auto;' value='" + valorQtd + "'>";
     id_produtoQtd.html("");
     id_produtoQtd.html(inputQtd);
 
@@ -60,8 +60,7 @@ function save(id_produto) {
     var pegaDescricao = $("#descricao" + id_produto + " input").val();
 
     var id_produtoValor = $("#valor" + id_produto);
-    var pegaValor = $("#valor" + id_produto + " input").val();
-    //console.log($.isNumeric(pegaValor.substring(2).replace(",", ".")));
+    var pegaValor = $("#valor" + id_produto + " input").val().replace(",", "");
 
     var id_produtoQtd = $("#quantidade" + id_produto);
     var pegaQtd = $("#quantidade" + id_produto + " input").val();
@@ -87,19 +86,20 @@ function save(id_produto) {
             id_produtoDescricao.html(pegaDescricao);
 
             id_produtoValor.html("");
-            id_produtoValor.html("R$ "+pegaValor.replace(".",","));
+            id_produtoValor.html("R$ " + pegaValor.replace(".", ","));
 
             id_produtoQtd.html("");
             id_produtoQtd.html(pegaQtd);
+
+            $("#save" + id_produto).prop("disabled", true);
+            $("#edit" + id_produto).prop("disabled", false);
         } else {
-            console.log(data);
+            $(".editRow" + id_produto).css({ border: "1px solid red", color: "red" });
+            alert(data.msg);
         }
     }).fail(function (data) {
-        console.log(data);
+        alert('Erro ao editar o produto. Tente mais tarde');
     });
-
-    $("#save" + id_produto).prop("disabled", true);
-    $("#edit" + id_produto).prop("disabled", false);
 }
 
 $("#salvar_produto").click(function () {
@@ -133,6 +133,6 @@ $("#salvar_produto").click(function () {
 
         tabela_produto();
     }).fail(function (data) {
-        console.log(data);
+        alert('Erro ao criar o produto. Tente mais tarde');
     });
 });
