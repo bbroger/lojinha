@@ -43,8 +43,10 @@
     <div class="container">
         <div class="row mt-3">
             <div class="col-md-12">
+                <div class="btn-group" role="group" aria-label="Basic example">
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#novoProduto"><i class="fas fa-plus-circle"></i> Cadastrar novo produto</button>
-
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#novaPromocao"><i class="fas fa-plus-circle"></i> Cadastrar nova promoção</button>
+                </div>
             </div>
         </div>
         <div class="row mt-3">
@@ -110,6 +112,51 @@
                                 </div>
                                 <br>
                                 <button type="button" id="salvar_produto" class="btn btn-primary">
+                                    Cadastrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal criar produto-->
+    <div class="modal fade text-dark" id="novaPromocao" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova promoção</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <p id="mostra_msg_promo"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="nome">ID produto</label>
+                                    <input type="number" class="form-control" id="produto_promo" min="0" value="" placeholder="" autocomplete="off">
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label for="quantidade">Quantidade mínima</label>
+                                        <input type="number" class="form-control" id="quantidade_promo" value="0" placeholder="" autocomplete="off">
+                                    </div>
+                                    <div class="col">
+                                        <label for="valor">Valor promocional (unidade)</label>
+                                        <input type="text" class="form-control" id="valor_promo" data-decimal="." value="" placeholder="" autocomplete="off">
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="button" id="salvar_promocao" class="btn btn-primary">
                                     Cadastrar
                                 </button>
                             </div>
