@@ -47,7 +47,7 @@ $("#search_inserir").click(function () {
         valid = false;
         id_produto.css({ border: "1px solid red", color: "red" });
         $("#msg_search_id_produto").html("Código do produto é obrigatório");
-    } else if (id_produto.val() < 0) {
+    } else if (id_produto.val() <= 0) {
         valid = false;
         id_produto.css({ border: "1px solid red", color: "red" });
         $("#msg_search_id_produto").html("Produto precisa ser maior que 0");
@@ -57,7 +57,7 @@ $("#search_inserir").click(function () {
         valid = false;
         quantidade.css({ border: "1px solid red", color: "red" });
         $("#msg_search_quantidade").html("Quantidade é obrigatório");
-    } else if (quantidade.val() < 0) {
+    } else if (quantidade.val() <= 0) {
         valid = false;
         quantidade.css({ border: "1px solid red", color: "red" });
         $("#msg_search_quantidade").html("Quantidade precisa ser maior que 0");

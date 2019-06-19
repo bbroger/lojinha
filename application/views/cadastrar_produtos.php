@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="row mt-3">
-            <div class="col-md-12"></div>
+            <div class="col-md-12">
                 <table class="table table-striped text-center">
                     <thead class="thead-dark">
                         <tr>
@@ -92,20 +92,20 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="nome">Nome</label>
-                                    <input type="text" class="form-control" id="nome" value="" placeholder="">
+                                    <input type="text" class="form-control" id="nome" value="" placeholder="" autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label for="descricao">Descrição</label>
-                                    <input type="text" class="form-control" id="descricao" value="" placeholder="">
+                                    <input type="text" class="form-control" id="descricao" value="" placeholder="" autocomplete="off">
                                 </div>
                                 <div class="form-row">
                                     <div class="col">
                                         <label for="valor">Valor</label>
-                                        <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="">
+                                        <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
                                     </div>
                                     <div class="col">
                                         <label for="quantidade">Quantidade</label>
-                                        <input type="number" class="form-control" id="quantidade" value="0" placeholder="">
+                                        <input type="number" class="form-control" id="quantidade" value="0" placeholder="" autocomplete="off">
                                     </div>
                                 </div>
                                 <br>
