@@ -88,6 +88,7 @@ table.on('click', '.save', function () {
             tdDesc.find('input').css({border: "1px solid red", color: "red"});
             tdValor.find('input').css({border: "1px solid red", color: "red"});
             tdQtde.find('input').css({border: "1px solid red", color: "red"});
+            alert(data.msg);
         }
     });
 });

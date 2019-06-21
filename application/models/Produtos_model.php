@@ -44,13 +44,5 @@ class Produtos_model extends CI_Model
     {
         $this->db->where('id_produto', $id);
         $this->db->update('produtos', $data);
-
-        if($this->db->affected_rows() > 0)
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
     }
 }

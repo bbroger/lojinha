@@ -18,16 +18,16 @@ class Produtos extends CI_Controller
     public function tabela_produtos()
     {
         $produtos = $this->Produtos_model->tabela_produtos();
-        
+
         foreach ($produtos as $key => $value) {
             foreach ($value as $chave => $valor) {
-                $data['data'][$key][$chave]= $valor;
+                $data['data'][$key][$chave] = $valor;
             }
-            $data['data'][$key]['button']= '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
+            $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                 <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
                 <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
         }
-        
+
         echo json_encode($data);
     }
 
@@ -62,14 +62,14 @@ class Produtos extends CI_Controller
 
     public function editar_produto()
     {
-        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]");
+        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
         $this->form_validation->set_rules("nome", "Nome", "trim|required|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("descricao", "Descrição", "trim|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("valor", "Valor", "trim|required|decimal|min_length[3]");
         $this->form_validation->set_rules("quantidade", "Quantidade", "trim|integer|max_length[11]");
 
         if (!$this->form_validation->run()) {
-            $data['msg'] = validation_errors(" "," ");
+            $data['msg'] = validation_errors(" ", " ");
             $data['status'] = false;
             echo json_encode($data);
 
@@ -81,16 +81,9 @@ class Produtos extends CI_Controller
             $data['valor'] = $this->input->post("valor");
             $data['quantidade'] = $this->input->post("quantidade");
 
-            $re = $this->Produtos_model->editar_produto($data, $id_produto);
-
-            if ($re) {
-                $data['status'] = true;
-                echo json_encode($data);
-            } else{
-                $data_erro['msg'] = "Erro! O id_produto ($id_produto) não foi localizado";
-                $data_erro['status'] = false;
-                echo json_encode($data_erro);
-            }
+            $this->Produtos_model->editar_produto($data, $id_produto);
+            $data['status'] = true;
+            echo json_encode($data);
         }
     }
 }
