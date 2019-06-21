@@ -18,8 +18,17 @@ class Produtos extends CI_Controller
     public function tabela_produtos()
     {
         $produtos = $this->Produtos_model->tabela_produtos();
-
-        echo json_encode($produtos);
+        
+        foreach ($produtos as $key => $value) {
+            foreach ($value as $chave => $valor) {
+                $data['data'][$key][$chave]= $valor;
+            }
+            $data['data'][$key]['button']= '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
+                <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
+                <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
+        }
+        
+        echo json_encode($data);
     }
 
     public function salvar_produto()

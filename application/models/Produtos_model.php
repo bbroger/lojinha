@@ -28,7 +28,7 @@ class Produtos_model extends CI_Model
 
     public function tabela_produtos()
     {
-        $this->db->select('*')->from('produtos')->order_by('id_produto', 'DESC');
+        $this->db->select('*, CONCAT("R$ ",valor) AS valor')->from('produtos')->order_by('id_produto', 'DESC');
 
         $query = $this->db->get();
 

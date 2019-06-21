@@ -1,106 +1,96 @@
-$(document).ready(function () {
-    $("#valor").maskMoney();
-    tabela_produto();
+$("#valor").maskMoney();
+
+var table = $("#mostra_tabela").DataTable({
+    "processing": true,
+    "order": [[0, "desc"]],
+    ajax: url_ajax("Produtos/tabela_produtos"),
+    "columns": [
+        { "data": "id_produto" },
+        { "data": "nome" },
+        { "data": "descricao" },
+        { "data": "valor" },
+        { "data": "quantidade" },
+        { "data": "status" },
+        { "data": "button" }
+    ],
+    "language": {
+        "sEmptyTable": "Nenhum registro encontrado",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "_MENU_ resultados por página",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "sSearch": "Pesquisar",
+        "oPaginate": {
+            "sNext": "Próximo",
+            "sPrevious": "Anterior",
+            "sFirst": "Primeiro",
+            "sLast": "Último"
+        },
+        "oAria": {
+            "sSortAscending": ": Ordenar colunas de forma ascendente",
+            "sSortDescending": ": Ordenar colunas de forma descendente"
+        }
+    }
 });
 
-function tabela_produto() {
-    $.getJSON(url_ajax("Produtos/tabela_produtos"), function (result) {
-        var tr = null;
-        $.each(result, function (key, value) {
-            tr += "<tr>";
-            tr += "<td>" + value.id_produto + "</td>";
-            tr += "<td id='nome" + value.id_produto + "'>" + value.nome + "</td>";
-            tr += "<td id='descricao" + value.id_produto + "'>" + value.descricao + "</td>";
-            tr += "<td id='valor" + value.id_produto + "'>R$ " + value.valor.replace(".", ",") + "</td>";
-            tr += "<td id='quantidade" + value.id_produto + "'>" + value.quantidade + "</td>";
-            tr += "<td>" + value.status + "</td>";
-            tr += '<td><button style="padding: 0 5px;" id="save' + value.id_produto + '" class="btn btn-success" onclick="save(' + value.id_produto + ')" disabled><i class="fas fa-save"></i></button> ' +
-                '<button style="padding: 0 5px;" id="edit' + value.id_produto + '" class="btn btn-warning" onclick="edit(' + value.id_produto + ')"><i class="fas fa-edit"></i></button> ' +
-                '<button style="padding: 0 5px;" id="block' + value.id_produto + '" class="btn btn-danger" onclick="block(' + value.id_produto + ')"><i class="fas fa-ban"></i></button></td>';
-            tr += '</tr>';
-        });
+table.on('click', '.edit', function () {
+    var tr = $(this).closest("tr");
+    var tdNome = tr.find("td").eq(1);
+    var tdDesc = tr.find("td").eq(2);
+    var tdValor = tr.find("td").eq(3);
+    var tdQtde = tr.find("td").eq(4);
 
-        $("#mostra_tabela").html(tr);
-    });
-}
+    tdNome.html("<input type='text' class='form-control' value='" + tdNome.html() + "'>");
+    tdDesc.html("<input type='text' class='form-control' value='" + tdDesc.html() + "'>");
+    tdValor.html("<input type='text' style='width: 70%; margin: auto auto;' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
+    tdValor.find("input").maskMoney();
+    tdQtde.html("<input type='number' style='width: 60%; margin: auto auto;' class='form-control' value='" + tdQtde.html() + "'>");
 
-function edit(id_produto) {
-    var id_produtoNome = $("#nome" + id_produto);
-    var inputNome = "<input type='text' class='form-control editRow" + id_produto + "' value='" + id_produtoNome.html() + "'>";
-    id_produtoNome.html("");
-    id_produtoNome.html(inputNome);
+    $(this).closest("td").find('button').eq(0).prop('disabled', false);
+    $(this).closest("td").find('button').eq(1).prop('disabled', true);
+});
 
-    var id_produtoDescricao = $("#descricao" + id_produto);
-    var inputDescricao = "<input type='text' class='form-control editRow" + id_produto + "' value='" + id_produtoDescricao.html() + "'>";
-    id_produtoDescricao.html("");
-    id_produtoDescricao.html(inputDescricao);
-
-    var id_produtoValor = $("#valor" + id_produto);
-    var pegaValor = id_produtoValor.html().replace(",", ".").replace("R$ ", "");
-    var inputValor = "<input type='text' class='form-control editRow" + id_produto + "' style='width: 70%; margin: auto auto;' data-decimal='.' id='money" + id_produto + "' value='" + pegaValor + "'>";
-    id_produtoValor.html("");
-    id_produtoValor.html(inputValor);
-    $("#money" + id_produto).maskMoney();
-
-    var id_produtoQtd = $("#quantidade" + id_produto);
-    var valorQtd = id_produtoQtd.html();
-    var inputQtd = "<input type='number' class='form-control editRow" + id_produto + "' style='width: 50%; margin: auto auto;' value='" + valorQtd + "'>";
-    id_produtoQtd.html("");
-    id_produtoQtd.html(inputQtd);
-
-    $("#edit" + id_produto).prop("disabled", true);
-    $("#save" + id_produto).prop("disabled", false);
-}
-
-function save(id_produto) {
-    var id_produtoNome = $("#nome" + id_produto);
-    var pegaNome = $("#nome" + id_produto + " input").val();
-
-    var id_produtoDescricao = $("#descricao" + id_produto);
-    var pegaDescricao = $("#descricao" + id_produto + " input").val();
-
-    var id_produtoValor = $("#valor" + id_produto);
-    var pegaValor = $("#valor" + id_produto + " input").val().replace(",", "");
-
-    var id_produtoQtd = $("#quantidade" + id_produto);
-    var pegaQtd = $("#quantidade" + id_produto + " input").val();
-
+table.on('click', '.save', function () {
+    var tr = $(this).closest("tr");
+    var tdID= tr.find("td").eq(0);
+    var tdNome = tr.find("td").eq(1);
+    var tdDesc = tr.find("td").eq(2);
+    var tdValor = tr.find("td").eq(3);
+    var tdQtde = tr.find("td").eq(4);
+    
     $.ajax({
         url: url_ajax("Produtos/editar_produto"),
         type: "Post",
         data: {
-            id_produto: id_produto,
-            nome: pegaNome,
-            descricao: pegaDescricao,
-            valor: pegaValor,
-            quantidade: pegaQtd
+            id_produto : tdID.html(),
+            nome: tdNome.find('input').val(),
+            descricao: tdDesc.find('input').val(),
+            valor: tdValor.find('input').val(),
+            quantidade: tdQtde.find('input').val()
         },
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
+            tdNome.html(tdNome.find('input').val());
+            tdDesc.html(tdDesc.find('input').val());
+            tdValor.html("R$ " + tdValor.find('input').val());
+            tdQtde.html(tdQtde.find('input').val());
 
-            id_produtoNome.html("");
-            id_produtoNome.html(pegaNome);
-
-            id_produtoDescricao.html("");
-            id_produtoDescricao.html(pegaDescricao);
-
-            id_produtoValor.html("");
-            id_produtoValor.html("R$ " + pegaValor.replace(".", ","));
-
-            id_produtoQtd.html("");
-            id_produtoQtd.html(pegaQtd);
-
-            $("#save" + id_produto).prop("disabled", true);
-            $("#edit" + id_produto).prop("disabled", false);
-        } else {
-            $(".editRow" + id_produto).css({ border: "1px solid red", color: "red" });
-            alert(data.msg);
+            tr.find("td").eq(6).find('button').eq(0).prop('disabled', true)
+            tr.find("td").eq(6).find('button').eq(1).prop('disabled', false)
+        } else{
+            tdNome.find('input').css({border: "1px solid red", color: "red"});
+            tdDesc.find('input').css({border: "1px solid red", color: "red"});
+            tdValor.find('input').css({border: "1px solid red", color: "red"});
+            tdQtde.find('input').css({border: "1px solid red", color: "red"});
         }
-    }).fail(function (data) {
-        alert('Erro ao editar o produto. Tente mais tarde');
     });
-}
+});
 
 $("#salvar_produto").click(function () {
     var nome = $("#nome");

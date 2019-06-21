@@ -6,6 +6,7 @@
     <title>Lojinha</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap.min.css") ?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/dataTables.bootstrap4.min.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/css/main.css") ?>">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <script>
@@ -51,19 +52,19 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-12">
-                <table class="table table-striped text-center">
+                <table class="table table-striped text-center" id="mostra_tabela">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Código</th>
                             <th scope="col">Produto</th>
                             <th scope="col">Descrição</th>
                             <th scope="col">Valor</th>
-                            <th scope="col">Quantidade</th>
+                            <th scope="col">Qtde</th>
                             <th scope="col">Status</th>
                             <th scope="col">Ação</th>
                         </tr>
                     </thead>
-                    <tbody id="mostra_tabela">
+                    <tbody>
                     </tbody>
                 </table>
 
@@ -171,6 +172,8 @@
     <script src="<?php echo base_url("assets/js/popper.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/bootstrap.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/moment.min.js"); ?>"></script>
+    <script src="<?php echo base_url("assets/js/dataTables.min.js"); ?>"></script>
+    <script src="<?php echo base_url("assets/js/dataTables.bootstrap4.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/maskMoney.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/produtos.js"); ?>"></script>
 </body>
