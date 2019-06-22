@@ -42,11 +42,11 @@
         </div>
     </nav>
     <div class="container">
-        <div class="row mt-3">
+    <div class="row mt-3">
             <div class="col-md-12">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#novoProduto"><i class="fas fa-plus-circle"></i> Cadastrar novo produto</button>
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#novaPromocao"><i class="fas fa-plus-circle"></i> Cadastrar nova promoção</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#novoProduto"><i class="fas fa-plus-circle"></i> Cadastrar novo produto</button>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#novaPromocao"><i class="fas fa-plus-circle"></i> Cadastrar nova promoção</button>
                 </div>
             </div>
         </div>
@@ -67,11 +67,28 @@
                     <tbody>
                     </tbody>
                 </table>
-
             </div>
-
         </div>
-
+        
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <table class="table table-striped text-center" id="mostra_tabela_promocao">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">ID Produto</th>
+                            <th scope="col">Quantidade</th>
+                            <th scope="col">Valor (unid)</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!--Modal criar produto-->

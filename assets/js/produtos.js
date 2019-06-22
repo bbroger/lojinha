@@ -1,4 +1,5 @@
 $("#valor").maskMoney();
+$("#valor_promo").maskMoney();
 
 var table = $("#mostra_tabela").DataTable({
     "processing": true,
@@ -70,7 +71,7 @@ table.on('click', '.save', function () {
             id_produto : tdID.html(),
             nome: tdNome.find('input').val(),
             descricao: tdDesc.find('input').val(),
-            valor: tdValor.find('input').val(),
+            valor: tdValor.find('input').val().replace(",", ""),
             quantidade: tdQtde.find('input').val()
         },
         dataType: "Json"
@@ -78,7 +79,7 @@ table.on('click', '.save', function () {
         if (data.status) {
             tdNome.html(tdNome.find('input').val());
             tdDesc.html(tdDesc.find('input').val());
-            tdValor.html("R$ " + tdValor.find('input').val());
+            tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
             tdQtde.html(tdQtde.find('input').val());
 
             tr.find("td").eq(6).find('button').eq(0).prop('disabled', true)
@@ -88,6 +89,87 @@ table.on('click', '.save', function () {
             tdDesc.find('input').css({border: "1px solid red", color: "red"});
             tdValor.find('input').css({border: "1px solid red", color: "red"});
             tdQtde.find('input').css({border: "1px solid red", color: "red"});
+            alert(data.msg);
+        }
+    });
+});
+
+var table_promocao = $("#mostra_tabela_promocao").DataTable({
+    "processing": true,
+    "order": [[0, "desc"]],
+    ajax: url_ajax("Produtos/tabela_promocao"),
+    "columns": [
+        { "data": "id_promocao" },
+        { "data": "id_produto" },
+        { "data": "quantidade" },
+        { "data": "valor" },
+        { "data": "status" },
+        { "data": "timestamp" },
+        { "data": "button" }
+    ],
+    "language": {
+        "sEmptyTable": "Nenhum registro encontrado",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "_MENU_ resultados por página",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "sSearch": "Pesquisar",
+        "oPaginate": {
+            "sNext": "Próximo",
+            "sPrevious": "Anterior",
+            "sFirst": "Primeiro",
+            "sLast": "Último"
+        },
+        "oAria": {
+            "sSortAscending": ": Ordenar colunas de forma ascendente",
+            "sSortDescending": ": Ordenar colunas de forma descendente"
+        }
+    }
+});
+
+table_promocao.on('click', '.edit', function () {
+    var tr = $(this).closest("tr");
+    var tdQtde = tr.find("td").eq(2);
+    var tdValor = tr.find("td").eq(3);
+
+    tdQtde.html("<input type='number' style='width: 60%; margin: auto auto;' class='form-control' value='" + tdQtde.html() + "'>");
+    tdValor.html("<input type='text' style='width: 70%; margin: auto auto;' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
+    tdValor.find("input").maskMoney();
+
+    $(this).closest("td").find('button').eq(0).prop('disabled', false);
+    $(this).closest("td").find('button').eq(1).prop('disabled', true);
+});
+
+table_promocao.on('click', '.save', function () {
+    var tr = $(this).closest("tr");
+    var tdID= tr.find("td").eq(0);
+    var tdQtde = tr.find("td").eq(2);
+    var tdValor = tr.find("td").eq(3);
+    
+    $.ajax({
+        url: url_ajax("Produtos/editar_promocao"),
+        type: "Post",
+        data: {
+            id_promocao : tdID.html(),
+            quantidade: tdQtde.find('input').val(),
+            valor: tdValor.find('input').val().replace(",", "")
+        },
+        dataType: "Json"
+    }).done(function (data) {
+        if (data.status) {
+            tdQtde.html(tdQtde.find('input').val());
+            tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
+
+            tr.find("td").eq(6).find('button').eq(0).prop('disabled', true)
+            tr.find("td").eq(6).find('button').eq(1).prop('disabled', false)
+        } else{
+            tdQtde.find('input').css({border: "1px solid red", color: "red"});
+            tdValor.find('input').css({border: "1px solid red", color: "red"});
             alert(data.msg);
         }
     });
@@ -118,11 +200,41 @@ $("#salvar_produto").click(function () {
             descricao.val("");
             valor.val("");
             quantidade.val(0);
+            table.ajax.reload();
         } else {
             $("#mostra_msg").html(data.msg).addClass("text-danger").fadeIn();
         }
+    }).fail(function (data) {
+        alert('Erro ao criar o produto. Tente mais tarde');
+    });
+});
 
-        tabela_produto();
+$("#salvar_promocao").click(function () {
+    var id_produto = $("#produto_promo");
+    var quantidade = $("#quantidade_promo");
+    var valor = $("#valor_promo");
+
+    $("#mostra_msg").removeClass();
+    $.ajax({
+        url: url_ajax("Produtos/salvar_promocao"),
+        type: "Post",
+        data: {
+            id_produto: id_produto.val(),
+            quantidade: quantidade.val(),
+            valor: valor.val().replace(",", "")
+        },
+        dataType: "Json"
+    }).done(function (data) {
+        if (data.status) {
+            $("#mostra_msg_promo").html(data.msg).addClass("text-success").fadeIn();
+            $("#mostra_msg_promo").fadeOut(4000);
+            id_produto.val("");
+            quantidade.val(0);
+            valor.val("");
+            table_promocao.ajax.reload();
+        } else {
+            $("#mostra_msg_promo").html(data.msg).addClass("text-danger").fadeIn();
+        }
     }).fail(function (data) {
         alert('Erro ao criar o produto. Tente mais tarde');
     });
