@@ -22,7 +22,7 @@ class Caixa extends CI_Controller
     public function tabela_produtos($id_produto = null)
     {
         $produtos = $this->Caixa_model->tabela_produtos($id_produto);
-
+        
         echo json_encode($produtos);
     }
 

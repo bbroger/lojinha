@@ -2,7 +2,7 @@ var produtos_inseridos = [];
 $("#insere_valor_pago").maskMoney();
 
 $("#catalogo").dataTable({
-    "paging": false,
+    "pageLength": "25",
     "ordering": false,
     "info": false,
     "dom": "ftip",
@@ -70,8 +70,17 @@ $("#search_inserir").click(function () {
                 $("#msg_search_id_produto").html("Código produto não encontrado.<br> Confira na tabela ao lado");
 
             } else {
+                console.log(result);
+                var valorPromo= 0;
+                $.each(result, function (i, value){
+                    if(parseInt(quantidade.val()) >= parseInt(value.qtdPromo)){
+                        valorPromo= value.valorPromo;
+                    }
+                });
+
                 result[0]['quantidade'] = quantidade.val();
-                result[0]['valor_total'] = (quantidade.val() * result[0]['valor']).toFixed(2);
+                result[0]['valor_total'] = (valorPromo === 0) ? (quantidade.val() * result[0]['valor']).toFixed(2) : (quantidade.val() * valorPromo).toFixed(2);
+                result[0]['valorPromo'] = valorPromo;
 
                 produtos_inseridos.push(result[0]);
 
@@ -82,6 +91,7 @@ $("#search_inserir").click(function () {
                     tr += "<td>" + value.nome + "</td>";
                     tr += "<td>" + value.descricao + "</td>";
                     tr += "<td>R$ " + value.valor.replace(".", ",") + "</td>";
+                    tr += "<td>R$ " + ((value.valorPromo === 0) ? "0.00" : value.valorPromo.replace(".", ",")) + "</td>";
                     tr += "<td>" + value.quantidade + "</td>";
                     tr += "<td>R$ " + value.valor_total.replace(".", ",") + "</td>";
                     tr += '<td><button onclick="delete_produto(' + i + ')" style="padding: 0 5px;" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></td>';

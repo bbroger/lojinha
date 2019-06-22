@@ -49,7 +49,8 @@
                                     <th scope="col">#</th>
                                     <th scope="col">PRODUTO</th>
                                     <th scope="col">DESCRIÇÃO</th>
-                                    <th scope="col">VALOR UNIT.</th>
+                                    <th scope="col">VALOR UNID.</th>
+                                    <th scope="col">VALOR PROM.</th>
                                     <th scope="col">QTD</th>
                                     <th scope="col">VALOR TOTAL</th>
                                     <th>#</th>
@@ -66,13 +67,13 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="search_id_produto">CÓDIGO PRODUTO</label>
-                            <input type="number" id="search_id_produto" class="form-control">
-                            <small style="color: red; background: #fff" id="msg_search_id_produto"></small>
+                            <input type="number" min="0" id="search_id_produto" class="form-control">
+                            <small style="color: red;" id="msg_search_id_produto"></small>
                         </div>
                         <div class="form-group">
                             <label for="exampleFormControlInput1">QUANTIDADE</label>
-                            <input type="number" id="search_quantidade" class="form-control">
-                            <small style="color: red; background: #fff" id="msg_search_quantidade"></small>
+                            <input type="number" min="0" id="search_quantidade" class="form-control">
+                            <small style="color: red;" id="msg_search_quantidade"></small>
                         </div>
                         <button class="btn btn-primary" id="search_inserir" style="width: 100%;">INSERIR PRODUTO</button>
                     </div>

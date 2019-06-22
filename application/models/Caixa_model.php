@@ -5,11 +5,13 @@ class Caixa_model extends CI_Model
     public function tabela_produtos($id_produto = null)
     {
         if ($id_produto) { 
-            $this->db->select('*')->from('produtos')->where('id_produto', $id_produto)->order_by('id_produto', 'DESC');
+            $sql= "SELECT produtos.*, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo 
+                FROM produtos LEFT JOIN promocao ON produtos.id_produto = promocao.id_produto WHERE produtos.id_produto= $id_produto ORDER BY qtdPromo ASC";
+            $query= $this->db->query($sql);
         } else {
             $this->db->select('*')->from('produtos')->order_by('id_produto', 'DESC');
+            $query = $this->db->get();
         }
-        $query = $this->db->get();
         
         return (count($query->result_array()) > 0) ? $query->result_array() : false;
     }
