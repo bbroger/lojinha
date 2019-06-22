@@ -19,36 +19,44 @@ class Produtos extends CI_Controller
     {
         $produtos = $this->Produtos_model->tabela_produtos();
 
-        foreach ($produtos as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                $data['data'][$key][$chave] = $valor;
+        if($produtos){
+            foreach ($produtos as $key => $value) {
+                foreach ($value as $chave => $valor) {
+                    $data['data'][$key][$chave] = $valor;
+                }
+                $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
+                    <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
+                    <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
             }
-            $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
-                <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
-                <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
-        }
 
-        echo json_encode($data);
+            echo json_encode($data);
+        } else{
+            echo json_encode(["data" => false]);
+        }
     }
 
     public function tabela_promocao()
     {
         $promocao = $this->Produtos_model->tabela_promocao();
 
-        foreach ($promocao as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                if ($chave == 'timestamp') {
-                    $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d H:i:s', $valor)->format("d/m/Y H:i");
-                } else {
-                    $data['data'][$key][$chave] = $valor;
+        if($promocao){
+            foreach ($promocao as $key => $value) {
+                foreach ($value as $chave => $valor) {
+                    if ($chave == 'timestamp') {
+                        $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d H:i:s', $valor)->format("d/m/Y H:i");
+                    } else {
+                        $data['data'][$key][$chave] = $valor;
+                    }
                 }
+                $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
+                    <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
+                    <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
             }
-            $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
-                <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
-                <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
-        }
 
-        echo json_encode($data);
+            echo json_encode($data);
+        } else{
+            echo json_encode(["data" => false]);
+        }
     }
 
     public function salvar_produto()
