@@ -1,7 +1,7 @@
 var produtos_inseridos = [];
 $("#insere_valor_pago").maskMoney();
 
-$("#catalogo").dataTable({
+var table= $("#catalogo").dataTable({
     "pageLength": "25",
     "ordering": false,
     "info": false,
@@ -87,6 +87,7 @@ $("#search_inserir").click(function () {
 
                 id_produto.val("");
                 quantidade.val("");
+                table.fnFilter('');
             }
         });
     }
@@ -125,7 +126,6 @@ $("#finalizar_venda").click(function () {
 });
 
 function monta_tabela(){
-    console.log(produtos_inseridos);
     var tr = null;
     $.each(produtos_inseridos, function (i, value) {
         tr += "<tr scope='row' id='row" + i + "'>";
