@@ -2,20 +2,23 @@
 
 class Caixa_model extends CI_Model
 {
-    public function tabela_produtos($id_produto = null)
+    public function tabela_produtos($id_produto)
     {
-        if ($id_produto) { 
-            $sql= "SELECT produtos.*, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo 
+        $sql = "SELECT produtos.*, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo 
                 FROM produtos LEFT JOIN promocao ON produtos.id_produto = promocao.id_produto 
-                WHERE produtos.id_produto= $id_produto AND status = 'active' ORDER BY qtdPromo ASC";
-            $query= $this->db->query($sql);
-        } else {
-            $this->db->select('*')->from('produtos')->where('status', 'ativo')->order_by('id_produto', 'DESC');
-            $query = $this->db->get();
-        }
-        
+                WHERE produtos.id_produto= $id_produto AND produtos.status = 'ativo' ORDER BY qtdPromo ASC";
+        $query = $this->db->query($sql);
+
         return (count($query->result_array()) > 0) ? $query->result_array() : false;
     }
+
+    public function catalogo()
+    {
+        $this->db->select('*, CONCAT("R$ ",valor) AS valor')->from('produtos')->where('status', 'ativo')->order_by('id_produto', 'DESC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
 
     public function inserir_transacao($data)
     {

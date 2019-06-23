@@ -1,11 +1,18 @@
 var produtos_inseridos = [];
 $("#insere_valor_pago").maskMoney();
 
-var table= $("#catalogo").dataTable({
+var table = $("#catalogo").DataTable({
+    "processing": true,
     "pageLength": "25",
     "ordering": false,
     "info": false,
     "dom": "ftip",
+    ajax: url_ajax("Caixa/catalogo"),
+    "columns": [
+        { "data": "id_produto" },
+        { "data": "nome" },
+        { "data": "valor" }
+    ],
     "language": {
         "sEmptyTable": "Nenhum registro encontrado",
         "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -172,3 +179,5 @@ function calcula_todos_valores(){
         $("#insere_valor_pago").val("");
     }
 }
+
+setInterval(function(){ table.ajax.reload(); }, 3000);

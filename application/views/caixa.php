@@ -101,13 +101,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if($produtos){ foreach ($produtos as $key => $value) { ?>
-                                    <tr>
-                                        <th scope="row"><?php echo $value['id_produto'] ?></th>
-                                        <td><?php echo $value['nome'] ?></td>
-                                        <td>R$ <?php echo str_replace(".", ",", $value['valor']); ?></td>
-                                    </tr>
-                                <?php }} ?>
                             </tbody>
                         </table>
                     </div>

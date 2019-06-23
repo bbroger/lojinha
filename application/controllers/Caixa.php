@@ -9,21 +9,35 @@ class Caixa extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Caixa_model');
-
-        $this->produtos= $this->Caixa_model->tabela_produtos();
     }
 
     public function index()
     {
-        $produtos = $this->Caixa_model->tabela_produtos();
-        $this->load->view('caixa', ['produtos' => $produtos]);
+        $this->load->view('caixa');
     }
 
-    public function tabela_produtos($id_produto = null)
+    public function tabela_produtos($id_produto)
     {
         $produtos = $this->Caixa_model->tabela_produtos($id_produto);
         
         echo json_encode($produtos);
+    }
+
+    public function catalogo()
+    {
+        $produtos = $this->Caixa_model->catalogo();
+
+        if ($produtos) {
+            foreach ($produtos as $key => $value) {
+                foreach ($value as $chave => $valor) {
+                    $data['data'][$key][$chave] = $valor;
+                }
+            }
+
+            echo json_encode($data);
+        } else {
+            echo json_encode(["data" => false]);
+        }
     }
 
     public function finalizar_venda()
