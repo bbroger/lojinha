@@ -94,7 +94,8 @@ $("#search_inserir").click(function () {
 
                 id_produto.val("");
                 quantidade.val("");
-                table.fnFilter('');
+                console.log(table);
+                table.search('').draw();
             }
         });
     }
