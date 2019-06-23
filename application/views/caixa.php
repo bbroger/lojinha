@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Lojinha</title>
+    <title>Caixa</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap.min.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/css/dataTables.bootstrap4.min.css") ?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/fontawesome.min.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/css/main.css") ?>">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <script>
         function url_ajax(destino) {
             return "<?php echo base_url(); ?>" + destino;
