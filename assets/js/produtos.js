@@ -98,6 +98,8 @@ table.on('click', '.block', function () {
     var tr = $(this).closest("tr");
     var tdID= tr.find("td").eq(0);
     var tdNome = tr.find("td").eq(1);
+    var tdStatus = tr.find("td").eq(5);
+    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(2);
     
     var conf= confirm("Tem certeza que deseja excluir o produto "+tdNome.html()+"?");
     if(conf){
@@ -110,7 +112,8 @@ table.on('click', '.block', function () {
             dataType: "Json"
         }).done(function (data) {
             if (data.status) {
-                tr.html("");
+                tdStatus.html("desativado");
+                tdButtonStatus.removeClass('btn-danger block').addClass('btn-primary activ').html('<i class="fas fa-check-square"></i>');
             } else{
                 alert(data.msg);
             }
