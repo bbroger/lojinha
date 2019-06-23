@@ -49,9 +49,14 @@ class Produtos extends CI_Controller
                 foreach ($value as $chave => $valor) {
                     $data['data'][$key][$chave] = $valor;
                 }
+                if($value['status'] == 'ativo'){
+                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
+                } else{
+                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-primary activ"><i class="fas fa-check-square"></i></button>';
+                }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                     <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
+                    '.$buttonStatus;
             }
 
             echo json_encode($data);
@@ -221,6 +226,26 @@ class Produtos extends CI_Controller
             $data['status'] = 'desativado';
 
             $this->Produtos_model->desativar_promocao($data, $id_promocao);
+            $data['status'] = true;
+            echo json_encode($data);
+        }
+    }
+
+    public function ativar_promocao()
+    {
+        $this->form_validation->set_rules("id_promocao", "ID promocao", "trim|required|max_length[11]|combines[promocao.id_promocao]");
+
+        if (!$this->form_validation->run()) {
+            $data['msg'] = validation_errors(" ", " ");
+            $data['status'] = false;
+            echo json_encode($data);
+
+            return false;
+        } else {
+            $id_promocao = $this->input->post("id_promocao");
+            $data['status'] = 'ativo';
+
+            $this->Produtos_model->ativar_promocao($data, $id_promocao);
             $data['status'] = true;
             echo json_encode($data);
         }

@@ -57,4 +57,10 @@ class Produtos_model extends CI_Model
         $this->db->where('id_promocao', $id);
         $this->db->update('promocao', $data);
     }
+
+    public function ativar_promocao($data, $id)
+    {
+        $this->db->where('id_promocao', $id);
+        $this->db->update('promocao', $data);
+    }
 }

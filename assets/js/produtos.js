@@ -54,6 +54,7 @@ table.on('click', '.edit', function () {
 
     $(this).closest("td").find('button').eq(0).prop('disabled', false);
     $(this).closest("td").find('button').eq(1).prop('disabled', true);
+    $(this).closest("td").find('button').eq(2).prop('disabled', true);
 });
 
 table.on('click', '.save', function () {
@@ -82,8 +83,9 @@ table.on('click', '.save', function () {
             tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
             tdQtde.html(tdQtde.find('input').val());
 
-            tr.find("td").eq(6).find('button').eq(0).prop('disabled', true)
-            tr.find("td").eq(6).find('button').eq(1).prop('disabled', false)
+            tr.find("td").eq(6).find('button').eq(0).prop('disabled', true);
+            tr.find("td").eq(6).find('button').eq(1).prop('disabled', false);
+            tr.find("td").eq(6).find('button').eq(2).prop('disabled', false);
         } else{
             tdNome.find('input').css({border: "1px solid red", color: "red"});
             tdDesc.find('input').css({border: "1px solid red", color: "red"});
@@ -197,6 +199,7 @@ table_promocao.on('click', '.edit', function () {
 
     $(this).closest("td").find('button').eq(0).prop('disabled', false);
     $(this).closest("td").find('button').eq(1).prop('disabled', true);
+    $(this).closest("td").find('button').eq(2).prop('disabled', true);
 });
 
 table_promocao.on('click', '.save', function () {
@@ -219,8 +222,9 @@ table_promocao.on('click', '.save', function () {
             tdQtde.html(tdQtde.find('input').val());
             tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
 
-            tr.find("td").eq(6).find('button').eq(0).prop('disabled', true)
-            tr.find("td").eq(6).find('button').eq(1).prop('disabled', false)
+            tr.find("td").eq(6).find('button').eq(0).prop('disabled', true);
+            tr.find("td").eq(6).find('button').eq(1).prop('disabled', false);
+            tr.find("td").eq(6).find('button').eq(2).prop('disabled', false);
         } else{
             tdQtde.find('input').css({border: "1px solid red", color: "red"});
             tdValor.find('input').css({border: "1px solid red", color: "red"});
@@ -234,7 +238,7 @@ table_promocao.on('click', '.block', function () {
     var tdID= tr.find("td").eq(0);
     var tdNome = tr.find("td").eq(2);
     
-    var conf= confirm("Tem certeza que deseja excluir a promoçao do produto "+tdNome.html()+"?");
+    var conf= confirm("Tem certeza que deseja excluir a promoção "+tdID.html()+" do produto "+tdNome.html()+"?");
     if(conf){
         $.ajax({
             url: url_ajax("Produtos/desativar_promocao"),
@@ -249,6 +253,35 @@ table_promocao.on('click', '.block', function () {
             } else{
                 alert(data.msg);
             }
+        });
+    }
+});
+
+table_promocao.on('click', '.activ', function () {
+    var tr = $(this).closest("tr");
+    var tdID= tr.find("td").eq(0);
+    var tdNome = tr.find("td").eq(2);
+    var tdStatus = tr.find("td").eq(5);
+    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(2);
+    
+    var conf= confirm("Deseja ativar a promoção "+tdID.html()+" do produto "+tdNome.html()+"?");
+    if(conf){
+        $.ajax({
+            url: url_ajax("Produtos/ativar_promocao"),
+            type: "Post",
+            data: {
+                id_promocao : tdID.html()
+            },
+            dataType: "Json"
+        }).done(function (data) {
+            if (data.status) {
+                tdStatus.html("ativo");
+                tdButtonStatus.removeClass('btn-primary activ').addClass('btn-danger block').html('<i class="fas fa-ban"></i>');
+            } else{
+                alert(data.msg);
+            }
+        }).fail(function(data){
+            console.log(data);
         });
     }
 });
