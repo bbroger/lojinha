@@ -349,7 +349,7 @@ $("#salvar_promocao").click(function () {
 });
 
 function allUp(text) {
-    var words = $.trim(text).toLowerCase().split(" ");
+    var words = $.trim(text.replace("  ", " ")).toLowerCase().split(" ");
     for (var a = 0; a < words.length; a++) {
         var w = words[a];
         words[a] = w[0].toUpperCase() + w.slice(1);
@@ -358,7 +358,7 @@ function allUp(text) {
 }
 
 function firstUp(text) {
-    var words = $.trim(text).toLowerCase().split(" ");
+    var words = $.trim(text.replace("  ", " ")).toLowerCase().split(" ");
     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
     return words.join(" ");
 }
