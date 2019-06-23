@@ -4,7 +4,7 @@ class Produtos_model extends CI_Model
 {
     public function tabela_produtos()
     {
-        $this->db->select('*, CONCAT("R$ ",valor) AS valor')->from('produtos')->where('status', 'ativo')->order_by('id_produto', 'DESC');
+        $this->db->select('*, CONCAT("R$ ",valor) AS valor')->from('produtos')->order_by('id_produto', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -13,7 +13,7 @@ class Produtos_model extends CI_Model
     {
         $sql="SELECT promocao.*, produtos.nome AS nomeProduto, CONCAT('R$ ',promocao.valor) AS valor 
             FROM promocao INNER JOIN produtos ON promocao.id_produto = produtos.id_produto 
-            WHERE promocao.status = 'ativo' ORDER BY promocao.id_promocao DESC";
+            ORDER BY promocao.id_promocao DESC";
         $query= $this->db->query($sql);
         return $query->result_array();
     }
@@ -30,6 +30,12 @@ class Produtos_model extends CI_Model
     }
 
     public function desativar_produto($data, $id)
+    {
+        $this->db->where('id_produto', $id);
+        $this->db->update('produtos', $data);
+    }
+
+    public function ativar_produto($data, $id)
     {
         $this->db->where('id_produto', $id);
         $this->db->update('produtos', $data);

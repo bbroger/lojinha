@@ -24,9 +24,14 @@ class Produtos extends CI_Controller
                 foreach ($value as $chave => $valor) {
                     $data['data'][$key][$chave] = $valor;
                 }
+                if($value['status'] == 'ativo'){
+                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
+                } else{
+                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-primary activ"><i class="fas fa-check-square"></i></button>';
+                }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                     <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
+                    '.$buttonStatus;
             }
 
             echo json_encode($data);
@@ -57,7 +62,7 @@ class Produtos extends CI_Controller
 
     public function salvar_produto()
     {
-        $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]|max_length[255]");
+        $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]|max_length[255]|is_unique[produtos.nome]");
         $this->form_validation->set_rules("descricao", "<b>Nome Descrição</b>", "trim|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|required|decimal|min_length[3]");
         $this->form_validation->set_rules("quantidade", "<b>Quantidade</b>", "trim|integer|max_length[11]");
@@ -126,6 +131,26 @@ class Produtos extends CI_Controller
             $data['status'] = 'desativado';
 
             $this->Produtos_model->desativar_produto($data, $id_produto);
+            $data['status'] = true;
+            echo json_encode($data);
+        }
+    }
+
+    public function ativar_produto()
+    {
+        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
+
+        if (!$this->form_validation->run()) {
+            $data['msg'] = validation_errors(" ", " ");
+            $data['status'] = false;
+            echo json_encode($data);
+
+            return false;
+        } else {
+            $id_produto = $this->input->post("id_produto");
+            $data['status'] = 'ativo';
+
+            $this->Produtos_model->ativar_produto($data, $id_produto);
             $data['status'] = true;
             echo json_encode($data);
         }

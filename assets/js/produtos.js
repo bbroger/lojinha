@@ -110,7 +110,34 @@ table.on('click', '.block', function () {
             dataType: "Json"
         }).done(function (data) {
             if (data.status) {
-                table.ajax.reload();
+                tr.html("");
+            } else{
+                alert(data.msg);
+            }
+        });
+    }
+});
+
+table.on('click', '.activ', function () {
+    var tr = $(this).closest("tr");
+    var tdID= tr.find("td").eq(0);
+    var tdNome = tr.find("td").eq(1);
+    var tdStatus = tr.find("td").eq(5);
+    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(2);
+    
+    var conf= confirm("Deseja ativar o produto "+tdNome.html()+"?");
+    if(conf){
+        $.ajax({
+            url: url_ajax("Produtos/ativar_produto"),
+            type: "Post",
+            data: {
+                id_produto : tdID.html()
+            },
+            dataType: "Json"
+        }).done(function (data) {
+            if (data.status) {
+                tdStatus.html("ativo");
+                tdButtonStatus.removeClass('btn-primary activ').addClass('btn-danger block').html('<i class="fas fa-ban"></i>');
             } else{
                 alert(data.msg);
             }
