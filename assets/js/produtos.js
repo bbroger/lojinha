@@ -70,16 +70,16 @@ table.on('click', '.save', function () {
         type: "Post",
         data: {
             id_produto: tdID.html(),
-            nome: tdNome.find('input').val(),
-            descricao: tdDesc.find('input').val(),
+            nome: allUp(tdNome.find('input').val()),
+            descricao: firstUp(tdDesc.find('input').val()),
             valor: tdValor.find('input').val().replace(",", ""),
             quantidade: tdQtde.find('input').val()
         },
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
-            tdNome.html(tdNome.find('input').val());
-            tdDesc.html(tdDesc.find('input').val());
+            tdNome.html(allUp(tdNome.find('input').val()));
+            tdDesc.html(firstUp(tdDesc.find('input').val()));
             tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
             tdQtde.html(tdQtde.find('input').val());
 
@@ -294,8 +294,8 @@ $("#salvar_produto").click(function () {
         url: url_ajax("Produtos/salvar_produto"),
         type: "Post",
         data: {
-            nome: nome.val(),
-            descricao: descricao.val(),
+            nome: allUp(nome.val()),
+            descricao: firstUp(descricao.val()),
             valor: valor.val().replace(",", ""),
             quantidade: quantidade.val()
         },
@@ -347,3 +347,18 @@ $("#salvar_promocao").click(function () {
         alert('Erro ao criar o produto. Tente mais tarde');
     });
 });
+
+function allUp(text) {
+    var words = $.trim(text).toLowerCase().split(" ");
+    for (var a = 0; a < words.length; a++) {
+        var w = words[a];
+        words[a] = w[0].toUpperCase() + w.slice(1);
+    }
+    return words.join(" ");
+}
+
+function firstUp(text) {
+    var words = $.trim(text).toLowerCase().split(" ");
+    words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+    return words.join(" ");
+}
