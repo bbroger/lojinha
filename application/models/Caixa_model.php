@@ -6,10 +6,11 @@ class Caixa_model extends CI_Model
     {
         if ($id_produto) { 
             $sql= "SELECT produtos.*, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo 
-                FROM produtos LEFT JOIN promocao ON produtos.id_produto = promocao.id_produto WHERE produtos.id_produto= $id_produto ORDER BY qtdPromo ASC";
+                FROM produtos LEFT JOIN promocao ON produtos.id_produto = promocao.id_produto 
+                WHERE produtos.id_produto= $id_produto AND status = 'active' ORDER BY qtdPromo ASC";
             $query= $this->db->query($sql);
         } else {
-            $this->db->select('*')->from('produtos')->order_by('id_produto', 'DESC');
+            $this->db->select('*')->from('produtos')->where('status', 'ativo')->order_by('id_produto', 'DESC');
             $query = $this->db->get();
         }
         

@@ -115,6 +115,26 @@ class Produtos extends CI_Controller
         }
     }
 
+    public function desativar_produto()
+    {
+        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
+
+        if (!$this->form_validation->run()) {
+            $data['msg'] = validation_errors(" ", " ");
+            $data['status'] = false;
+            echo json_encode($data);
+
+            return false;
+        } else {
+            $id_produto = $this->input->post("id_produto");
+            $data['status']= 'desativado';
+
+            $this->Produtos_model->desativar_produto($data, $id_produto);
+            $data['status'] = true;
+            echo json_encode($data);
+        }
+    }
+
     public function salvar_promocao()
     {
         $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");

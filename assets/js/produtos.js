@@ -94,6 +94,30 @@ table.on('click', '.save', function () {
     });
 });
 
+table.on('click', '.block', function () {
+    var tr = $(this).closest("tr");
+    var tdID= tr.find("td").eq(0);
+    var tdNome = tr.find("td").eq(1);
+    
+    var conf= confirm("Tem certeza que deseja excluir o produto "+tdNome.html() + tdID.html()+"?");
+    if(conf){
+        $.ajax({
+            url: url_ajax("Produtos/desativar_produto"),
+            type: "Post",
+            data: {
+                id_produto : tdID.html()
+            },
+            dataType: "Json"
+        }).done(function (data) {
+            if (data.status) {
+                table.ajax.reload();
+            } else{
+                alert(data.msg);
+            }
+        });
+    }
+});
+
 var table_promocao = $("#mostra_tabela_promocao").DataTable({
     "processing": true,
     "order": [[0, "desc"]],
