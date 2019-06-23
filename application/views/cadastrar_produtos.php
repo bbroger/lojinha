@@ -76,11 +76,11 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">ID Produto</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Nome</th>
                             <th scope="col">Quantidade</th>
                             <th scope="col">Valor (unid)</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Data</th>
                             <th scope="col">Ação</th>
                         </tr>
                     </thead>

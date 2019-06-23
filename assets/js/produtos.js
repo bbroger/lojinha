@@ -99,7 +99,7 @@ table.on('click', '.block', function () {
     var tdID= tr.find("td").eq(0);
     var tdNome = tr.find("td").eq(1);
     
-    var conf= confirm("Tem certeza que deseja excluir o produto "+tdNome.html() + tdID.html()+"?");
+    var conf= confirm("Tem certeza que deseja excluir o produto "+tdNome.html()+"?");
     if(conf){
         $.ajax({
             url: url_ajax("Produtos/desativar_produto"),
@@ -125,10 +125,10 @@ var table_promocao = $("#mostra_tabela_promocao").DataTable({
     "columns": [
         { "data": "id_promocao" },
         { "data": "id_produto" },
+        { "data": "nomeProduto" },
         { "data": "quantidade" },
         { "data": "valor" },
         { "data": "status" },
-        { "data": "timestamp" },
         { "data": "button" }
     ],
     "language": {
@@ -158,8 +158,8 @@ var table_promocao = $("#mostra_tabela_promocao").DataTable({
 
 table_promocao.on('click', '.edit', function () {
     var tr = $(this).closest("tr");
-    var tdQtde = tr.find("td").eq(2);
-    var tdValor = tr.find("td").eq(3);
+    var tdQtde = tr.find("td").eq(3);
+    var tdValor = tr.find("td").eq(4);
 
     tdQtde.html("<input type='number' style='width: 60%; margin: auto auto;' class='form-control' value='" + tdQtde.html() + "'>");
     tdValor.html("<input type='text' style='width: 70%; margin: auto auto;' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
@@ -172,8 +172,8 @@ table_promocao.on('click', '.edit', function () {
 table_promocao.on('click', '.save', function () {
     var tr = $(this).closest("tr");
     var tdID= tr.find("td").eq(0);
-    var tdQtde = tr.find("td").eq(2);
-    var tdValor = tr.find("td").eq(3);
+    var tdQtde = tr.find("td").eq(3);
+    var tdValor = tr.find("td").eq(4);
     
     $.ajax({
         url: url_ajax("Produtos/editar_promocao"),
@@ -197,6 +197,30 @@ table_promocao.on('click', '.save', function () {
             alert(data.msg);
         }
     });
+});
+
+table_promocao.on('click', '.block', function () {
+    var tr = $(this).closest("tr");
+    var tdID= tr.find("td").eq(0);
+    var tdNome = tr.find("td").eq(2);
+    
+    var conf= confirm("Tem certeza que deseja excluir a promoçao do produto "+tdNome.html()+"?");
+    if(conf){
+        $.ajax({
+            url: url_ajax("Produtos/desativar_promocao"),
+            type: "Post",
+            data: {
+                id_promocao : tdID.html()
+            },
+            dataType: "Json"
+        }).done(function (data) {
+            if (data.status) {
+                table_promocao.ajax.reload();
+            } else{
+                alert(data.msg);
+            }
+        });
+    }
 });
 
 $("#salvar_produto").click(function () {

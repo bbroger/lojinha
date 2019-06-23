@@ -19,7 +19,7 @@ class Produtos extends CI_Controller
     {
         $produtos = $this->Produtos_model->tabela_produtos();
 
-        if($produtos){
+        if ($produtos) {
             foreach ($produtos as $key => $value) {
                 foreach ($value as $chave => $valor) {
                     $data['data'][$key][$chave] = $valor;
@@ -30,7 +30,7 @@ class Produtos extends CI_Controller
             }
 
             echo json_encode($data);
-        } else{
+        } else {
             echo json_encode(["data" => false]);
         }
     }
@@ -39,14 +39,10 @@ class Produtos extends CI_Controller
     {
         $promocao = $this->Produtos_model->tabela_promocao();
 
-        if($promocao){
+        if ($promocao) {
             foreach ($promocao as $key => $value) {
                 foreach ($value as $chave => $valor) {
-                    if ($chave == 'timestamp') {
-                        $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d H:i:s', $valor)->format("d/m/Y H:i");
-                    } else {
-                        $data['data'][$key][$chave] = $valor;
-                    }
+                    $data['data'][$key][$chave] = $valor;
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                     <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
@@ -54,7 +50,7 @@ class Produtos extends CI_Controller
             }
 
             echo json_encode($data);
-        } else{
+        } else {
             echo json_encode(["data" => false]);
         }
     }
@@ -127,7 +123,7 @@ class Produtos extends CI_Controller
             return false;
         } else {
             $id_produto = $this->input->post("id_produto");
-            $data['status']= 'desativado';
+            $data['status'] = 'desativado';
 
             $this->Produtos_model->desativar_produto($data, $id_produto);
             $data['status'] = true;
@@ -180,6 +176,26 @@ class Produtos extends CI_Controller
             $data['valor'] = $this->input->post("valor");
 
             $this->Produtos_model->editar_promocao($data, $id_promocao);
+            $data['status'] = true;
+            echo json_encode($data);
+        }
+    }
+
+    public function desativar_promocao()
+    {
+        $this->form_validation->set_rules("id_promocao", "ID promocao", "trim|required|max_length[11]|combines[promocao.id_promocao]");
+
+        if (!$this->form_validation->run()) {
+            $data['msg'] = validation_errors(" ", " ");
+            $data['status'] = false;
+            echo json_encode($data);
+
+            return false;
+        } else {
+            $id_promocao = $this->input->post("id_promocao");
+            $data['status'] = 'desativado';
+
+            $this->Produtos_model->desativar_promocao($data, $id_promocao);
             $data['status'] = true;
             echo json_encode($data);
         }
