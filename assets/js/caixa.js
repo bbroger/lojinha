@@ -3,7 +3,7 @@ $("#insere_valor_pago").maskMoney();
 
 var table = $("#catalogo").DataTable({
     "processing": true,
-    "pageLength": "25",
+    "pageLength": "10",
     "ordering": false,
     "info": false,
     "dom": "ftip",
@@ -112,12 +112,13 @@ $("#insere_valor_pago").keyup(function () {
 
 $("#finalizar_venda").click(function () {
     var valor_pago = $("#insere_valor_pago");
+    var tipo_pag = ($("#pagcartao").is(':checked')) ? 'cartao' : 'dinheiro';
 
     $.ajax({
         url: url_ajax("Caixa/finalizar_venda"),
         type: 'Post',
         dataType: 'json',
-        data: { valor_pago: valor_pago.val(), itens_produto: produtos_inseridos }
+        data: { valor_pago: valor_pago.val(), tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
     }).done(function (data) {
         if (data.status) {
             valor_pago.val("");
@@ -125,6 +126,7 @@ $("#finalizar_venda").click(function () {
             $("#tabela_produtos_inseridos").html("");
             $("#mostra_valor_total").html("R$ 0,00");
             $("#mostra_valor_pago").html("R$ 0,00");
+            $("#pagcartao").prop('checked', false);
             $("#mostra_troco").html("R$ 0,00");
         }
     }).fail(function (data) {
@@ -181,4 +183,4 @@ function calcula_todos_valores(){
     }
 }
 
-setInterval(function(){ table.ajax.reload(); }, 3000);
+setInterval(function(){ table.ajax.reload(); }, 30000);

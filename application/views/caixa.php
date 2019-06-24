@@ -84,6 +84,12 @@
                         <div class="form-group">
                             <label for="insere_valor_pago">VALOR PAGO</label>
                             <input type="text" data-decimal="." id="insere_valor_pago" class="form-control">
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" value="pagcartao" id="pagcartao">
+                                <label class="form-check-label" for="pagcartao">
+                                    Pagamento cartão
+                                </label>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary" id="finalizar_venda" style="width: 100%;">FINALIZAR VENDA</button>
                     </div>

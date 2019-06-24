@@ -43,6 +43,7 @@ class Caixa extends CI_Controller
     public function finalizar_venda()
     {
         $this->form_validation->set_rules("valor_pago", "<b>Valor pago</b>", "trim|required|decimal|max_length[6]");
+        $this->form_validation->set_rules("tipo_pag", "<b>Valor pago</b>", "trim|in_list[cartao,dinheiro]");
         $this->form_validation->set_rules("itens_produto", "<b>Produtos</b>", "callback_itens_produto_check");
 
         if (!$this->form_validation->run()) {
@@ -54,6 +55,7 @@ class Caixa extends CI_Controller
         }
 
         $transacao['valor_pago'] = $this->input->post("valor_pago");
+        $transacao['tipo_pagamento'] = $this->input->post("tipo_pag");
         $itens = $this->input->post("itens_produto");
 
         $transacao['valor_total']= 0;
@@ -90,7 +92,7 @@ class Caixa extends CI_Controller
             $this->form_validation->set_message("itens_produto_check", "Produtos no formato inválido.");
             return false;
         }
-        
+
         $produtos = $this->Caixa_model->catalogo();
 
         $coluna_id_produto = array_column($produtos, 'id_produto');
