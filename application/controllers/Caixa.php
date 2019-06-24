@@ -90,8 +90,10 @@ class Caixa extends CI_Controller
             $this->form_validation->set_message("itens_produto_check", "Produtos no formato inválido.");
             return false;
         }
+        
+        $produtos = $this->Caixa_model->catalogo();
 
-        $coluna_id_produto = array_column($this->produtos, 'id_produto');
+        $coluna_id_produto = array_column($produtos, 'id_produto');
         foreach ($itens as $key => $value) {
             if (!in_array($value['id_produto'], $coluna_id_produto)) {
                 $this->form_validation->set_message("itens_produto_check", "Uma ou mais <b>Produtos</b> não foram encontrados.");
