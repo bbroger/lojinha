@@ -48,9 +48,9 @@ table.on('click', '.edit', function () {
 
     tdNome.html("<input type='text' class='form-control' value='" + tdNome.html() + "'>");
     tdDesc.html("<input type='text' class='form-control' value='" + tdDesc.html() + "'>");
-    tdValor.html("<input type='text' style='width: 70%; margin: auto auto;' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
+    tdValor.html("<input type='text' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
     tdValor.find("input").maskMoney();
-    tdQtde.html("<input type='number' style='width: 60%; margin: auto auto;' class='form-control' value='" + tdQtde.html() + "'>");
+    tdQtde.html("<input type='number' style='width: 80px; margin: auto auto;' class='form-control' value='" + tdQtde.html() + "'>");
 
     $(this).closest("td").find('button').eq(0).prop('disabled', false);
     $(this).closest("td").find('button').eq(1).prop('disabled', true);
