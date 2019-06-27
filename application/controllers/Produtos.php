@@ -23,6 +23,9 @@ class Produtos extends CI_Controller
             foreach ($produtos as $key => $value) {
                 foreach ($value as $chave => $valor) {
                     $data['data'][$key][$chave] = $valor;
+                    if($chave == 'nova_quantidade' && !is_null($valor)){
+                        $data['data'][$key]['quantidade'] = $valor;
+                    }
                 }
                 if($value['status'] == 'ativo'){
                     $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
