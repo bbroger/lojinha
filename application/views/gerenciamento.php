@@ -33,13 +33,13 @@
                     <a class="nav-link" href="<?php echo base_url(); ?>">Caixa</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cadastrar produto</a>
+                    <a class="nav-link" href="<?php echo base_url('Produtos/'); ?>">Cadastrar produto</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">Relatórios</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Gerenciamento</a>
+                    <a class="nav-link active" href="<?php echo base_url("Gerenciamento/"); ?>">Gerenciamento</a>
                 </li>
             </ul>
         </div>
@@ -51,6 +51,7 @@
                 <table class="table table-striped text-center" id="mostra_retirado">
                     <thead class="thead-dark">
                         <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Valor</th>
                             <th scope="col">Descrição</th>
                             <th scope="col">Data</th>
@@ -100,11 +101,11 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="nome">Qual foi o valor retirado?</label>
-                                    <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
+                                    <input type="text" class="form-control" id="valor_retirado" data-decimal="." value="" placeholder="" autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label for="descricao">Descreva o motivo (Se for compras detalhe os produtos e qtde.)</label>
-                                    <input type="text" class="form-control" id="descricao" value="" placeholder="" autocomplete="off">
+                                    <textarea class="form-control" id="descricao_retirado" value="" placeholder="" autocomplete="off"></textarea>
                                 </div>
                                 <br>
                                 <button type="button" id="salvar_retirado" class="btn btn-primary">
@@ -142,7 +143,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="descricao">Descreva o motivo (Troco, devolvendo...)</label>
-                                    <input type="text" class="form-control" id="descricao_inserido" value="" placeholder="" autocomplete="off">
+                                    <textarea class="form-control" id="descricao_inserido" value="" placeholder="" autocomplete="off"></textarea>
                                 </div>
                                 <br>
                                 <button type="button" id="salvar_inserido" class="btn btn-primary">

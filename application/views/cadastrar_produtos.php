@@ -23,7 +23,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+<nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample10" aria-controls="navbarsExample10" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -32,11 +32,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url(); ?>">Caixa</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Cadastrar produto</a>
+                <li class="nav-item">
+                    <a class="nav-link active" href="<?php echo base_url('Produtos/'); ?>">Cadastrar produto</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">Relatórios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url("Gerenciamento/"); ?>">Gerenciamento</a>
                 </li>
             </ul>
         </div>
