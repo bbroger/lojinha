@@ -166,7 +166,7 @@ class Produtos extends CI_Controller
     public function add_estoque()
     {
         $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
-        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|integer|max_length[11]");
+        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|greater_than[0]|max_length[11]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors(" ", " ");
