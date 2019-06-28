@@ -44,13 +44,11 @@ table.on('click', '.edit', function () {
     var tdNome = tr.find("td").eq(1);
     var tdDesc = tr.find("td").eq(2);
     var tdValor = tr.find("td").eq(3);
-    var tdQtde = tr.find("td").eq(4);
 
     tdNome.html("<input type='text' class='form-control' value='" + tdNome.html() + "'>");
     tdDesc.html("<input type='text' class='form-control' value='" + tdDesc.html() + "'>");
     tdValor.html("<input type='text' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
     tdValor.find("input").maskMoney();
-    tdQtde.html("<input type='number' style='width: 80px; margin: auto auto;' class='form-control' value='" + tdQtde.html() + "'>");
 
     $(this).closest("td").find('button').eq(0).prop('disabled', false);
     $(this).closest("td").find('button').eq(1).prop('disabled', true);
@@ -63,7 +61,6 @@ table.on('click', '.save', function () {
     var tdNome = tr.find("td").eq(1);
     var tdDesc = tr.find("td").eq(2);
     var tdValor = tr.find("td").eq(3);
-    var tdQtde = tr.find("td").eq(4);
 
     $.ajax({
         url: url_ajax("Produtos/editar_produto"),
@@ -72,8 +69,7 @@ table.on('click', '.save', function () {
             id_produto: tdID.html(),
             nome: allUp(tdNome.find('input').val()),
             descricao: firstUp(tdDesc.find('input').val()),
-            valor: tdValor.find('input').val().replace(",", ""),
-            quantidade: tdQtde.find('input').val()
+            valor: tdValor.find('input').val().replace(",", "")
         },
         dataType: "Json"
     }).done(function (data) {
@@ -81,7 +77,6 @@ table.on('click', '.save', function () {
             tdNome.html(allUp(tdNome.find('input').val()));
             tdDesc.html(firstUp(tdDesc.find('input').val()));
             tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
-            tdQtde.html(tdQtde.find('input').val());
 
             tr.find("td").eq(6).find('button').eq(0).prop('disabled', true);
             tr.find("td").eq(6).find('button').eq(1).prop('disabled', false);
