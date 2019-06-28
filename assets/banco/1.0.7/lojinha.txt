@@ -1,0 +1,3 @@
+Adicionei a tabela movimentaçao
+Adicionei a tabela add_estoque
+Adicionei o trigger no add_estoque

@@ -14,6 +14,9 @@ var table = $("#mostra_tabela").DataTable({
         { "data": "status" },
         { "data": "button" }
     ],
+    "columnDefs": [
+        { "width": "5%", "targets": 0 }
+    ],
     "language": {
         "sEmptyTable": "Nenhum registro encontrado",
         "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -285,7 +288,7 @@ table_promocao.on('click', '.block', function () {
         if (data.status) {
             tdStatus.html("desativado");
             tdButtonStatusEdit.prop('disabled', true);
-            tdButtonStatus.removeClass('btn-danger block').addClass('btn-primary activ').html('<i class="fas fa-check-square"></i>');
+            tdButtonStatus.removeClass('btn-danger block').addClass('btn-secondary activ').html('<i class="fas fa-check-square"></i>');
         } else {
             alert(data.msg);
         }
