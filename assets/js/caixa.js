@@ -77,10 +77,10 @@ $("#search_inserir").click(function () {
                 $("#msg_search_id_produto").html("Código produto não encontrado.<br> Confira na tabela ao lado");
 
             } else {
-                var valorPromo= 0;
-                $.each(result, function (i, value){
-                    if(parseInt(quantidade.val()) >= parseInt(value.qtdPromo)){
-                        valorPromo= value.valorPromo;
+                var valorPromo = 0;
+                $.each(result, function (i, value) {
+                    if (parseInt(quantidade.val()) >= parseInt(value.qtdPromo)) {
+                        valorPromo = value.valorPromo;
                     }
                 });
 
@@ -94,7 +94,7 @@ $("#search_inserir").click(function () {
 
                 id_produto.val("");
                 quantidade.val("");
-                console.log(table);
+
                 table.search('').draw();
             }
         });
@@ -111,31 +111,49 @@ $("#insere_valor_pago").keyup(function () {
 });
 
 $("#finalizar_venda").click(function () {
+    $("#msg_finalizar_venda").html("");
+
     var valor_pago = $("#insere_valor_pago");
+    valor_pago.css({ border: "1px solid #ccc", color: "#737373" });
+
     var tipo_pag = ($("#pagcartao").is(':checked')) ? 'cartao' : 'dinheiro';
 
-    $.ajax({
-        url: url_ajax("Caixa/finalizar_venda"),
-        type: 'Post',
-        dataType: 'json',
-        data: { valor_pago: valor_pago.val(), tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
-    }).done(function (data) {
-        if (data.status) {
-            valor_pago.val("");
-            produtos_inseridos = [];
-            $("#tabela_produtos_inseridos").html("");
-            $("#mostra_valor_total").html("R$ 0,00");
-            $("#mostra_valor_pago").html("R$ 0,00");
-            $("#pagcartao").prop('checked', false);
-            $("#mostra_troco").html("R$ 0,00");
-        }
-    }).fail(function (data) {
-        console.log(data);
-    });
+    var valid = true;
 
+    if(produtos_inseridos.length == 0){
+        valid = false;
+        valor_pago.css({ border: "1px solid red", color: "red" });
+        $("#msg_finalizar_venda").html("Não existem produtos inseridos.");
+    } else if (valor_pago.val().length == 0 || valor_pago.val() == '0.00') {
+        valid = false;
+        valor_pago.css({ border: "1px solid red", color: "red" });
+        $("#msg_finalizar_venda").html("Insira o valor antes de finalizar");
+    }
+
+    if (valid) {
+
+        $.ajax({
+            url: url_ajax("Caixa/finalizar_venda"),
+            type: 'Post',
+            dataType: 'json',
+            data: { valor_pago: valor_pago.val(), tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
+        }).done(function (data) {
+            if (data.status) {
+                valor_pago.val("");
+                produtos_inseridos = [];
+                $("#tabela_produtos_inseridos").html("");
+                $("#mostra_valor_total").html("R$ 0,00");
+                $("#mostra_valor_pago").html("R$ 0,00");
+                $("#pagcartao").prop('checked', false);
+                $("#mostra_troco").html("R$ 0,00");
+            }
+        }).fail(function (data) {
+            alert(data.msg);
+        });
+    }
 });
 
-function monta_tabela(){
+function monta_tabela() {
     var tr = null;
     $.each(produtos_inseridos, function (i, value) {
         tr += "<tr scope='row' id='row" + i + "'>";
@@ -156,13 +174,13 @@ function monta_tabela(){
     calcula_todos_valores();
 }
 
-function calcula_todos_valores(){
+function calcula_todos_valores() {
     $("#mostra_valor_total").html("R$ 0,00");
     $("#mostra_valor_pago").html("R$ 0,00");
     $("#mostra_troco").html("R$ 0,00");
     if (produtos_inseridos.length > 0) {
         var pega_valor_pago = parseFloat($("#insere_valor_pago").val().replace(",", ""));
-        var valor_pago= ($.isNumeric(pega_valor_pago)) ? pega_valor_pago : 0;
+        var valor_pago = ($.isNumeric(pega_valor_pago)) ? pega_valor_pago : 0;
         var valor_total = 0;
         $.each(produtos_inseridos, function (i, value) {
             valor_total += parseFloat(value.valor_total);
@@ -178,9 +196,9 @@ function calcula_todos_valores(){
         } else {
             $("#mostra_troco").html("R$ 0,00");
         }
-    } else{
+    } else {
         $("#insere_valor_pago").val("");
     }
 }
 
-setInterval(function(){ table.ajax.reload(); }, 30000);
+setInterval(function () { table.ajax.reload(); }, 30000);

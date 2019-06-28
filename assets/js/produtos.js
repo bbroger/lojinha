@@ -14,6 +14,9 @@ var table = $("#mostra_tabela").DataTable({
         { "data": "status" },
         { "data": "button" }
     ],
+    "columnDefs": [
+        { "width": "5%", "targets": 0 }
+    ],
     "language": {
         "sEmptyTable": "Nenhum registro encontrado",
         "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -44,17 +47,16 @@ table.on('click', '.edit', function () {
     var tdNome = tr.find("td").eq(1);
     var tdDesc = tr.find("td").eq(2);
     var tdValor = tr.find("td").eq(3);
-    var tdQtde = tr.find("td").eq(4);
 
     tdNome.html("<input type='text' class='form-control' value='" + tdNome.html() + "'>");
     tdDesc.html("<input type='text' class='form-control' value='" + tdDesc.html() + "'>");
     tdValor.html("<input type='text' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
     tdValor.find("input").maskMoney();
-    tdQtde.html("<input type='number' style='width: 80px; margin: auto auto;' class='form-control' value='" + tdQtde.html() + "'>");
 
     $(this).closest("td").find('button').eq(0).prop('disabled', false);
     $(this).closest("td").find('button').eq(1).prop('disabled', true);
     $(this).closest("td").find('button').eq(2).prop('disabled', true);
+    $(this).closest("td").find('button').eq(3).prop('disabled', true);
 });
 
 table.on('click', '.save', function () {
@@ -63,7 +65,6 @@ table.on('click', '.save', function () {
     var tdNome = tr.find("td").eq(1);
     var tdDesc = tr.find("td").eq(2);
     var tdValor = tr.find("td").eq(3);
-    var tdQtde = tr.find("td").eq(4);
 
     $.ajax({
         url: url_ajax("Produtos/editar_produto"),
@@ -72,8 +73,7 @@ table.on('click', '.save', function () {
             id_produto: tdID.html(),
             nome: allUp(tdNome.find('input').val()),
             descricao: firstUp(tdDesc.find('input').val()),
-            valor: tdValor.find('input').val().replace(",", ""),
-            quantidade: tdQtde.find('input').val()
+            valor: tdValor.find('input').val().replace(",", "")
         },
         dataType: "Json"
     }).done(function (data) {
@@ -81,11 +81,11 @@ table.on('click', '.save', function () {
             tdNome.html(allUp(tdNome.find('input').val()));
             tdDesc.html(firstUp(tdDesc.find('input').val()));
             tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
-            tdQtde.html(tdQtde.find('input').val());
 
             tr.find("td").eq(6).find('button').eq(0).prop('disabled', true);
             tr.find("td").eq(6).find('button').eq(1).prop('disabled', false);
             tr.find("td").eq(6).find('button').eq(2).prop('disabled', false);
+            tr.find("td").eq(6).find('button').eq(3).prop('disabled', false);
         } else {
             tdNome.find('input').css({ border: "1px solid red", color: "red" });
             tdDesc.find('input').css({ border: "1px solid red", color: "red" });
@@ -114,7 +114,7 @@ table.on('click', '.block', function () {
         if (data.status) {
             tdStatus.html("desativado");
             tdButtonStatusEdit.prop('disabled', true);
-            tdButtonStatus.removeClass('btn-danger block').addClass('btn-primary activ').html('<i class="fas fa-check-square"></i>');
+            tdButtonStatus.removeClass('btn-danger block').addClass('btn-secondary activ').html('<i class="fas fa-check-square"></i>');
         } else {
             alert(data.msg);
         }
@@ -145,6 +145,46 @@ table.on('click', '.activ', function () {
             alert(data.msg);
         }
     });
+});
+
+table.on('click', '.add', function () {
+    var IDProduto= $("#id_produto_estoque");
+    IDProduto.val("");
+
+    var nomeProduto= $("#nome_produto_estoque");
+    nomeProduto.val("");
+
+    var qtdeAtual= $("#qtde_atual_estoque");
+    qtdeAtual.val("");
+
+    var qtdeNova= $("#qtde_nova_estoque");
+    qtdeNova.val("");
+
+    var qtdeTotal= $("#qtde_total_estoque");
+    qtdeTotal.val("");
+
+    var tr = $(this).closest("tr");
+
+    var tdID = tr.find("td").eq(0);
+    IDProduto.val(tdID.html());
+
+    var tdNome = tr.find("td").eq(1);
+    nomeProduto.val(tdNome.html());
+
+    var tdQtde = tr.find("td").eq(4);
+    qtdeAtual.val(tdQtde.html());
+
+    $("#addEstoque").modal('show');
+});
+
+$("#qtde_nova_estoque").keyup(function () {
+    var qtdeAtual= parseInt($("#qtde_atual_estoque").val());
+    var qtdeNova = parseInt($("#qtde_nova_estoque").val());
+    if(Number.isInteger(qtdeNova)){
+        $("#qtde_total_estoque").val(qtdeAtual + qtdeNova);
+    } else{
+        $("#qtde_total_estoque").val("");
+    }
 });
 
 var table_promocao = $("#mostra_tabela_promocao").DataTable({
@@ -248,7 +288,7 @@ table_promocao.on('click', '.block', function () {
         if (data.status) {
             tdStatus.html("desativado");
             tdButtonStatusEdit.prop('disabled', true);
-            tdButtonStatus.removeClass('btn-danger block').addClass('btn-primary activ').html('<i class="fas fa-check-square"></i>');
+            tdButtonStatus.removeClass('btn-danger block').addClass('btn-secondary activ').html('<i class="fas fa-check-square"></i>');
         } else {
             alert(data.msg);
         }
@@ -287,7 +327,6 @@ $("#salvar_produto").click(function () {
     var nome = $("#nome");
     var descricao = $("#descricao");
     var valor = $("#valor");
-    var quantidade = $("#quantidade");
 
     $("#mostra_msg").removeClass();
     $.ajax({
@@ -296,8 +335,7 @@ $("#salvar_produto").click(function () {
         data: {
             nome: allUp(nome.val()),
             descricao: firstUp(descricao.val()),
-            valor: valor.val().replace(",", ""),
-            quantidade: quantidade.val()
+            valor: valor.val().replace(",", "")
         },
         dataType: "Json"
     }).done(function (data) {
@@ -307,7 +345,6 @@ $("#salvar_produto").click(function () {
             nome.val("");
             descricao.val("");
             valor.val("");
-            quantidade.val(0);
             table.ajax.reload();
         } else {
             $("#mostra_msg").html(data.msg).addClass("text-danger").fadeIn();
@@ -348,8 +385,39 @@ $("#salvar_promocao").click(function () {
     });
 });
 
+$("#salvar_novo_estoque").click(function () {
+    var id_produto = $("#id_produto_estoque");
+    var qtdeAtual= $("#qtde_atual_estoque");
+    var qtdeNova= $("#qtde_nova_estoque");
+    var qtdeTotal = $("#qtde_total_estoque");
+
+    $("#mostra_msg_estoque").removeClass();
+    $.ajax({
+        url: url_ajax("Produtos/add_estoque"),
+        type: "Post",
+        data: {
+            id_produto: id_produto.val(),
+            quantidade: qtdeNova.val()
+        },
+        dataType: "Json"
+    }).done(function (data) {
+        if (data.status) {
+            $("#mostra_msg_estoque").html(data.msg).addClass("text-success").fadeIn();
+            $("#mostra_msg_estoque").fadeOut(4000);
+            qtdeAtual.val(qtdeTotal.val());
+            qtdeNova.val("");
+            qtdeTotal.val("");
+            table.ajax.reload();
+        } else {
+            $("#mostra_msg_estoque").html(data.msg).addClass("text-danger").fadeIn();
+        }
+    }).fail(function (data) {
+        alert('Erro ao criar o produto. Tente mais tarde');
+    });
+});
+
 function allUp(text) {
-    var words = $.trim(text.replace("  ", " ")).toLowerCase().split(" ");
+    var words = $.trim(esp(text)).split(" ");
     for (var a = 0; a < words.length; a++) {
         var w = words[a];
         words[a] = w[0].toUpperCase() + w.slice(1);
@@ -358,7 +426,18 @@ function allUp(text) {
 }
 
 function firstUp(text) {
-    var words = $.trim(text.replace("  ", " ")).toLowerCase().split(" ");
+    var words = $.trim(esp(text)).split(" ");
     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
     return words.join(" ");
+}
+
+function esp(vlr) {
+
+    while (vlr.indexOf("  ") != -1)
+        vlr = vlr.replace("  ", " ");
+
+    while (vlr.indexOf("   ") != -1)
+        vlr = vlr.replace("   ", " ");
+
+    return vlr;
 }

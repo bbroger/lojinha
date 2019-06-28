@@ -23,16 +23,20 @@ class Produtos extends CI_Controller
             foreach ($produtos as $key => $value) {
                 foreach ($value as $chave => $valor) {
                     $data['data'][$key][$chave] = $valor;
+                    if($chave == 'nova_quantidade' && !is_null($valor)){
+                        $data['data'][$key]['quantidade'] = $valor;
+                    }
                 }
                 if($value['status'] == 'ativo'){
                     $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
                     <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
                 } else{
                     $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-primary activ"><i class="fas fa-check-square"></i></button>';
+                    <button style="padding: 0 5px;" class="btn btn-secondary activ"><i class="fas fa-check-square"></i></button>';
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
-                    '.$buttonStatus;
+                    '.$buttonStatus
+                    .' <button style="padding: 0 5px;" class="btn btn-primary add"><i class="fas fa-plus-square"></i></button>';
             }
 
             echo json_encode($data);
@@ -55,7 +59,7 @@ class Produtos extends CI_Controller
                     <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
                 } else{
                     $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-primary activ"><i class="fas fa-check-square"></i></button>';
+                    <button style="padding: 0 5px;" class="btn btn-secondary activ"><i class="fas fa-check-square"></i></button>';
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                     '.$buttonStatus;
@@ -72,7 +76,6 @@ class Produtos extends CI_Controller
         $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]|max_length[255]|is_unique[produtos.nome]");
         $this->form_validation->set_rules("descricao", "<b>Nome Descrição</b>", "trim|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|required|decimal|min_length[3]");
-        $this->form_validation->set_rules("quantidade", "<b>Quantidade</b>", "trim|integer|max_length[11]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors();
@@ -84,7 +87,6 @@ class Produtos extends CI_Controller
             $data['nome'] = $this->input->post("nome");
             $data['descricao'] = $this->input->post("descricao");
             $data['valor'] = $this->input->post("valor");
-            $data['quantidade'] = $this->input->post("quantidade");
 
             $this->Produtos_model->salvar_produto($data);
 
@@ -102,7 +104,6 @@ class Produtos extends CI_Controller
         $this->form_validation->set_rules("nome", "Nome", "trim|required|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("descricao", "Descrição", "trim|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("valor", "Valor", "trim|required|decimal|min_length[3]");
-        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|integer|max_length[11]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors(" ", " ");
@@ -115,7 +116,6 @@ class Produtos extends CI_Controller
             $data['nome'] = $this->input->post("nome");
             $data['descricao'] = $this->input->post("descricao");
             $data['valor'] = $this->input->post("valor");
-            $data['quantidade'] = $this->input->post("quantidade");
 
             $this->Produtos_model->editar_produto($data, $id_produto);
             $data['status'] = true;
@@ -158,6 +158,29 @@ class Produtos extends CI_Controller
             $data['status'] = 'ativo';
 
             $this->Produtos_model->ativar_produto($data, $id_produto);
+            $data['status'] = true;
+            echo json_encode($data);
+        }
+    }
+
+    public function add_estoque()
+    {
+        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
+        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|integer|max_length[11]");
+
+        if (!$this->form_validation->run()) {
+            $data['msg'] = validation_errors(" ", " ");
+            $data['status'] = false;
+            echo json_encode($data);
+
+            return false;
+        } else {
+            $id_produto = $this->input->post("id_produto");
+            $data['quantidade'] = $this->input->post("quantidade");
+
+            $this->Produtos_model->add_estoque($data, $id_produto);
+
+            $data['msg'] = "<p><b>Estoque adicionado com sucesso!</b></p>";
             $data['status'] = true;
             echo json_encode($data);
         }

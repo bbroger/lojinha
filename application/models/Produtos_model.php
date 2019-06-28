@@ -4,8 +4,9 @@ class Produtos_model extends CI_Model
 {
     public function tabela_produtos()
     {
-        $this->db->select('*, CONCAT("R$ ",valor) AS valor')->from('produtos')->order_by('id_produto', 'DESC');
-        $query = $this->db->get();
+        $sql= "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, (produtos.quantidade - SUM(vendas.quantidade)) AS nova_quantidade 
+            FROM produtos LEFT JOIN vendas ON produtos.id_produto = vendas.id_produto GROUP BY produtos.id_produto";
+        $query= $this->db->query($sql);
         return $query->result_array();
     }
 
@@ -39,6 +40,13 @@ class Produtos_model extends CI_Model
     {
         $this->db->where('id_produto', $id);
         $this->db->update('produtos', $data);
+    }
+
+    public function add_estoque($data, $id)
+    {
+        $this->db->set('quantidade', 'quantidade+'.$data['quantidade'], FALSE);
+        $this->db->where('id_produto', $id);
+        $this->db->update('produtos');
     }
 
     public function salvar_promocao($data)

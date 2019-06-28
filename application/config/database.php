@@ -76,8 +76,8 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> 'mysql:host=localhost;dbname=lojinha',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'username' => 'goodnato',
+	'password' => 'goodlegends3d',
 	'database' => 'lojinha',
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',

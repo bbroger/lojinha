@@ -23,7 +23,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+<nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample10" aria-controls="navbarsExample10" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -32,11 +32,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url(); ?>">Caixa</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Cadastrar produto</a>
+                <li class="nav-item">
+                    <a class="nav-link active" href="<?php echo base_url('Produtos/'); ?>">Cadastrar produto</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">Relatórios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url("Gerenciamento/"); ?>">Gerenciamento</a>
                 </li>
             </ul>
         </div>
@@ -124,8 +127,8 @@
                                         <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
                                     </div>
                                     <div class="col">
-                                        <label for="quantidade">Quantidade</label>
-                                        <input type="number" class="form-control" id="quantidade" value="0" placeholder="" autocomplete="off">
+                                        <label for="quantidade">Data de cadastro</label>
+                                        <input type="text" class="form-control" value="<?php echo date('d/m/Y H:i') ?>" placeholder="" autocomplete="off" disabled>
                                     </div>
                                 </div>
                                 <br>
@@ -140,7 +143,6 @@
         </div>
     </div>
 
-    <!--Modal criar produto-->
     <div class="modal fade text-dark" id="novaPromocao" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
@@ -176,6 +178,55 @@
                                 <br>
                                 <button type="button" id="salvar_promocao" class="btn btn-primary">
                                     Cadastrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade text-dark" id="addEstoque" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar estoque</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <p id="mostra_msg_estoque"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="hidden" id="id_produto_estoque" value="">
+                                <div class="form-group">
+                                    <label for="nome">Nome produto</label>
+                                    <input type="text" class="form-control" id="nome_produto_estoque" min="0" value="" placeholder="" autocomplete="off" disabled>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label for="quantidade">Qtde atual</label>
+                                        <input type="number" class="form-control" id="qtde_atual_estoque" value="" placeholder="" autocomplete="off" disabled>
+                                    </div>
+                                    <div class="col">
+                                        <label for="valor">Qtde nova</label>
+                                        <input type="number" class="form-control" id="qtde_nova_estoque" min="0" value="" placeholder="" autocomplete="off">
+                                    </div>
+                                    <div class="col">
+                                        <label for="valor">Qtde total</label>
+                                        <input type="number" class="form-control" id="qtde_total_estoque" value="" placeholder="" autocomplete="off" disabled>
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="button" id="salvar_novo_estoque" class="btn btn-primary">
+                                    Cadastrar estoque
                                 </button>
                             </div>
                         </div>
