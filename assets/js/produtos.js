@@ -147,6 +147,46 @@ table.on('click', '.activ', function () {
     });
 });
 
+table.on('click', '.add', function () {
+    var IDProduto= $("#id_produto_estoque");
+    IDProduto.val("");
+
+    var nomeProduto= $("#nome_produto_estoque");
+    nomeProduto.val("");
+
+    var qtdeAtual= $("#qtde_atual_estoque");
+    qtdeAtual.val("");
+
+    var qtdeNova= $("#qtde_nova_estoque");
+    qtdeNova.val("");
+
+    var qtdeTotal= $("#qtde_total_estoque");
+    qtdeTotal.val("");
+
+    var tr = $(this).closest("tr");
+
+    var tdID = tr.find("td").eq(0);
+    IDProduto.val(tdID.html());
+
+    var tdNome = tr.find("td").eq(1);
+    nomeProduto.val(tdNome.html());
+
+    var tdQtde = tr.find("td").eq(4);
+    qtdeAtual.val(tdQtde.html());
+
+    $("#addEstoque").modal('show');
+});
+
+$("#qtde_nova_estoque").keyup(function () {
+    var qtdeAtual= parseInt($("#qtde_atual_estoque").val());
+    var qtdeNova = parseInt($("#qtde_nova_estoque").val());
+    if(Number.isInteger(qtdeNova)){
+        $("#qtde_total_estoque").val(qtdeAtual + qtdeNova);
+    } else{
+        $("#qtde_total_estoque").val("");
+    }
+});
+
 var table_promocao = $("#mostra_tabela_promocao").DataTable({
     "processing": true,
     "order": [[0, "desc"]],
@@ -342,6 +382,37 @@ $("#salvar_promocao").click(function () {
             table_promocao.ajax.reload();
         } else {
             $("#mostra_msg_promo").html(data.msg).addClass("text-danger").fadeIn();
+        }
+    }).fail(function (data) {
+        alert('Erro ao criar o produto. Tente mais tarde');
+    });
+});
+
+$("#salvar_novo_estoque").click(function () {
+    var id_produto = $("#id_produto_estoque");
+    var qtdeAtual= $("#qtde_atual_estoque");
+    var qtdeNova= $("#qtde_nova_estoque");
+    var qtdeTotal = $("#qtde_total_estoque");
+
+    $("#mostra_msg_estoque").removeClass();
+    $.ajax({
+        url: url_ajax("Produtos/add_estoque"),
+        type: "Post",
+        data: {
+            id_produto: id_produto.val(),
+            quantidade: qtdeNova.val()
+        },
+        dataType: "Json"
+    }).done(function (data) {
+        if (data.status) {
+            $("#mostra_msg_estoque").html(data.msg).addClass("text-success").fadeIn();
+            $("#mostra_msg_estoque").fadeOut(4000);
+            qtdeAtual.val(qtdeTotal.val());
+            qtdeNova.val("");
+            qtdeTotal.val("");
+            table.ajax.reload();
+        } else {
+            $("#mostra_msg_estoque").html(data.msg).addClass("text-danger").fadeIn();
         }
     }).fail(function (data) {
         alert('Erro ao criar o produto. Tente mais tarde');

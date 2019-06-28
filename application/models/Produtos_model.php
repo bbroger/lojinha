@@ -42,6 +42,13 @@ class Produtos_model extends CI_Model
         $this->db->update('produtos', $data);
     }
 
+    public function add_estoque($data, $id)
+    {
+        $this->db->set('quantidade', 'quantidade+'.$data['quantidade'], FALSE);
+        $this->db->where('id_produto', $id);
+        $this->db->update('produtos');
+    }
+
     public function salvar_promocao($data)
     {
         $this->db->insert('promocao', $data);

@@ -32,10 +32,11 @@ class Produtos extends CI_Controller
                     <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
                 } else{
                     $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-primary activ"><i class="fas fa-check-square"></i></button>';
+                    <button style="padding: 0 5px;" class="btn btn-info activ"><i class="fas fa-check-square"></i></button>';
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
-                    '.$buttonStatus;
+                    '.$buttonStatus
+                    .' <button style="padding: 0 5px;" class="btn btn-primary add"><i class="fas fa-plus-square"></i></button>';
             }
 
             echo json_encode($data);
@@ -161,6 +162,29 @@ class Produtos extends CI_Controller
             $data['status'] = 'ativo';
 
             $this->Produtos_model->ativar_produto($data, $id_produto);
+            $data['status'] = true;
+            echo json_encode($data);
+        }
+    }
+
+    public function add_estoque()
+    {
+        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
+        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|integer|max_length[11]");
+
+        if (!$this->form_validation->run()) {
+            $data['msg'] = validation_errors(" ", " ");
+            $data['status'] = false;
+            echo json_encode($data);
+
+            return false;
+        } else {
+            $id_produto = $this->input->post("id_produto");
+            $data['quantidade'] = $this->input->post("quantidade");
+
+            $this->Produtos_model->add_estoque($data, $id_produto);
+
+            $data['msg'] = "<p><b>Estoque adicionado com sucesso!</b></p>";
             $data['status'] = true;
             echo json_encode($data);
         }
