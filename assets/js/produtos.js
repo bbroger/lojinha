@@ -53,6 +53,7 @@ table.on('click', '.edit', function () {
     $(this).closest("td").find('button').eq(0).prop('disabled', false);
     $(this).closest("td").find('button').eq(1).prop('disabled', true);
     $(this).closest("td").find('button').eq(2).prop('disabled', true);
+    $(this).closest("td").find('button').eq(3).prop('disabled', true);
 });
 
 table.on('click', '.save', function () {
@@ -81,6 +82,7 @@ table.on('click', '.save', function () {
             tr.find("td").eq(6).find('button').eq(0).prop('disabled', true);
             tr.find("td").eq(6).find('button').eq(1).prop('disabled', false);
             tr.find("td").eq(6).find('button').eq(2).prop('disabled', false);
+            tr.find("td").eq(6).find('button').eq(3).prop('disabled', false);
         } else {
             tdNome.find('input').css({ border: "1px solid red", color: "red" });
             tdDesc.find('input').css({ border: "1px solid red", color: "red" });
@@ -109,7 +111,7 @@ table.on('click', '.block', function () {
         if (data.status) {
             tdStatus.html("desativado");
             tdButtonStatusEdit.prop('disabled', true);
-            tdButtonStatus.removeClass('btn-danger block').addClass('btn-primary activ').html('<i class="fas fa-check-square"></i>');
+            tdButtonStatus.removeClass('btn-danger block').addClass('btn-secondary activ').html('<i class="fas fa-check-square"></i>');
         } else {
             alert(data.msg);
         }

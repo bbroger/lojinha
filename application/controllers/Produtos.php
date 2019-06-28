@@ -32,7 +32,7 @@ class Produtos extends CI_Controller
                     <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
                 } else{
                     $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-info activ"><i class="fas fa-check-square"></i></button>';
+                    <button style="padding: 0 5px;" class="btn btn-secondary activ"><i class="fas fa-check-square"></i></button>';
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                     '.$buttonStatus
@@ -59,7 +59,7 @@ class Produtos extends CI_Controller
                     <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
                 } else{
                     $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-primary activ"><i class="fas fa-check-square"></i></button>';
+                    <button style="padding: 0 5px;" class="btn btn-secondary activ"><i class="fas fa-check-square"></i></button>';
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                     '.$buttonStatus;
