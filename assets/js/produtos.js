@@ -322,7 +322,6 @@ $("#salvar_produto").click(function () {
     var nome = $("#nome");
     var descricao = $("#descricao");
     var valor = $("#valor");
-    var quantidade = $("#quantidade");
 
     $("#mostra_msg").removeClass();
     $.ajax({
@@ -331,8 +330,7 @@ $("#salvar_produto").click(function () {
         data: {
             nome: allUp(nome.val()),
             descricao: firstUp(descricao.val()),
-            valor: valor.val().replace(",", ""),
-            quantidade: quantidade.val()
+            valor: valor.val().replace(",", "")
         },
         dataType: "Json"
     }).done(function (data) {
@@ -342,7 +340,6 @@ $("#salvar_produto").click(function () {
             nome.val("");
             descricao.val("");
             valor.val("");
-            quantidade.val(0);
             table.ajax.reload();
         } else {
             $("#mostra_msg").html(data.msg).addClass("text-danger").fadeIn();

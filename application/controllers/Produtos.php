@@ -76,7 +76,6 @@ class Produtos extends CI_Controller
         $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]|max_length[255]|is_unique[produtos.nome]");
         $this->form_validation->set_rules("descricao", "<b>Nome Descrição</b>", "trim|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|required|decimal|min_length[3]");
-        $this->form_validation->set_rules("quantidade", "<b>Quantidade</b>", "trim|integer|max_length[11]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors();
@@ -88,7 +87,6 @@ class Produtos extends CI_Controller
             $data['nome'] = $this->input->post("nome");
             $data['descricao'] = $this->input->post("descricao");
             $data['valor'] = $this->input->post("valor");
-            $data['quantidade'] = $this->input->post("quantidade");
 
             $this->Produtos_model->salvar_produto($data);
 

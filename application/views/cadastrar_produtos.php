@@ -127,8 +127,8 @@
                                         <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
                                     </div>
                                     <div class="col">
-                                        <label for="quantidade">Quantidade</label>
-                                        <input type="number" class="form-control" id="quantidade" value="0" placeholder="" autocomplete="off">
+                                        <label for="quantidade">Data de cadastro</label>
+                                        <input type="text" class="form-control" value="<?php echo date('d/m/Y H:i') ?>" placeholder="" autocomplete="off" disabled>
                                     </div>
                                 </div>
                                 <br>
