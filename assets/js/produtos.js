@@ -114,7 +114,7 @@ table.on('click', '.block', function () {
         if (data.status) {
             tdStatus.html("desativado");
             tdButtonStatusEdit.prop('disabled', true);
-            tdButtonStatus.removeClass('btn-danger block').addClass('btn-secondary activ').html('<i class="fas fa-check-square"></i>');
+            tdButtonStatus.removeClass('block').addClass('activ').html('<i class="fas fa-check-square"></i>');
         } else {
             alert(data.msg);
         }
