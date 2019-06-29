@@ -1,9 +1,10 @@
 var produtos_inseridos = [];
 $("#insere_valor_pago").maskMoney();
 
+//Serve para limitar o numero de botoes da paginaçao
+$.fn.DataTable.ext.pager.numbers_length = 3;
 var table = $("#catalogo").DataTable({
     "processing": true,
-    "pageLength": "10",
     "ordering": false,
     "info": false,
     "dom": "ftip",
@@ -131,7 +132,7 @@ $("#finalizar_venda").click(function () {
     }
 
     if (valid) {
-
+        console.log(produtos_inseridos);
         $.ajax({
             url: url_ajax("Caixa/finalizar_venda"),
             type: 'Post',
