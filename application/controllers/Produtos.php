@@ -55,11 +55,9 @@ class Produtos extends CI_Controller
                     $data['data'][$key][$chave] = $valor;
                 }
                 if($value['status'] == 'ativo'){
-                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
+                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
                 } else{
-                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-secondary activ"><i class="fas fa-check-square"></i></button>';
+                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-secondary activ"><i class="fas fa-check-square"></i></button>';
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                     '.$buttonStatus;

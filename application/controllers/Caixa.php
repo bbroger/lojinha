@@ -60,7 +60,8 @@ class Caixa extends CI_Controller
 
         $transacao['valor_total']= 0;
         foreach ($itens as $key => $value) {
-            $transacao['valor_total']+= $value['quantidade'] * $value['valor'];
+            $valor= ($value['valorPromo'] == 0) ? $value['valor'] : $value['valorPromo'];
+            $transacao['valor_total']+= $value['quantidade'] * $valor;
         }
 
         $transacao['troco']= ($transacao['valor_pago'] - $transacao['valor_total'] > 0)? $transacao['valor_pago'] - $transacao['valor_total']:0 ;
@@ -71,7 +72,8 @@ class Caixa extends CI_Controller
         foreach ($itens as $key => $value) {
             $salvar_produtos[$key]['id_transacao']= $id_transacao;
             $salvar_produtos[$key]['id_produto']= $value['id_produto'];
-            $salvar_produtos[$key]['valor']= $value['valor'];
+            $valor= ($value['valorPromo'] == 0) ? $value['valor'] : $value['valorPromo'];
+            $salvar_produtos[$key]['valor']= $valor;
             $salvar_produtos[$key]['quantidade']= $value['quantidade'];
         }
 
