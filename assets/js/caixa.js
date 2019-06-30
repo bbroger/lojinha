@@ -202,3 +202,28 @@ function calcula_todos_valores() {
 }
 
 setInterval(function () { table.ajax.reload(); }, 30000);
+
+$("#btnUltimasVendas").click(function(){
+    var table= $("#table_ultimasVendas_modal");
+    table.html("");
+
+    $.ajax({
+        url: url_ajax("Caixa/ultimas_vendas"),
+        type: "Post",
+        dataType: "Json"
+    }).done(function(data){
+        var tr= null;
+        $.each(data, function(key, value){
+            tr+= "<tr><td>"+value.id_transacao+"</td>";
+            tr+= "<td>"+value.nome+"</td>";
+            tr+= "<td>"+value.quantidade+"</td>";
+            tr+= "<td>"+value.valor+"</td>";
+            tr+= "<td>"+value.timestamp+"</td>";
+            tr+= "</tr>";
+        });
+
+        table.html(tr);
+    }).fail(function(data){
+        console.log(data)
+    });
+});

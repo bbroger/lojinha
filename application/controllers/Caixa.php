@@ -107,4 +107,11 @@ class Caixa extends CI_Controller
 
         return true;
     }
+
+    public function ultimas_vendas()
+    {
+        $ultimas= $this->Caixa_model->ultimas_vendas();
+
+        echo json_encode($ultimas);
+    }
 }
