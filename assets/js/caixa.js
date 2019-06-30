@@ -132,7 +132,6 @@ $("#finalizar_venda").click(function () {
     }
 
     if (valid) {
-        console.log(produtos_inseridos);
         $.ajax({
             url: url_ajax("Caixa/finalizar_venda"),
             type: 'Post',

@@ -23,7 +23,7 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample10" aria-controls="navbarsExample10" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -45,7 +45,7 @@
         </div>
     </nav>
     <div class="container">
-    <div class="row mt-3">
+        <div class="row mt-3">
             <div class="col-md-12">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#novoProduto"><i class="fas fa-plus-circle"></i> Cadastrar novo produto</button>
@@ -72,7 +72,7 @@
                 </table>
             </div>
         </div>
-        
+
         <div class="row mt-5">
             <div class="col-md-12">
                 <table class="table table-striped text-center" id="mostra_tabela_promocao">
@@ -191,7 +191,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Adicionar estoque</h5>
+                    <h5 class="modal-title">Estoque</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
@@ -206,27 +206,38 @@
                         <div class="row">
                             <div class="col-12">
                                 <input type="hidden" id="id_produto_estoque" value="">
+                                <label for="nome">O que você quer fazer?</label>
                                 <div class="form-group">
-                                    <label for="nome">Nome produto</label>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="adicionar_estoque" name="acao_estoque" value="add" class="custom-control-input" checked>
+                                        <label class="custom-control-label" for="adicionar_estoque">Adicionar estoque</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="remover_estoque" name="acao_estoque" value="remover" class="custom-control-input">
+                                        <label class="custom-control-label" for="remover_estoque">Remover estoque</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nome_produto_estoque">Nome produto</label>
                                     <input type="text" class="form-control" id="nome_produto_estoque" min="0" value="" placeholder="" autocomplete="off" disabled>
                                 </div>
                                 <div class="form-row">
                                     <div class="col">
-                                        <label for="quantidade">Qtde atual</label>
+                                        <label for="qtde_atual_estoque">Qtde atual</label>
                                         <input type="number" class="form-control" id="qtde_atual_estoque" value="" placeholder="" autocomplete="off" disabled>
                                     </div>
                                     <div class="col">
-                                        <label for="valor">Qtde nova</label>
-                                        <input type="number" class="form-control" id="qtde_nova_estoque" min="0" value="" placeholder="" autocomplete="off">
+                                        <label for="qtde_acao_estoque" id="label_acao_estoque">Adicionar</label>
+                                        <input type="number" class="form-control" id="qtde_acao_estoque" min="0" value="" placeholder="" autocomplete="off">
                                     </div>
                                     <div class="col">
-                                        <label for="valor">Qtde total</label>
+                                        <label for="qtde_total_estoque">Qtde total</label>
                                         <input type="number" class="form-control" id="qtde_total_estoque" value="" placeholder="" autocomplete="off" disabled>
                                     </div>
                                 </div>
                                 <br>
                                 <button type="button" id="salvar_novo_estoque" class="btn btn-primary">
-                                    Cadastrar estoque
+                                    Adicionar estoque
                                 </button>
                             </div>
                         </div>
