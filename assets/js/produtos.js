@@ -420,16 +420,23 @@ $("#salvar_promocao").click(function () {
 $("#salvar_novo_estoque").click(function () {
     var id_produto = $("#id_produto_estoque");
     var qtdeAtual = $("#qtde_atual_estoque");
-    var qtdeNova = $("#qtde_nova_estoque");
+    var qtdeNova = $("#qtde_acao_estoque");
     var qtdeTotal = $("#qtde_total_estoque");
+    var radioAcao;
+    if($("#adicionar_estoque").is(':checked')){
+        radioAcao= 'add';
+    } else{
+        radioAcao= 'remover';
+    }
 
     $("#mostra_msg_estoque").removeClass();
     $.ajax({
-        url: url_ajax("Produtos/add_estoque"),
+        url: url_ajax("Produtos/acao_estoque"),
         type: "Post",
         data: {
             id_produto: id_produto.val(),
-            quantidade: qtdeNova.val()
+            quantidade: qtdeNova.val(),
+            acao: radioAcao
         },
         dataType: "Json"
     }).done(function (data) {
