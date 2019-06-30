@@ -217,12 +217,14 @@ $("#btnUltimasVendas").click(function(){
             tr+= "<tr><td>"+value.id_transacao+"</td>";
             tr+= "<td>"+value.nome+"</td>";
             tr+= "<td>"+value.quantidade+"</td>";
-            tr+= "<td>"+value.valor+"</td>";
-            tr+= "<td>"+value.timestamp+"</td>";
+            tr+= "<td>R$ "+value.valor+"</td>";
+            tr+= "<td>R$ "+value.valor_total+"</td>";
+            tr+= "<td>"+moment(value.timestamp).format('DD/MM/YYYY HH:mm')+"</td>";
             tr+= "</tr>";
         });
 
         table.html(tr);
+        $("#ultimasVendas").modal('show');
     }).fail(function(data){
         console.log(data)
     });

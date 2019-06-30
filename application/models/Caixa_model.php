@@ -31,4 +31,14 @@ class Caixa_model extends CI_Model
     {
         $this->db->insert_batch('vendas', $data);
     }
+
+    public function ultimas_vendas()
+    {
+        $sql = "SELECT vendas.*, produtos.nome, vendas.quantidade * vendas.valor AS valor_total FROM vendas INNER JOIN produtos ON vendas.id_produto = produtos.id_produto 
+            ORDER BY vendas.id_vendas DESC LIMIT 20";
+
+        $query = $this->db->query($sql);
+
+        return $query->result_array();
+    }
 }

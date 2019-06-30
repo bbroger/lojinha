@@ -138,7 +138,8 @@
                                 <th scope="col">ID transacao</th>
                                 <th scope="col">Produto</th>
                                 <th scope="col">Qtd</th>
-                                <th scope="col">Valor</th>
+                                <th scope="col">Valor unid</th>
+                                <th scope="col">Valor total</th>
                                 <th scope="col">Data</th>
                             </tr>
                         </thead>
