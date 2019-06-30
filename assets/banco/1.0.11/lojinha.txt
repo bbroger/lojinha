@@ -1,0 +1,5 @@
+Alterei a tabela de add_estoque para acao_estoque
+Alterei no trigger add_estoque para acao_estoque
+Se na tabela acao_estoque o valor atual for maior que o valor novo é por que o item foi removido
+
+Alterei a coluna id_add_estoque para id_acao_estoque
