@@ -107,4 +107,23 @@ class Caixa extends CI_Controller
 
         return true;
     }
+
+    public function ultimas_vendas()
+    {
+        $vendas= $this->Caixa_model->ultimas_vendas();
+
+        $arr= [];
+        foreach($vendas as $key=>$value){
+            array_push($arr, $value['id_transacao']);
+            if(count(array_unique($arr)) == 4){
+                break;
+            }
+            foreach ($value as $chave => $valor) {
+                $ultimas[$key][$chave]= $valor;
+            }
+
+        }
+
+        echo json_encode($ultimas);
+    }
 }

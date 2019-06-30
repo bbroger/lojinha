@@ -114,7 +114,7 @@ table.on('click', '.block', function () {
         if (data.status) {
             tdStatus.html("desativado");
             tdButtonStatusEdit.prop('disabled', true);
-            tdButtonStatus.removeClass('btn-danger block').addClass('btn-secondary activ').html('<i class="fas fa-check-square"></i>');
+            tdButtonStatus.removeClass('block').addClass('activ').html('<i class="fas fa-check-square"></i>');
         } else {
             alert(data.msg);
         }
@@ -148,20 +148,29 @@ table.on('click', '.activ', function () {
 });
 
 table.on('click', '.add', function () {
-    var IDProduto= $("#id_produto_estoque");
+    var radioAdd = $("#adicionar_estoque");
+    radioAdd.prop('checked', true);
+
+    var IDProduto = $("#id_produto_estoque");
     IDProduto.val("");
 
-    var nomeProduto= $("#nome_produto_estoque");
+    var nomeProduto = $("#nome_produto_estoque");
     nomeProduto.val("");
 
-    var qtdeAtual= $("#qtde_atual_estoque");
+    var qtdeAtual = $("#qtde_atual_estoque");
     qtdeAtual.val("");
 
-    var qtdeNova= $("#qtde_nova_estoque");
+    var labelAcao = $("#label_acao_estoque");
+    labelAcao.html("Adicionar");
+
+    var qtdeNova = $("#qtde_acao_estoque");
     qtdeNova.val("");
 
-    var qtdeTotal= $("#qtde_total_estoque");
+    var qtdeTotal = $("#qtde_total_estoque");
     qtdeTotal.val("");
+
+    var btnEstoque = $("#salvar_novo_estoque");
+    btnEstoque.html("Adicionar estoque").removeClass('btn-danger').addClass('btn-primary');
 
     var tr = $(this).closest("tr");
 
@@ -177,11 +186,34 @@ table.on('click', '.add', function () {
     $("#addEstoque").modal('show');
 });
 
-$("#qtde_nova_estoque").keyup(function () {
-    var qtdeAtual= parseInt($("#qtde_atual_estoque").val());
-    var qtdeNova = parseInt($("#qtde_nova_estoque").val());
-    if(Number.isInteger(qtdeNova)){
+$("input[name='acao_estoque'").click(function () {
+    $("#qtde_total_estoque").val("");
+    $("#qtde_acao_estoque").val("");
+    if ($(this).val() == 'add') {
+        $("#label_acao_estoque").html("Adicionar");
+        $("#salvar_novo_estoque").removeClass('btn-danger').addClass('btn-primary').html("Adicionar estoque");
+    } else{
+        $("#label_acao_estoque").html("Remover");
+        $("#salvar_novo_estoque").removeClass('btn-primary').addClass('btn-danger').html("Remover estoque");
+    }
+});
+
+$("#qtde_acao_estoque").keyup(function () {
+    var qtdeAtual = parseInt($("#qtde_atual_estoque").val());
+
+    var radioAcao;
+    if($("#adicionar_estoque").is(':checked')){
+        radioAcao= 'add';
+    } else{
+        radioAcao= 'remover';
+    }
+
+    var qtdeNova = parseInt($(this).val());
+    
+    if (Number.isInteger(qtdeNova) && radioAcao == 'add') {
         $("#qtde_total_estoque").val(qtdeAtual + qtdeNova);
+    } else if(Number.isInteger(qtdeNova) && radioAcao == 'remover') {
+        $("#qtde_total_estoque").val(qtdeAtual - qtdeNova);
     } else{
         $("#qtde_total_estoque").val("");
     }
@@ -387,17 +419,24 @@ $("#salvar_promocao").click(function () {
 
 $("#salvar_novo_estoque").click(function () {
     var id_produto = $("#id_produto_estoque");
-    var qtdeAtual= $("#qtde_atual_estoque");
-    var qtdeNova= $("#qtde_nova_estoque");
+    var qtdeAtual = $("#qtde_atual_estoque");
+    var qtdeNova = $("#qtde_acao_estoque");
     var qtdeTotal = $("#qtde_total_estoque");
+    var radioAcao;
+    if($("#adicionar_estoque").is(':checked')){
+        radioAcao= 'add';
+    } else{
+        radioAcao= 'remover';
+    }
 
     $("#mostra_msg_estoque").removeClass();
     $.ajax({
-        url: url_ajax("Produtos/add_estoque"),
+        url: url_ajax("Produtos/acao_estoque"),
         type: "Post",
         data: {
             id_produto: id_produto.val(),
-            quantidade: qtdeNova.val()
+            quantidade: qtdeNova.val(),
+            acao: radioAcao
         },
         dataType: "Json"
     }).done(function (data) {

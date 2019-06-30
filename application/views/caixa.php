@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <hr>
-                <div class="row mt-5">
+                <div class="row my-5">
                     <div class="col-12">
                         <div class="form-group">
                             <label for="insere_valor_pago">VALOR PAGO</label>
@@ -93,6 +93,12 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary" id="finalizar_venda" style="width: 100%;">FINALIZAR VENDA</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row mt-5">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-dark" style="width: 100%;" id="btnUltimasVendas">Ver últimas vendas</button>
                     </div>
                 </div>
             </div>
@@ -115,6 +121,39 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="ultimasVendas" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">As 3 últimas vendas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped text-center">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID transacao</th>
+                                <th scope="col">Produto</th>
+                                <th scope="col">Qtd</th>
+                                <th scope="col">Valor unid</th>
+                                <th scope="col">Valor total</th>
+                                <th scope="col">Data</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table_ultimasVendas_modal">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>s
 
     <script src="<?php echo base_url("assets/js/jquery.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/popper.min.js"); ?>"></script>

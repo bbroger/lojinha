@@ -132,7 +132,6 @@ $("#finalizar_venda").click(function () {
     }
 
     if (valid) {
-        console.log(produtos_inseridos);
         $.ajax({
             url: url_ajax("Caixa/finalizar_venda"),
             type: 'Post',
@@ -203,3 +202,30 @@ function calcula_todos_valores() {
 }
 
 setInterval(function () { table.ajax.reload(); }, 30000);
+
+$("#btnUltimasVendas").click(function(){
+    var table= $("#table_ultimasVendas_modal");
+    table.html("");
+
+    $.ajax({
+        url: url_ajax("Caixa/ultimas_vendas"),
+        type: "Post",
+        dataType: "Json"
+    }).done(function(data){
+        var tr= null;
+        $.each(data, function(key, value){
+            tr+= "<tr><td>"+value.id_transacao+"</td>";
+            tr+= "<td>"+value.nome+"</td>";
+            tr+= "<td>"+value.quantidade+"</td>";
+            tr+= "<td>R$ "+value.valor+"</td>";
+            tr+= "<td>R$ "+value.valor_total+"</td>";
+            tr+= "<td>"+moment(value.timestamp).format('DD/MM/YYYY HH:mm')+"</td>";
+            tr+= "</tr>";
+        });
+
+        table.html(tr);
+        $("#ultimasVendas").modal('show');
+    }).fail(function(data){
+        console.log(data)
+    });
+});

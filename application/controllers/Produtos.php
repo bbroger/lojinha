@@ -32,11 +32,11 @@ class Produtos extends CI_Controller
                     <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
                 } else{
                     $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-secondary activ"><i class="fas fa-check-square"></i></button>';
+                    <button style="padding: 0 5px;" class="btn btn-danger activ"><i class="fas fa-check-square"></i></button>';
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
                     '.$buttonStatus
-                    .' <button style="padding: 0 5px;" class="btn btn-primary add"><i class="fas fa-plus-square"></i></button>';
+                    .' <button style="padding: 0 5px;" class="btn btn-primary add"><i class="fas fa-shopping-cart"></i></button>';
             }
 
             echo json_encode($data);
@@ -161,10 +161,11 @@ class Produtos extends CI_Controller
         }
     }
 
-    public function add_estoque()
+    public function acao_estoque()
     {
         $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
         $this->form_validation->set_rules("quantidade", "Quantidade", "trim|greater_than[0]|max_length[11]");
+        $this->form_validation->set_rules("acao", "Ação", "trim|in_list[add,remover]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors(" ", " ");
@@ -175,10 +176,11 @@ class Produtos extends CI_Controller
         } else {
             $id_produto = $this->input->post("id_produto");
             $data['quantidade'] = $this->input->post("quantidade");
+            $data['acao'] = $this->input->post("acao");
 
-            $this->Produtos_model->add_estoque($data, $id_produto);
+            $this->Produtos_model->acao_estoque($data, $id_produto);
 
-            $data['msg'] = "<p><b>Estoque adicionado com sucesso!</b></p>";
+            $data['msg'] = ($data['acao'] == 'add') ? "<p><b>Estoque adicionado com sucesso!</b></p>" : "<p><b>Estoque removido com sucesso!</b></p>";
             $data['status'] = true;
             echo json_encode($data);
         }
