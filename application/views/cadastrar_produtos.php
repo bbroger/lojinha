@@ -41,6 +41,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url("Gerenciamento/"); ?>">Gerenciamento</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="<?php echo base_url("Gerenciamento/sair"); ?>">Sair</a>
+                </li>
             </ul>
         </div>
     </nav>
