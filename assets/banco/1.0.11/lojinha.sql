@@ -42,33 +42,6 @@ LOCK TABLES `acao_estoque` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `add_estoque`
---
-
-DROP TABLE IF EXISTS `add_estoque`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `add_estoque` (
-  `id_add_estoque` int(11) NOT NULL AUTO_INCREMENT,
-  `id_produto` int(11) NOT NULL,
-  `quantidade_atual` int(11) NOT NULL,
-  `quantidade_novo` int(11) NOT NULL,
-  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_add_estoque`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `add_estoque`
---
-
-LOCK TABLES `add_estoque` WRITE;
-/*!40000 ALTER TABLE `add_estoque` DISABLE KEYS */;
-INSERT INTO `add_estoque` VALUES (1,4,56,60,'2019-06-28 15:20:27'),(2,3,231,234,'2019-06-28 15:20:51'),(3,39,3,39,'2019-06-28 15:23:16'),(4,5,24,43,'2019-06-28 16:32:07'),(5,3,234,286,'2019-06-28 16:32:36'),(6,17,0,12,'2019-06-28 16:37:54'),(7,29,0,50,'2019-06-28 16:40:01'),(8,29,50,100,'2019-06-28 16:40:48'),(9,18,2,13,'2019-06-28 16:42:07'),(10,28,64,364,'2019-06-28 16:42:45'),(11,63,0,0,'2019-06-29 05:43:58'),(12,43,479,3179,'2019-06-29 13:01:17'),(13,44,37,237,'2019-06-29 13:02:02'),(14,5,43,48,'2019-06-29 13:03:37'),(15,35,21,48,'2019-06-29 13:04:30'),(16,34,16,22,'2019-06-29 13:05:15'),(17,34,22,97,'2019-06-29 13:05:28'),(18,7,8,44,'2019-06-29 13:44:47'),(19,6,14,26,'2019-06-29 13:45:26'),(20,46,71,421,'2019-06-29 13:46:17'),(21,6,26,62,'2019-06-29 13:52:46'),(22,16,8,22,'2019-06-29 13:57:05'),(23,14,10,46,'2019-06-29 14:04:39'),(24,15,19,31,'2019-06-29 14:06:07'),(25,63,0,26,'2019-06-29 17:35:34'),(26,5,48,61,'2019-06-29 19:11:33');
-/*!40000 ALTER TABLE `add_estoque` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `movimentacao`
 --
 
@@ -132,9 +105,14 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`goodnato`@`%`*/ /*!50003 TRIGGER `lojinha`.`produtos_BEFORE_UPDATE` BEFORE UPDATE ON `produtos` FOR EACH ROW
+
 BEGIN
 
-INSERT INTO add_estoque VALUES (NULL,OLD.id_produto,OLD.quantidade,NEW.quantidade,NOW());
+
+
+INSERT INTO acao_estoque VALUES (NULL,OLD.id_produto,OLD.quantidade,NEW.quantidade,NOW());
+
+
 
 END */;;
 DELIMITER ;
@@ -234,4 +212,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-30  4:25:35
+-- Dump completed on 2019-06-30 23:22:09
