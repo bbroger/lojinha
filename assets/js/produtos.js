@@ -48,12 +48,15 @@ table.on('click', '.edit', function () {
     var tr = $(this).closest("tr");
     var tdNome = tr.find("td").eq(1);
     var tdDesc = tr.find("td").eq(2);
-    var tdValor = tr.find("td").eq(3);
+    var tdVarejo = tr.find("td").eq(3);
+    var tdAtacado = tr.find("td").eq(4);
 
     tdNome.html("<input type='text' class='form-control' value='" + tdNome.html() + "'>");
     tdDesc.html("<input type='text' class='form-control' value='" + tdDesc.html() + "'>");
-    tdValor.html("<input type='text' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
-    tdValor.find("input").maskMoney();
+    tdVarejo.html("<input type='text' data-decimal='.' class='form-control' value='" + tdVarejo.html().replace("R$ ", "") + "'>");
+    tdVarejo.find("input").maskMoney();
+    tdAtacado.html("<input type='text' data-decimal='.' class='form-control' value='" + tdAtacado.html().replace("R$ ", "") + "'>");
+    tdAtacado.find("input").maskMoney();
 
     $(this).closest("td").find('button').eq(0).prop('disabled', false);
     $(this).closest("td").find('button').eq(1).prop('disabled', true);
@@ -65,34 +68,51 @@ table.on('click', '.save', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
     var tdNome = tr.find("td").eq(1);
+    var nome;
     var tdDesc = tr.find("td").eq(2);
-    var tdValor = tr.find("td").eq(3);
+    var desc;
+    var tdVarejo = tr.find("td").eq(3);
+    var tdAtacado = tr.find("td").eq(4);
+
+    if (tdNome.find('input').val().length <= 0) {
+        nome = null;
+    } else {
+        nome = allUp(tdNome.find('input').val());
+    }
+
+    if (tdDesc.find('input').val().length <= 0) {
+        desc = null;
+    } else {
+        desc = firstUp(tdDesc.find('input').val());
+    }
 
     $.ajax({
         url: url_ajax("Produtos/editar_produto"),
         type: "Post",
         data: {
             id_produto: tdID.html(),
-            nome: allUp(tdNome.find('input').val()),
-            descricao: firstUp(tdDesc.find('input').val()),
-            valor: tdValor.find('input').val().replace(",", "")
+            nome: nome,
+            descricao: desc,
+            valorVarejo: tdVarejo.find('input').val().replace(",", ""),
+            valorAtacado: tdAtacado.find('input').val().replace(",", "")
         },
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
             tdNome.html(allUp(tdNome.find('input').val()));
             tdDesc.html(firstUp(tdDesc.find('input').val()));
-            tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
+            tdVarejo.html("R$ " + tdVarejo.find('input').val().replace(",", ""));
+            tdAtacado.html("R$ " + tdAtacado.find('input').val().replace(",", ""));
 
-            tr.find("td").eq(6).find('button').eq(0).prop('disabled', true);
-            tr.find("td").eq(6).find('button').eq(1).prop('disabled', false);
-            tr.find("td").eq(6).find('button').eq(2).prop('disabled', false);
-            tr.find("td").eq(6).find('button').eq(3).prop('disabled', false);
+            tr.find("td").eq(7).find('button').eq(0).prop('disabled', true);
+            tr.find("td").eq(7).find('button').eq(1).prop('disabled', false);
+            tr.find("td").eq(7).find('button').eq(2).prop('disabled', false);
+            tr.find("td").eq(7).find('button').eq(3).prop('disabled', false);
         } else {
             tdNome.find('input').css({ border: "1px solid red", color: "red" });
             tdDesc.find('input').css({ border: "1px solid red", color: "red" });
-            tdValor.find('input').css({ border: "1px solid red", color: "red" });
-            tdQtde.find('input').css({ border: "1px solid red", color: "red" });
+            tdVarejo.find('input').css({ border: "1px solid red", color: "red" });
+            tdAtacado.find('input').css({ border: "1px solid red", color: "red" });
             alert(data.msg);
         }
     });
@@ -357,7 +377,7 @@ table_promocao.on('click', '.activ', function () {
     });
 });
 
-$(".clearModal").click(function(){
+$(".clearModal").click(function () {
     $("#produto_promo").val("");
     $("#nome").val("");
     $("#descricao").val("");
@@ -369,24 +389,24 @@ $(".clearModal").click(function(){
 });
 
 $("#salvar_produto").click(function () {
-    var nome = $("#nome");
+    var pega_nome = $("#nome");
+    var nome;
     var pega_descricao = $("#descricao");
     var descricao;
     var pega_varejo = $("#valorVarejo");
     var valorVarejo;
     var pega_atacado = $("#valorAtacado");
     var valorAtacado;
-    var msg;
-    var valid = true;
-    
-    if ($.trim(nome.val()).length <= 0) {
-        msg = "<p>O campo <b>Nome</b> é obrigatório</p>";
-        valid= false;
+
+    if ($.trim(pega_nome.val()).length <= 0) {
+        nome= null;
+    } else{
+        nome= allUp($.trim(pega_nome.val()));
     }
     if ($.trim(pega_descricao.val()).length <= 0) {
         descricao = null;
     } else {
-        descricao = firstUp(pega_descricao.val());
+        descricao = firstUp($.trim(pega_descricao.val()));
     }
     if (pega_varejo.val().length <= 0) {
         valorVarejo = null;
@@ -400,37 +420,33 @@ $("#salvar_produto").click(function () {
     }
 
     $("#mostra_msg").html("").removeClass();
-    
-    if (valid) {
-        $.ajax({
-            url: url_ajax("Produtos/salvar_produto"),
-            type: "Post",
-            data: {
-                nome: allUp(nome.val()),
-                descricao: descricao,
-                valorVarejo: valorVarejo,
-                valorAtacado: valorAtacado
-            },
-            dataType: "Json"
-        }).done(function (data) {
-            if (data.status) {
-                $("#mostra_msg").html(data.msg).addClass("text-success").fadeIn();
-                $("#mostra_msg").fadeOut(4000);
-                nome.val("");
-                pega_descricao.val("");
-                pega_varejo.val("");
-                pega_atacado.val("");
-                table.ajax.reload();
-            } else {
-                $("#mostra_msg").html(data.msg).addClass("text-danger").fadeIn();
-            }
-        }).fail(function (data) {
-            console.log(data);
-            alert('Erro ao criar o produto. Tente mais tarde');
-        });
-    } else{
-        $("#mostra_msg").html(msg).addClass("text-danger");
-    }
+    $.ajax({
+        url: url_ajax("Produtos/salvar_produto"),
+        type: "Post",
+        data: {
+            nome: nome,
+            descricao: descricao,
+            valorVarejo: valorVarejo,
+            valorAtacado: valorAtacado
+        },
+        dataType: "Json"
+    }).done(function (data) {
+        if (data.status) {
+            $("#mostra_msg").html(data.msg).addClass("text-success").fadeIn();
+            $("#mostra_msg").fadeOut(4000);
+            pega_nome.val("");
+            pega_descricao.val("");
+            pega_varejo.val("");
+            pega_atacado.val("");
+            table.ajax.reload();
+        } else {
+            $("#mostra_msg").html(data.msg).addClass("text-danger").fadeIn();
+        }
+    }).fail(function (data) {
+        console.log(data);
+        alert('Erro ao criar o produto. Tente mais tarde');
+    });
+
 });
 
 $("#salvar_promocao").click(function () {
