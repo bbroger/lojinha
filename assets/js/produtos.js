@@ -121,9 +121,9 @@ table.on('click', '.save', function () {
 table.on('click', '.block', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
-    var tdStatus = tr.find("td").eq(5);
-    var tdButtonStatusEdit = tr.find("td").eq(6).find('button').eq(1);
-    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(2);
+    var tdStatus = tr.find("td").eq(6);
+    var tdButtonStatusEdit = tr.find("td").eq(7).find('button').eq(1);
+    var tdButtonStatus = tr.find("td").eq(7).find('button').eq(2);
 
     $.ajax({
         url: url_ajax("Produtos/desativar_produto"),
@@ -136,7 +136,7 @@ table.on('click', '.block', function () {
         if (data.status) {
             tdStatus.html("desativado");
             tdButtonStatusEdit.prop('disabled', true);
-            tdButtonStatus.removeClass('block').addClass('activ').html('<i class="fas fa-check-square"></i>');
+            tdButtonStatus.removeClass('block').addClass('activ').html('<i class="fas fa-check"></i>');
         } else {
             alert(data.msg);
         }
@@ -146,10 +146,9 @@ table.on('click', '.block', function () {
 table.on('click', '.activ', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
-    var tdNome = tr.find("td").eq(1);
-    var tdStatus = tr.find("td").eq(5);
-    var tdButtonStatusEdit = tr.find("td").eq(6).find('button').eq(1);
-    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(2);
+    var tdStatus = tr.find("td").eq(6);
+    var tdButtonStatusEdit = tr.find("td").eq(7).find('button').eq(1);
+    var tdButtonStatus = tr.find("td").eq(7).find('button').eq(2);
 
     $.ajax({
         url: url_ajax("Produtos/ativar_produto"),
