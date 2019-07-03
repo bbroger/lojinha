@@ -32,7 +32,7 @@ class Login extends CI_Controller
         $conta= $this->input->post("conta");
         $senha= $this->input->post("senha");
 
-        if($conta=="adm" && $senha="7323"){
+        if($conta=="adm" && $senha=="7323"){
             return true;
         } else{
             $this->form_validation->set_message('check_now', 'Conta ou senha inválida.');

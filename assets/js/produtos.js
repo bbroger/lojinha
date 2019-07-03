@@ -1,4 +1,5 @@
-$("#valor").maskMoney();
+$("#valorVarejo").maskMoney();
+$("#valorAtacado").maskMoney();
 $("#valor_promo").maskMoney();
 
 var table = $("#mostra_tabela").DataTable({
@@ -9,7 +10,8 @@ var table = $("#mostra_tabela").DataTable({
         { "data": "id_produto" },
         { "data": "nome" },
         { "data": "descricao" },
-        { "data": "valor" },
+        { "data": "valorVarejo" },
+        { "data": "valorAtacado" },
         { "data": "quantidade" },
         { "data": "status" },
         { "data": "button" }
@@ -192,7 +194,7 @@ $("input[name='acao_estoque'").click(function () {
     if ($(this).val() == 'add') {
         $("#label_acao_estoque").html("Adicionar");
         $("#salvar_novo_estoque").removeClass('btn-danger').addClass('btn-primary').html("Adicionar estoque");
-    } else{
+    } else {
         $("#label_acao_estoque").html("Remover");
         $("#salvar_novo_estoque").removeClass('btn-primary').addClass('btn-danger').html("Remover estoque");
     }
@@ -202,19 +204,19 @@ $("#qtde_acao_estoque").keyup(function () {
     var qtdeAtual = parseInt($("#qtde_atual_estoque").val());
 
     var radioAcao;
-    if($("#adicionar_estoque").is(':checked')){
-        radioAcao= 'add';
-    } else{
-        radioAcao= 'remover';
+    if ($("#adicionar_estoque").is(':checked')) {
+        radioAcao = 'add';
+    } else {
+        radioAcao = 'remover';
     }
 
     var qtdeNova = parseInt($(this).val());
-    
+
     if (Number.isInteger(qtdeNova) && radioAcao == 'add') {
         $("#qtde_total_estoque").val(qtdeAtual + qtdeNova);
-    } else if(Number.isInteger(qtdeNova) && radioAcao == 'remover') {
+    } else if (Number.isInteger(qtdeNova) && radioAcao == 'remover') {
         $("#qtde_total_estoque").val(qtdeAtual - qtdeNova);
-    } else{
+    } else {
         $("#qtde_total_estoque").val("");
     }
 });
@@ -355,35 +357,80 @@ table_promocao.on('click', '.activ', function () {
     });
 });
 
+$(".clearModal").click(function(){
+    $("#produto_promo").val("");
+    $("#nome").val("");
+    $("#descricao").val("");
+    $("#valorVarejo").val("");
+    $("#quantidade_promo").val("");
+    $("#valor_promo").val("");
+    $("#mostra_msg").html("");
+    $("#mostra_msg_promo").html();
+});
+
 $("#salvar_produto").click(function () {
     var nome = $("#nome");
-    var descricao = $("#descricao");
-    var valor = $("#valor");
+    var pega_descricao = $("#descricao");
+    var descricao;
+    var pega_varejo = $("#valorVarejo");
+    var valorVarejo;
+    var pega_atacado = $("#valorAtacado");
+    var valorAtacado;
+    var msg;
+    var valid = true;
+    
+    if ($.trim(nome.val()).length <= 0) {
+        msg = "<p>O campo <b>Nome</b> é obrigatório</p>";
+        valid= false;
+    }
+    if ($.trim(pega_descricao.val()).length <= 0) {
+        descricao = null;
+    } else {
+        descricao = firstUp(pega_descricao.val());
+    }
+    if (pega_varejo.val().length <= 0) {
+        valorVarejo = null;
+    } else {
+        valorVarejo = pega_varejo.val().replace(",", "");
+    }
+    if (pega_atacado.val().length <= 0) {
+        valoratacado = null;
+    } else {
+        valorAtacado = pega_atacado.val().replace(",", "");
+    }
 
-    $("#mostra_msg").removeClass();
-    $.ajax({
-        url: url_ajax("Produtos/salvar_produto"),
-        type: "Post",
-        data: {
-            nome: allUp(nome.val()),
-            descricao: firstUp(descricao.val()),
-            valor: valor.val().replace(",", "")
-        },
-        dataType: "Json"
-    }).done(function (data) {
-        if (data.status) {
-            $("#mostra_msg").html(data.msg).addClass("text-success").fadeIn();
-            $("#mostra_msg").fadeOut(4000);
-            nome.val("");
-            descricao.val("");
-            valor.val("");
-            table.ajax.reload();
-        } else {
-            $("#mostra_msg").html(data.msg).addClass("text-danger").fadeIn();
-        }
-    }).fail(function (data) {
-        alert('Erro ao criar o produto. Tente mais tarde');
-    });
+    $("#mostra_msg").html("").removeClass();
+    
+    if (valid) {
+        $.ajax({
+            url: url_ajax("Produtos/salvar_produto"),
+            type: "Post",
+            data: {
+                nome: allUp(nome.val()),
+                descricao: descricao,
+                valorVarejo: valorVarejo,
+                valorAtacado: valorAtacado
+            },
+            dataType: "Json"
+        }).done(function (data) {
+            if (data.status) {
+                $("#mostra_msg").html(data.msg).addClass("text-success").fadeIn();
+                $("#mostra_msg").fadeOut(4000);
+                nome.val("");
+                pega_descricao.val("");
+                pega_varejo.val("");
+                pega_atacado.val("");
+                table.ajax.reload();
+            } else {
+                $("#mostra_msg").html(data.msg).addClass("text-danger").fadeIn();
+            }
+        }).fail(function (data) {
+            console.log(data);
+            alert('Erro ao criar o produto. Tente mais tarde');
+        });
+    } else{
+        $("#mostra_msg").html(msg).addClass("text-danger");
+    }
 });
 
 $("#salvar_promocao").click(function () {
@@ -423,10 +470,10 @@ $("#salvar_novo_estoque").click(function () {
     var qtdeNova = $("#qtde_acao_estoque");
     var qtdeTotal = $("#qtde_total_estoque");
     var radioAcao;
-    if($("#adicionar_estoque").is(':checked')){
-        radioAcao= 'add';
-    } else{
-        radioAcao= 'remover';
+    if ($("#adicionar_estoque").is(':checked')) {
+        radioAcao = 'add';
+    } else {
+        radioAcao = 'remover';
     }
 
     $("#mostra_msg_estoque").removeClass();

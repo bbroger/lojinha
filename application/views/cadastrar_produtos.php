@@ -51,8 +51,8 @@
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#novoProduto"><i class="fas fa-plus-circle"></i> Cadastrar novo produto</button>
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#novaPromocao"><i class="fas fa-plus-circle"></i> Cadastrar nova promoção</button>
+                    <button type="button" class="btn btn-success clearModal" data-toggle="modal" data-target="#novoProduto"><i class="fas fa-plus-circle"></i> Cadastrar novo produto</button>
+                    <button type="button" class="btn btn-info clearModal" data-toggle="modal" data-target="#novaPromocao"><i class="fas fa-plus-circle"></i> Cadastrar nova promoção</button>
                 </div>
             </div>
         </div>
@@ -64,7 +64,8 @@
                             <th scope="col">Código</th>
                             <th scope="col">Produto</th>
                             <th scope="col">Descrição</th>
-                            <th scope="col">Valor</th>
+                            <th scope="col">Varejo</th>
+                            <th scope="col">Atacado</th>
                             <th scope="col">Qtde</th>
                             <th scope="col">Status</th>
                             <th scope="col">Ação</th>
@@ -126,12 +127,12 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="col">
-                                        <label for="valor">Valor</label>
-                                        <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
+                                        <label for="valorVarejo">Valor varejo</label>
+                                        <input type="text" class="form-control" id="valorVarejo" data-decimal="." value="" placeholder="" autocomplete="off">
                                     </div>
                                     <div class="col">
-                                        <label for="quantidade">Data de cadastro</label>
-                                        <input type="text" class="form-control" value="<?php echo date('d/m/Y H:i') ?>" placeholder="" autocomplete="off" disabled>
+                                    <label for="valorAtacado">Valor atacado</label>
+                                        <input type="text" class="form-control" id="valorAtacado" data-decimal="." value="" placeholder="" autocomplete="off">
                                     </div>
                                 </div>
                                 <br>
