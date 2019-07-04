@@ -5,7 +5,7 @@ class Caixa_model extends CI_Model
     public function busca_produto($id_produto)
     {
         $sql = "SELECT produtos.*, produtos.valorVarejo AS valor, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo 
-                FROM produtos LEFT JOIN promocao ON produtos.id_produto = promocao.id_produto 
+                FROM produtos LEFT JOIN promocao ON produtos.id_produto = promocao.id_produto AND produtos.status = promocao.status 
                 WHERE produtos.id_produto= $id_produto AND produtos.status = 'ativo' AND produtos.valorVarejo > 0 ORDER BY qtdPromo ASC";
         $query = $this->db->query($sql);
 
