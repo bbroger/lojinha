@@ -118,7 +118,6 @@ class Produtos extends CI_Controller
     public function editar_produto()
     {
         $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
-        $this->form_validation->set_rules("nome", "Nome", "trim|required|min_length[3]|max_length[255]|is_unique[produtos.nome]");
         $this->form_validation->set_rules("descricao", "Descrição", "trim|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("valorVarejo", "Valor Varejo", "trim|required|decimal|min_length[3]");
         $this->form_validation->set_rules("valorAtacado", "Valor Atacado", "trim|required|decimal|min_length[3]");
@@ -184,8 +183,9 @@ class Produtos extends CI_Controller
 
     public function acao_estoque()
     {
-        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
-        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|greater_than[0]|max_length[11]");
+        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|integer|max_length[11]|combines[produtos.id_produto]");
+        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|required|integer|greater_than[0]|max_length[11]", ["required"=> "Você precisa <b>inserir</b> um valor para Adicionar/Remover"]);
+        $this->form_validation->set_rules("qtdeAtual", "Quantidade atual", "trim|required|integer|max_length[11]");
         $this->form_validation->set_rules("acao", "Ação", "trim|in_list[add,remover]");
 
         if (!$this->form_validation->run()) {
@@ -196,12 +196,19 @@ class Produtos extends CI_Controller
             return false;
         } else {
             $id_produto = $this->input->post("id_produto");
+            $acao= $this->input->post("acao");
             $data['quantidade'] = $this->input->post("quantidade");
-            $data['acao'] = $this->input->post("acao");
 
-            $this->Produtos_model->acao_estoque($data, $id_produto);
+            $this->Produtos_model->acao_estoque($data, $acao, $id_produto);
 
-            $data['msg'] = ($data['acao'] == 'add') ? "<p><b>Estoque adicionado com sucesso!</b></p>" : "<p><b>Estoque removido com sucesso!</b></p>";
+            $data2['id_produto']= $id_produto;
+            $data2['quantidade_atual']= $this->input->post("qtdeAtual");
+            $data2['quantidade_inserido']= $this->input->post("quantidade");
+            $data2['acao']= $acao;
+
+            $this->Produtos_model->save_acao_estoque($data2, $id_produto);
+
+            $data['msg'] = ($acao == 'add') ? "<p><b>Estoque adicionado com sucesso!</b></p>" : "<p><b>Estoque removido com sucesso!</b></p>";
             $data['status'] = true;
             echo json_encode($data);
         }

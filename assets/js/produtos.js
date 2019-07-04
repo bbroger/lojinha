@@ -201,7 +201,7 @@ table.on('click', '.add', function () {
     var tdNome = tr.find("td").eq(1);
     nomeProduto.val(tdNome.html());
 
-    var tdQtde = tr.find("td").eq(4);
+    var tdQtde = tr.find("td").eq(5);
     qtdeAtual.val(tdQtde.html());
 
     $("#addEstoque").modal('show');
@@ -498,6 +498,7 @@ $("#salvar_novo_estoque").click(function () {
         data: {
             id_produto: id_produto.val(),
             quantidade: qtdeNova.val(),
+            qtdeAtual: qtdeAtual.val(),
             acao: radioAcao
         },
         dataType: "Json"
@@ -513,6 +514,7 @@ $("#salvar_novo_estoque").click(function () {
             $("#mostra_msg_estoque").html(data.msg).addClass("text-danger").fadeIn();
         }
     }).fail(function (data) {
+        console.log(data);
         alert('Erro ao criar o produto. Tente mais tarde');
     });
 });
