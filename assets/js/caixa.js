@@ -72,7 +72,7 @@ $("#search_inserir").click(function () {
     }
 
     if (valid) {
-        $.getJSON(url_ajax("Caixa/tabela_produtos/" + id_produto.val()), function (result) {
+        $.getJSON(url_ajax("Caixa/busca_produto/" + id_produto.val()), function (result) {
             if (!result) {
                 id_produto.css({ border: "1px solid red", color: "red" });
                 $("#msg_search_id_produto").html("Código produto não encontrado.<br> Confira na tabela ao lado");
@@ -146,6 +146,10 @@ $("#finalizar_venda").click(function () {
                 $("#mostra_valor_pago").html("R$ 0,00");
                 $("#pagcartao").prop('checked', false);
                 $("#mostra_troco").html("R$ 0,00");
+                $("#msg_search_id_produto").html("");
+                $("#msg_search_quantidade").html("");
+                $("#search_id_produto").val("").css({ border: "1px solid #ccc", color: "#737373" });
+                $("#search_quantidade").val("").css({ border: "1px solid #ccc", color: "#737373" });
             }
         }).fail(function (data) {
             alert(data.msg);

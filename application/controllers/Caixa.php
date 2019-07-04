@@ -16,9 +16,9 @@ class Caixa extends CI_Controller
         $this->load->view('caixa');
     }
 
-    public function tabela_produtos($id_produto)
+    public function busca_produto($id_produto)
     {
-        $produtos = $this->Caixa_model->tabela_produtos($id_produto);
+        $produtos = $this->Caixa_model->busca_produto($id_produto);
         
         echo json_encode($produtos);
     }
