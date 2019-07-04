@@ -42,12 +42,12 @@ class Caixa extends CI_Controller
 
     public function finalizar_venda()
     {
-        $this->form_validation->set_rules("valor_pago", "<b>Valor pago</b>", "trim|required|decimal|max_length[6]");
-        $this->form_validation->set_rules("tipo_pag", "<b>Valor pago</b>", "trim|in_list[cartao,dinheiro]");
-        $this->form_validation->set_rules("itens_produto", "<b>Produtos</b>", "callback_itens_produto_check");
+        $this->form_validation->set_rules("valor_pago", "Valor pago", "trim|required|decimal|min_length[3]");
+        $this->form_validation->set_rules("tipo_pag", "Forma pagamento", "trim|in_list[cartao,dinheiro]");
+        $this->form_validation->set_rules("itens_produto", "Produtos", "callback_itens_produto_check");
 
         if (!$this->form_validation->run()) {
-            $data['msg'] = validation_errors();
+            $data['msg'] = validation_errors(" ", " ");
             $data['status'] = false;
             echo json_encode($data);
 
@@ -100,7 +100,7 @@ class Caixa extends CI_Controller
         $coluna_id_produto = array_column($produtos, 'id_produto');
         foreach ($itens as $key => $value) {
             if (!in_array($value['id_produto'], $coluna_id_produto)) {
-                $this->form_validation->set_message("itens_produto_check", "Uma ou mais <b>Produtos</b> não foram encontrados.");
+                $this->form_validation->set_message("itens_produto_check", "Uma ou mais Produtos não foram encontrados.");
                 return false;
             }
         }

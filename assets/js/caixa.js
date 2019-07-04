@@ -136,7 +136,7 @@ $("#finalizar_venda").click(function () {
             url: url_ajax("Caixa/finalizar_venda"),
             type: 'Post',
             dataType: 'json',
-            data: { valor_pago: valor_pago.val(), tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
+            data: { valor_pago: valor_pago.val().replace(",",""), tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
         }).done(function (data) {
             if (data.status) {
                 valor_pago.val("");
@@ -150,9 +150,12 @@ $("#finalizar_venda").click(function () {
                 $("#msg_search_quantidade").html("");
                 $("#search_id_produto").val("").css({ border: "1px solid #ccc", color: "#737373" });
                 $("#search_quantidade").val("").css({ border: "1px solid #ccc", color: "#737373" });
+            } else{
+                alert(data.msg);
             }
         }).fail(function (data) {
-            alert(data.msg);
+            console.log(data);
+            alert("Erro! Não foi possível finalizar a venda. Tente mais tarde.")
         });
     }
 });
