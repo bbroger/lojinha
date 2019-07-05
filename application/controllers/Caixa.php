@@ -13,19 +13,23 @@ class Caixa extends CI_Controller
 
     public function index()
     {
-        $this->load->view('caixa');
+        $this->load->view('caixa', ["venda"=>"varejo"]);
     }
 
-    public function busca_produto($id_produto)
+    public function atacado(){
+        $this->load->view('caixa', ["venda"=>"atacado"]);
+    }
+
+    public function busca_produto($venda, $id_produto)
     {
-        $produtos = $this->Caixa_model->busca_produto($id_produto);
+        $produtos = $this->Caixa_model->busca_produto($venda, $id_produto);
         
         echo json_encode($produtos);
     }
 
-    public function catalogo()
+    public function catalogo($venda)
     {
-        $produtos = $this->Caixa_model->catalogo();
+        $produtos = $this->Caixa_model->catalogo($venda);
 
         if ($produtos) {
             foreach ($produtos as $key => $value) {
@@ -45,6 +49,7 @@ class Caixa extends CI_Controller
         $this->form_validation->set_rules("valor_pago", "Valor pago", "trim|required|decimal|min_length[3]");
         $this->form_validation->set_rules("tipo_pag", "Forma pagamento", "trim|in_list[cartao,dinheiro]");
         $this->form_validation->set_rules("itens_produto", "Produtos", "callback_itens_produto_check");
+        $this->form_validation->set_rules("venda", "Tipo da venda", "trim|required|in_list[varejo,atacado]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors(" ", " ");
@@ -66,6 +71,7 @@ class Caixa extends CI_Controller
 
         $transacao['troco']= ($transacao['valor_pago'] - $transacao['valor_total'] > 0)? $transacao['valor_pago'] - $transacao['valor_total']:0 ;
         $transacao['desconto']= ($transacao['valor_pago'] - $transacao['valor_total'] < 0)? $transacao['valor_total'] - $transacao['valor_pago']:0 ;
+        $transacao['venda']= $this->input->post("venda");
 
         $id_transacao= $this->Caixa_model->inserir_transacao($transacao);
 
@@ -89,13 +95,14 @@ class Caixa extends CI_Controller
     public function itens_produto_check()
     {
         $itens = $this->input->post("itens_produto");
+        $venda= $this->input->post("venda");
 
         if (!is_array($itens)) {
             $this->form_validation->set_message("itens_produto_check", "Produtos no formato inválido.");
             return false;
         }
 
-        $produtos = $this->Caixa_model->catalogo();
+        $produtos = $this->Caixa_model->catalogo($venda);
 
         $coluna_id_produto = array_column($produtos, 'id_produto');
         foreach ($itens as $key => $value) {

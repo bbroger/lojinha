@@ -162,6 +162,7 @@
     <script src="<?php echo base_url("assets/js/dataTables.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/dataTables.bootstrap4.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/maskMoney.min.js"); ?>"></script>
+    <script>var venda = '<?php echo $venda; ?>'</script>
     <script src="<?php echo base_url("assets/js/caixa.js"); ?>"></script>
 </body>
 
