@@ -39,7 +39,7 @@
                     <a class="nav-link" href="<?php echo base_url('Produtos/'); ?>">Cadastrar produto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Relatórios</a>
+                    <a class="nav-link" href="<?php echo base_url('Relatorios/'); ?>">Relatórios</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url("Gerenciamento/"); ?>">Gerenciamento</a>
