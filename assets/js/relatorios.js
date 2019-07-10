@@ -8,38 +8,31 @@ var chartMounth = new Chart(idMounth, {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
             {
-                fill: false,
                 type: 'line',
                 label: 'Total',
                 backgroundColor: 'blue',
-                borderColor: 'blue',
                 data: [50, 43, 67, 86, 37, 70, 45]
             },
             {
                 type: 'bar',
                 label: 'Atacado',
-                borderColor: 'white',
-                borderWidth: 2,
-                backgroundColor: 'yellow',
                 data: [0, 13, 5, 42, 23, 5, 32]
             },
             {
                 type: 'bar',
                 label: 'Varejo',
-                borderColor: 'white',
-                borderWidth: 2,
-                backgroundColor: 'green',
                 data: [32, 32, 45, 13, 21, 50, 7]
             },
             {
-                fill: false,
                 type: 'bar',
-                label: 'Desconto',
-                borderColor: 'white',
-                backgroundColor: 'red',
-                borderWidth: 2,
+                label: 'Valor retirado',
                 data: [0, 0, 5, 8, 0, 7, 5]
             },
+            {
+                type: 'bar',
+                label: 'Valor inserido',
+                data: ['10.50', 0, 5, 8, 0, 7, 5]
+            }
         ]
     },
 
@@ -261,7 +254,7 @@ var chartWeek = new Chart(idWeek, {
 
 var idWeekTotalTrans = $("#graphWeekTotalTrans");
 var chartWeekTotalTrans = new Chart(idWeekTotalTrans, {
-    type: 'doughnut',
+    type: 'pie',
     data: {
         datasets: [{
             data: [21, 32, 5, 32, 53, 4, 7],
@@ -291,7 +284,7 @@ var chartWeekTotalTrans = new Chart(idWeekTotalTrans, {
 
 var idWeekTotalVendas = $("#graphWeekTotalVendas");
 var chartWeekTotalVendas = new Chart(idWeekTotalVendas, {
-    type: 'doughnut',
+    type: 'pie',
     data: {
         datasets: [{
             data: [21, 32, 5, 32, 53, 4, 7],
