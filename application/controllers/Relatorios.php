@@ -63,6 +63,8 @@ class Relatorios extends CI_Controller
             foreach ($value as $chave => $valor) {
                 if ($count == 0) {
                     $vendas_mensal[$count]['type'] = 'line';
+                    $vendas_mensal[$count]['borderColor'] = $supp['cores'][$count];
+                    $vendas_mensal[$count]['fill'] = false;
                 } else {
                     $vendas_mensal[$count]['type'] = 'bar';
                 }
