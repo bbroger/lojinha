@@ -2,62 +2,62 @@
 
 class Relatorios_model extends CI_Model
 {
-    public function vendas_mensal()
+    public function vendas($var)
     {
         $ano= date('Y');
-        $sql = "SELECT DATE_FORMAT(timestamp, '%c') AS mes, 
+        $sql = "SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             SUM(valor_total) - SUM(desconto) AS valor_total, 
             NULL AS valor_atacado, 
             NULL AS valor_varejo, 
             NULL AS valor_desconto, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE YEAR(timestamp) = $ano GROUP BY mes 
+            FROM transacao WHERE YEAR(timestamp) = $ano GROUP BY chave 
             UNION ALL 
-            SELECT DATE_FORMAT(timestamp, '%c') AS mes, 
+            SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_total, 
             SUM(valor_total) - SUM(desconto) AS valor_atacado, 
             NULL AS valor_varejo, 
             NULL AS valor_desconto, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano GROUP BY mes 
+            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano GROUP BY chave 
             UNION ALL 
-            SELECT DATE_FORMAT(timestamp, '%c') AS mes, 
+            SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_total, 
             NULL AS valor_atacado, 
             SUM(valor_total) - SUM(desconto) AS valor_varejo,
             NULL AS valor_desconto, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano GROUP BY mes 
+            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano GROUP BY chave 
             UNION ALL 
-            SELECT DATE_FORMAT(timestamp, '%c') AS mes, 
+            SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_total, 
             NULL AS valor_atacado, 
             NULL AS valor_varejo, 
             SUM(desconto) AS valor_desconto, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE YEAR(timestamp) = $ano GROUP BY mes 
+            FROM transacao WHERE YEAR(timestamp) = $ano GROUP BY chave 
             UNION ALL 
-            SELECT DATE_FORMAT(timestamp, '%c') AS mes, 
+            SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_total, 
             NULL AS valor_atacado, 
             NULL AS valor_varejo, 
             NULL AS valor_desconto, 
             SUM(valor) AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM movimentacao WHERE tipo= 'retirado' AND YEAR(timestamp) = $ano GROUP BY mes 
+            FROM movimentacao WHERE tipo= 'retirado' AND YEAR(timestamp) = $ano GROUP BY chave 
             UNION ALL 
-            SELECT DATE_FORMAT(timestamp, '%c') AS mes, 
+            SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_total, 
             NULL AS valor_atacado, 
             NULL AS valor_varejo, 
             NULL AS valor_desconto, 
             NULL AS valor_retirado, 
             SUM(valor) AS valor_inserido 
-            FROM movimentacao WHERE tipo= 'inserido' AND YEAR(timestamp) = $ano GROUP BY mes";
+            FROM movimentacao WHERE tipo= 'inserido' AND YEAR(timestamp) = $ano GROUP BY chave";
 
         $query = $this->db->query($sql);
         return $query->result_array();
@@ -105,6 +105,26 @@ class Relatorios_model extends CI_Model
             NULL AS total_dinheiro, 
             COUNT(id_transacao) AS total_cartao 
             FROM transacao WHERE tipo_pagamento= 'cartao' AND YEAR(timestamp) = $ano GROUP BY mes";
+
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
+    public function total_produtos()
+    {
+        $ano= date('Y');
+        $sql= "SELECT DATE_FORMAT(timestamp, '%c') AS mes, 
+            SUM(quantidade) AS quantidade 
+            FROM vendas WHERE YEAR(timestamp)= $ano GROUP BY mes";
+        
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
+    public function tabela_transacao()
+    {
+        $ano= date('Y');
+        $sql= "SELECT * FROM transacao WHERE YEAR(timestamp)= $ano";
 
         $query = $this->db->query($sql);
         return $query->result_array();

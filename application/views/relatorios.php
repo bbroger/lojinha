@@ -139,13 +139,10 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
-                                            <canvas id="graphWeek" style="height: 300px;"></canvas>
+                                            <canvas id="graphWeek" style="height: 290px;"></canvas>
                                         </div>
-                                        <div class="col-6">
-                                            <canvas id="graphWeekTotalTrans" style="height: 280px;"></canvas>
-                                        </div>
-                                        <div class="col-6">
-                                            <canvas id="graphWeekTotalVendas" style="height: 280px;"></canvas>
+                                        <div class="col-12 mt-2">
+                                            <canvas id="graphDay" style="height: 290px;"></canvas>
                                         </div>
                                     </div>
                                 </div>

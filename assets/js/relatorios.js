@@ -10,6 +10,7 @@ var chartMounth = new Chart(idMounth, {
             {
                 type: 'line',
                 label: 'Total',
+                fill: false,
                 backgroundColor: 'blue',
                 data: [50, 43, 67, 86, 37, 70, 45]
             },
@@ -252,60 +253,71 @@ var chartWeek = new Chart(idWeek, {
 
 });
 
-var idWeekTotalTrans = $("#graphWeekTotalTrans");
-var chartWeekTotalTrans = new Chart(idWeekTotalTrans, {
-    type: 'pie',
-    data: {
-        datasets: [{
-            data: [21, 32, 5, 32, 53, 4, 7],
-            backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue', 'black', 'pink'],
-            labels:['January', 'February', 'March', 'April', 'May', 'June', 'July']
-        }]
-    },
-    options: {
-        responsive: true,
-        legend: {
-            position: 'none',
-        },
-        title: {
-            display: true,
-            text: 'Total de transação'
-        },
-        animation: {
-            animateScale: true,
-            animateRotate: true
-        },
-        animation: {
-            duration: 5000
-        },
-        maintainAspectRatio: false
-    }
-});
+var idDay = $("#graphDay");
+var chartDay = new Chart(idDay, {
+    // The type of chart we want to create
+    type: 'bar',
 
-var idWeekTotalVendas = $("#graphWeekTotalVendas");
-var chartWeekTotalVendas = new Chart(idWeekTotalVendas, {
-    type: 'pie',
+    // The data for our dataset
     data: {
-        datasets: [{
-            data: [21, 32, 5, 32, 53, 4, 7],
-            backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue', 'black', 'pink']
-        }],
-        labels:['January', 'February', 'March', 'April', 'May', 'June', 'July']
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+            {
+                fill: false,
+                type: 'line',
+                label: 'Total',
+                backgroundColor: 'blue',
+                borderColor: 'blue',
+                data: [50, 43, 67, 86, 37, 70, 45]
+            },
+            {
+                type: 'bar',
+                label: 'Atacado',
+                borderColor: 'white',
+                borderWidth: 2,
+                backgroundColor: 'yellow',
+                data: [0, 13, 5, 42, 23, 5, 32]
+            },
+            {
+                type: 'bar',
+                label: 'Varejo',
+                borderColor: 'white',
+                borderWidth: 2,
+                backgroundColor: 'green',
+                data: [32, 32, 45, 13, 21, 50, 7]
+            },
+            {
+                fill: false,
+                type: 'bar',
+                label: 'Desconto',
+                borderColor: 'white',
+                backgroundColor: 'red',
+                borderWidth: 2,
+                data: [0, 0, 5, 8, 0, 7, 5]
+            },
+        ]
     },
+
+    // Configuration options go here
     options: {
-        responsive: true,
-        legend: {
-            position: 'none',
-        },
         title: {
             display: true,
-            text: 'Total de produtos vendidos'
+            text: 'Vendas diario',
+            position: 'top'
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    callback: function (value, index, values) {
+                        return 'R$' + value;
+                    }
+                }
+            }]
         },
         animation: {
-            animateScale: true,
-            animateRotate: true,
             duration: 5000
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
     }
+
 });
