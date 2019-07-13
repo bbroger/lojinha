@@ -168,7 +168,7 @@ class Relatorios_model extends CI_Model
         }
 
         $ano = date('Y');
-        $sql = "SELECT transacao.*, CONCAT('R$ ',transacao.valor_total) AS valor_total, DATE_FORMAT(transacao.timestamp, 'S%V %d/%m %H:%i') AS data_venda, COUNT(vendas.id_vendas) AS itens FROM transacao 
+        $sql = "SELECT transacao.*, CONCAT('R$ ',transacao.valor_pago) AS valor_pago, DATE_FORMAT(transacao.timestamp, 'S%V %d/%m %H:%i') AS data_venda, COUNT(vendas.id_vendas) AS itens FROM transacao 
         INNER JOIN vendas ON transacao.id_transacao = vendas.id_transacao 
         WHERE YEAR(transacao.timestamp)= $ano$where GROUP BY id_transacao ORDER BY id_transacao DESC";
 

@@ -14,39 +14,30 @@ class Relatorios extends CI_Controller
 
     public function index()
     {
-        $data['mensal'] = $this->vendas_mensal();
-        $data['semanal'] = $this->vendas_semanal();
-        $data['diario'] = $this->vendas_diario();
-        $pega= $this->transacao();
-        $data['transacao'] = $pega['transacao'];
-        $data['circliful'] = $pega['circliful'];
-        $data['total_produtos'] = $this->total_produtos();
-        $tabela= $this->tabela_transacao();
-
         $this->load->view('head');
         $this->load->view('relatorios');
     }
 
-    public function monta_relatorio($tipo= null)
+    public function monta_relatorio($tipo = null)
     {
-        $data['mensal'] = $this->vendas_mensal($tipo);
-        $data['semanal'] = $this->vendas_semanal($tipo);
-        $data['diario'] = $this->vendas_diario($tipo);
-        $pega= $this->transacao($tipo);
+        $data['mensal'] = $this->vendas($tipo, '%c');
+        $data['semanal'] = $this->vendas($tipo, '%V');
+        $data['diario'] = $this->vendas($tipo, '%Y-%m-%d');
+        $pega = $this->transacao($tipo);
         $data['transacao'] = $pega['transacao'];
         $data['circliful'] = $pega['circliful'];
         $data['total_produtos'] = $this->total_produtos($tipo);
-        $tabela= $this->tabela_transacao($tipo);
+        $tabela = $this->tabela_transacao($tipo);
 
-        echo json_encode(["relatorios"=>$data, "tabela"=>$tabela]);
+        echo json_encode(["relatorios" => $data, "tabela" => $tabela]);
     }
 
-    public function vendas_mensal($tipo= null)
+    public function vendas($tipo, $cal)
     {
-        $dados = $this->Relatorios_model->vendas('%c', $tipo);
+        $dados = $this->Relatorios_model->vendas($cal, $tipo);
 
-        if(!$dados){
-            return $obj['data']= false;
+        if (!$dados) {
+            return $obj['data'] = false;
         }
 
         foreach ($dados as $key => $value) {
@@ -67,8 +58,15 @@ class Relatorios extends CI_Controller
             $arr[$key]['valor_pago'] = $value['valor_pago'] + ($value['valor_inserido'] - abs($value['valor_retirado']));
         }
 
-        $meses = [1 => 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        if ($cal != '%c') {
+            krsort($arr);
 
+            $arr = array_slice($arr, 0, 7, true);
+
+            ksort($arr);
+        }
+
+        $meses = [1 => 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         $supp = [
             "label" => ["Total pago", "Atacado", "Varejo", "Retirado", "Inserido", "Desconto"],
             "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188,0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
@@ -83,189 +81,47 @@ class Relatorios extends CI_Controller
             $count++;
         }
 
-        $label_meses = [];
+        $label = [];
         foreach ($arr as $key => $value) {
             $count = 0;
-            array_push($label_meses, $meses[$key]);
+            if ($cal == '%c') {
+                array_push($label, $meses[$key]);
+            } else if ($cal == '%V') {
+                array_push($label, "S" . $key);
+            } else {
+                array_push($label, DateTime::createFromFormat("Y-m-d", $key)->format("d/m"));
+            }
             foreach ($value as $chave => $valor) {
                 if ($count == 0) {
-                    $vendas_mensal[$count]['type'] = 'line';
-                    $vendas_mensal[$count]['borderColor'] = $supp['cores'][$count];
-                    $vendas_mensal[$count]['fill'] = false;
+                    $vendas[$count]['type'] = 'line';
+                    $vendas[$count]['borderColor'] = $supp['cores'][$count];
+                    $vendas[$count]['fill'] = false;
                 } else {
-                    $vendas_mensal[$count]['type'] = 'bar';
+                    $vendas[$count]['type'] = 'bar';
                 }
-                $vendas_mensal[$count]['label'] = $supp['label'][$count];
-                $vendas_mensal[$count]['borderWidth'] = 2;
-                $vendas_mensal[$count]['backgroundColor'] = $supp['cores'][$count];
-                $vendas_mensal[$count]['borderColor'] = $supp['borda'][$count];
-                $vendas_mensal[$count]['data'] = $data[$chave];
+                $vendas[$count]['label'] = $supp['label'][$count];
+                $vendas[$count]['borderWidth'] = 2;
+                $vendas[$count]['backgroundColor'] = $supp['cores'][$count];
+                $vendas[$count]['borderColor'] = $supp['borda'][$count];
+                $vendas[$count]['data'] = $data[$chave];
 
                 $count++;
             }
         }
 
-        $obj['data']['labels'] = $label_meses;
-        $obj['data']['datasets'] = $vendas_mensal;
+        $obj['data']['labels'] = $label;
+        $obj['data']['datasets'] = $vendas;
 
         return $obj;
     }
 
-    public function vendas_semanal($tipo= null)
-    {
-        $dados = $this->Relatorios_model->vendas('%V', $tipo);
-        
-        if(!$dados){
-            return $obj['data']= false;
-        }
-
-        foreach ($dados as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                if ($chave != 'chave' && $valor) {
-                    if ($chave == 'valor_desconto' || $chave == 'valor_retirado') {
-                        $arr[$value['chave']][$chave] = ($valor > 0) ? -$valor : 0;
-                    } else {
-                        $arr[$value['chave']][$chave] = $valor;
-                    }
-                } else if ($chave != 'chave' && !isset($arr[$value['chave']][$chave])) {
-                    $arr[$value['chave']][$chave] = 0;
-                }
-            }
-        }
-
-        foreach ($arr as $key => $value) {
-            $arr[$key]['valor_pago'] = $value['valor_pago'] + ($value['valor_inserido'] - $value['valor_retirado']);
-        }
-
-        krsort($arr);
-
-        $semana = array_slice($arr, 0, 7, true);
-
-        ksort($semana);
-
-        $supp = [
-            "label" => ["Total pago", "Atacado", "Varejo", "Retirado", "Inserido", "Desconto"],
-            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188, 0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
-            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
-        ];
-
-        $count = 0;
-        foreach ($semana as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                $data[$chave][$count] = $valor;
-            }
-            $count++;
-        }
-
-        $label_semana = [];
-        foreach ($semana as $key => $value) {
-            $count = 0;
-            array_push($label_semana, "S" . $key);
-            foreach ($value as $chave => $valor) {
-                if ($count == 0) {
-                    $vendas_semanal[$count]['type'] = 'line';
-                    $vendas_semanal[$count]['borderColor'] = $supp['cores'][$count];
-                    $vendas_semanal[$count]['fill'] = false;
-                } else {
-                    $vendas_semanal[$count]['type'] = 'bar';
-                }
-                $vendas_semanal[$count]['label'] = $supp['label'][$count];
-                $vendas_semanal[$count]['borderWidth'] = 2;
-                $vendas_semanal[$count]['backgroundColor'] = $supp['cores'][$count];
-                $vendas_semanal[$count]['borderColor'] = $supp['borda'][$count];
-                $vendas_semanal[$count]['data'] = $data[$chave];
-
-                $count++;
-            }
-        }
-
-        $obj['data']['labels'] = $label_semana;
-        $obj['data']['datasets'] = $vendas_semanal;
-
-        return $obj;
-    }
-
-    public function vendas_diario($tipo= null)
-    {
-        $dados = $this->Relatorios_model->vendas('%Y-%m-%d', $tipo);
-        
-        if(!$dados){
-            return $obj['data']= false;
-        }
-
-        foreach ($dados as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                if ($chave != 'chave' && $valor) {
-                    if ($chave == 'valor_desconto' || $chave == 'valor_retirado') {
-                        $arr[$value['chave']][$chave] = ($valor > 0) ? -$valor : 0;
-                    } else {
-                        $arr[$value['chave']][$chave] = $valor;
-                    }
-                } else if ($chave != 'chave' && !isset($arr[$value['chave']][$chave])) {
-                    $arr[$value['chave']][$chave] = 0;
-                }
-            }
-        }
-
-        foreach ($arr as $key => $value) {
-            $arr[$key]['valor_pago'] = $value['valor_pago'] + ($value['valor_inserido'] - $value['valor_retirado']);
-        }
-
-        krsort($arr);
-
-        $dia = array_slice($arr, 0, 7, true);
-
-        ksort($dia);
-
-        $supp = [
-            "label" => ["Total pago", "Atacado", "Varejo", "Retirado", "Inserido", "Desconto"],
-            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188, 0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
-            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
-        ];
-
-        $count = 0;
-        foreach ($dia as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                $data[$chave][$count] = $valor;
-            }
-            $count++;
-        }
-
-        $label_dia = [];
-        foreach ($dia as $key => $value) {
-            $count = 0;
-            array_push($label_dia, DateTime::createFromFormat("Y-m-d", $key)->format("d/m"));
-            foreach ($value as $chave => $valor) {
-                if ($count == 0) {
-                    $vendas_diario[$count]['type'] = 'line';
-                    $vendas_diario[$count]['borderColor'] = $supp['cores'][$count];
-                    $vendas_diario[$count]['fill'] = false;
-                } else {
-                    $vendas_diario[$count]['type'] = 'bar';
-                }
-                $vendas_diario[$count]['label'] = $supp['label'][$count];
-                $vendas_diario[$count]['borderWidth'] = 2;
-                $vendas_diario[$count]['backgroundColor'] = $supp['cores'][$count];
-                $vendas_diario[$count]['borderColor'] = $supp['borda'][$count];
-                $vendas_diario[$count]['data'] = $data[$chave];
-
-                $count++;
-            }
-        }
-
-        $obj['data']['labels'] = $label_dia;
-        $obj['data']['datasets'] = $vendas_diario;
-
-        return $obj;
-    }
-
-    public function transacao($tipo= null)
+    public function transacao($tipo = null)
     {
         $dados = $this->Relatorios_model->transacao($tipo);
 
-        if(!$dados){
-            $obj['transacao']['data']= false;
-            $obj['circliful']= $this->circli(false);
+        if (!$dados) {
+            $obj['transacao']['data'] = false;
+            $obj['circliful'] = $this->circli(false);
         }
 
         foreach ($dados as $key => $value) {
@@ -291,24 +147,24 @@ class Relatorios extends CI_Controller
             array_push($colors_meses, $cores[$key]);
         }
 
-        $total_transacao['datasets']= [['data' => array_column($arr, 'total_transacao'), 'backgroundColor' => $colors_meses]];
+        $total_transacao['datasets'] = [['data' => array_column($arr, 'total_transacao'), 'backgroundColor' => $colors_meses]];
         $total_transacao['labels'] = $labels_meses;
 
         $circli = $this->circli($arr);
 
-        $obj['transacao']['data']= $total_transacao;
-        $obj['circliful']= $circli;
+        $obj['transacao']['data'] = $total_transacao;
+        $obj['circliful'] = $circli;
 
         return $obj;
     }
 
     public function circli($arr)
     {
-        if(!$arr){
-            $circli['dinheiro']['porc']= 0;
-            $circli['cartao']['porc']= 0;
-            $circli['atacado']['porc']= 0;
-            $circli['varejo']['porc']= 0;
+        if (!$arr) {
+            $circli['dinheiro']['porc'] = 0;
+            $circli['cartao']['porc'] = 0;
+            $circli['atacado']['porc'] = 0;
+            $circli['varejo']['porc'] = 0;
         }
 
         $soma_total_transacao = array_sum(array_column($arr, 'total_transacao'));
@@ -334,7 +190,7 @@ class Relatorios extends CI_Controller
         return $circli;
     }
 
-    public function total_produtos($tipo= null)
+    public function total_produtos($tipo = null)
     {
         $dados = $this->Relatorios_model->total_produtos($tipo);
 
@@ -361,27 +217,27 @@ class Relatorios extends CI_Controller
             array_push($colors_meses, $cores[$key]);
         }
 
-        $total_produto['datasets']= [['data' => array_column($arr, 'quantidade'), 'backgroundColor' => $colors_meses]];
+        $total_produto['datasets'] = [['data' => array_column($arr, 'quantidade'), 'backgroundColor' => $colors_meses]];
         $total_produto['labels'] = $labels_meses;
 
-        $obj['data']= $total_produto;
+        $obj['data'] = $total_produto;
 
         return $obj;
     }
 
-    public function tabela_transacao($tipo= null)
+    public function tabela_transacao($tipo = null)
     {
         $dados = $this->Relatorios_model->tabela_transacao($tipo);
 
-        if(!$dados){
-            return ['data'=> false];
+        if (!$dados) {
+            return ['data' => false];
         }
 
         foreach ($dados as $key => $value) {
             foreach ($value as $chave => $valor) {
                 $data[$key][$chave] = $valor;
             }
-            $data[$key]['ver']= 'Ver';
+            $data[$key]['ver'] = 'Ver';
         }
 
         return $data;

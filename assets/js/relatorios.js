@@ -24,6 +24,19 @@ var chartMonth = new Chart($("#graphMonth"), {
         animation: {
             duration: 5000
         },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+        
+                    if (label) {
+                        label += ': R$ ';
+                    }
+                    label += tooltipItem.yLabel.toFixed(2);
+                    return label;
+                }
+            }
+        },
         maintainAspectRatio: false,
     }
 
@@ -103,6 +116,19 @@ var chartWeek = new Chart($("#graphWeek"), {
         animation: {
             duration: 5000
         },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+        
+                    if (label) {
+                        label += ': R$ ';
+                    }
+                    label += tooltipItem.yLabel.toFixed(2);
+                    return label;
+                }
+            }
+        },
         maintainAspectRatio: false,
     }
 
@@ -133,6 +159,19 @@ var chartDay = new Chart($("#graphDay"), {
         },
         animation: {
             duration: 5000
+        },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+        
+                    if (label) {
+                        label += ': R$ ';
+                    }
+                    label += tooltipItem.yLabel.toFixed(2);
+                    return label;
+                }
+            }
         },
         maintainAspectRatio: false,
     }
@@ -269,7 +308,7 @@ function constroi_table(pega_data= false) {
         data: pega_data,
         columns: [
             { "data": 'data_venda' },
-            { "data": 'valor_total' },
+            { "data": 'valor_pago' },
             { "data": 'itens' },
             { "data": 'ver' }
         ],
