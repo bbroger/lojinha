@@ -71,8 +71,8 @@ class Relatorios extends CI_Controller
 
         $supp = [
             "label" => ["Total pago", "Atacado", "Varejo", "Retirado", "Inserido", "Desconto"],
-            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(0,0,255,0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
-            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(0,0,255)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
+            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188,0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
+            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
         ];
 
         $count = 0;
@@ -145,8 +145,8 @@ class Relatorios extends CI_Controller
 
         $supp = [
             "label" => ["Total pago", "Atacado", "Varejo", "Retirado", "Inserido", "Desconto"],
-            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(0,0,255, 0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
-            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(0,0,255)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
+            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188, 0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
+            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
         ];
 
         $count = 0;
@@ -219,8 +219,8 @@ class Relatorios extends CI_Controller
 
         $supp = [
             "label" => ["Total pago", "Atacado", "Varejo", "Retirado", "Inserido", "Desconto"],
-            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(0,0,255, 0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
-            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(0,0,255)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
+            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188, 0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
+            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
         ];
 
         $count = 0;
