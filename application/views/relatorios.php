@@ -4,11 +4,11 @@
             <div class="row">
                 <div class="col-2">
                     <nav class="nav flex-column">
-                        <button class="btn btn-outline-dark btn-lg active" href="#">Vendas</button>
+                        <button class="btn btn-outline-dark btn-lg filtro active" id="btnvendas" href="#">Vendas</button>
 
-                        <button class="btn btn-outline-primary  btn-lg mt-5" href="#">Dinheiro</button>
+                        <button class="btn btn-outline-primary btn-lg filtro mt-5" id="btndinheiro" href="#">Dinheiro</button>
 
-                        <button class="btn btn-outline-success btn-lg mt-5" href="#">Cartão</button>
+                        <button class="btn btn-outline-success btn-lg filtro mt-5" id="btncartao" href="#">Cartão</button>
                     </nav>
                 </div>
                 <div class="col-10">
@@ -71,66 +71,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/03 13:00</td>
-                                        <td>R$ 102.43</td>
-                                        <td>10</td>
-                                        <td>Ver</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -164,6 +104,11 @@
 <script src="<?php echo base_url("assets/js/maskMoney.min.js"); ?>"></script>
 <script src="<?php echo base_url("assets/js/chartjs.min.js"); ?>"></script>
 <script src="<?php echo base_url("assets/js/circliful.min.js"); ?>"></script>
+<script>
+    var data_dinamico= <?php echo $relatorios; ?>;
+
+    var table_dinamico= <?php echo $table; ?>;
+</script>
 <script src="<?php echo base_url("assets/js/relatorios.js"); ?>"></script>
 </body>
 
