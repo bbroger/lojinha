@@ -3,7 +3,7 @@ var chartMonth = new Chart($("#graphMonth"), {
     type: 'bar',
 
     // The data for our dataset
-    data: data_dinamico.mensal.data,
+    data: false,
 
     // Configuration options go here
     options: {
@@ -31,7 +31,7 @@ var chartMonth = new Chart($("#graphMonth"), {
 
 var chartTotalTrans = new Chart($("#graphTotalTrans"), {
     type: 'doughnut',
-    data: data_dinamico.transacao.data,
+    data: false,
     options: {
         responsive: true,
         legend: {
@@ -39,7 +39,7 @@ var chartTotalTrans = new Chart($("#graphTotalTrans"), {
         },
         title: {
             display: true,
-            text: 'Total de transação'
+            text: 'Total de transação mensal'
         },
         animation: {
             animateScale: true,
@@ -54,7 +54,7 @@ var chartTotalTrans = new Chart($("#graphTotalTrans"), {
 
 var chartTotalVendas = new Chart($("#graphTotalVendas"), {
     type: 'doughnut',
-    data: data_dinamico.total_produtos.data,
+    data: false,
     options: {
         responsive: true,
         legend: {
@@ -62,7 +62,7 @@ var chartTotalVendas = new Chart($("#graphTotalVendas"), {
         },
         title: {
             display: true,
-            text: 'Total de produtos vendidos'
+            text: 'Total de produtos vendidos mensal'
         },
         animation: {
             animateScale: true,
@@ -73,96 +73,16 @@ var chartTotalVendas = new Chart($("#graphTotalVendas"), {
     }
 });
 
-$("#circlefulMoney").circliful({
-    animationStep: 3,
-    foregroundBorderWidth: 20,
-    backgroundBorderWidth: 20,
-    percent: data_dinamico.circliful.dinheiro.porc,
-    decimals: data_dinamico.circliful.dinheiro.decimal,
-    text: 'Dinheiro',
-    textY: 85
-});
+circliful();
 
-$("#circlefulCard").circliful({
-    animationStep: 3,
-    foregroundBorderWidth: 20,
-    backgroundBorderWidth: 20,
-    percent: data_dinamico.circliful.cartao.porc,
-    decimals: data_dinamico.circliful.cartao.decimal,
-    text: 'Cartão',
-    textY: 85
-});
+constroi_table(false);
 
-$("#circlefulAtacado").circliful({
-    animationStep: 3,
-    foregroundBorderWidth: 20,
-    backgroundBorderWidth: 20,
-    percent: data_dinamico.circliful.atacado.porc,
-    decimals: data_dinamico.circliful.atacado.decimal,
-    text: 'Atacado',
-    textY: 85
-});
-
-$("#circlefulVarejo").circliful({
-    animationStep: 3,
-    foregroundBorderWidth: 20,
-    backgroundBorderWidth: 20,
-    percent: data_dinamico.circliful.varejo.porc,
-    decimals: data_dinamico.circliful.varejo.decimal,
-    text: 'Varejo',
-    textY: 85
-});
-
-var table = $("#mostra_tabela").dataTable({
-    "info": false,
-    "ordering": false,
-    "dom": "ftip",
-    data: table_dinamico,
-    columns:[
-        {"data":'data_venda'},
-        {"data":'valor_total'},
-        {"data":'itens'},
-        {"data":'ver'}
-    ],
-    "language": {
-        "sEmptyTable": "Nenhum registro encontrado",
-        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-        "sInfoPostFix": "",
-        "sInfoThousands": ".",
-        "sLengthMenu": "_MENU_ resultados por página",
-        "sLoadingRecords": "Carregando...",
-        "sProcessing": "Processando...",
-        "sZeroRecords": "Nenhum registro encontrado",
-        "sSearch": "Pesquisar",
-        "oPaginate": {
-            "sNext": "Próximo",
-            "sPrevious": "Anterior",
-            "sFirst": "Primeiro",
-            "sLast": "Último"
-        },
-        "oAria": {
-            "sSortAscending": ": Ordenar colunas de forma ascendente",
-            "sSortDescending": ": Ordenar colunas de forma descendente"
-        }
-    }
-});
-
-function kk()
-{
-    if($.fn.dataTable.isDataTable('#mostra_tabela')){
-        table.dataTable().fnUpdate();
-    }
-}
-
-var idWeek = $("#graphWeek");
-var chartWeek = new Chart(idWeek, {
+var chartWeek = new Chart($("#graphWeek"), {
     // The type of chart we want to create
     type: 'bar',
 
     // The data for our dataset
-    data: data_dinamico.semanal.data,
+    data: false,
 
     // Configuration options go here
     options: {
@@ -188,13 +108,12 @@ var chartWeek = new Chart(idWeek, {
 
 });
 
-var idDay = $("#graphDay");
-var chartDay = new Chart(idDay, {
+var chartDay = new Chart($("#graphDay"), {
     // The type of chart we want to create
     type: 'bar',
 
     // The data for our dataset
-    data: data_dinamico.diario.data,
+    data: false,
 
     // Configuration options go here
     options: {
@@ -220,8 +139,166 @@ var chartDay = new Chart(idDay, {
 
 });
 
-$(".filtro").click(function(){
+atualiza_graph('vendas');
+
+$(".filtro").click(function () {
     $(".filtro").removeClass("active");
-    var id= $(this)[0].id;
-    $("#"+id).addClass("active");
+    var id = $(this)[0].id;
+    $("#" + id).addClass("active");
+
+    var tipo = (id == 'btndinheiro') ? 'dinheiro' : ((id == 'btncartao') ? 'cartao' : 'vendas');
+
+    atualiza_graph(tipo);
 });
+
+function atualiza_graph(tipo = null) {
+    $.ajax({
+        url: url_ajax("Relatorios/monta_relatorio/" + tipo),
+        type: 'Get',
+        dataType: 'json'
+    }).done(function (data) {
+
+        chartMonth.data = data.relatorios.mensal.data;
+        chartMonth.update({
+            duration: 2000,
+            easing: 'linear'
+        });
+
+        chartTotalTrans.data = data.relatorios.transacao.data;
+        chartTotalTrans.update({
+            duration: 2000,
+            easing: 'linear'
+        });
+
+        chartTotalVendas.data = data.relatorios.total_produtos.data;
+        chartTotalVendas.update({
+            duration: 2000,
+            easing: 'linear'
+        });
+
+        chartWeek.data = data.relatorios.semanal.data;
+        chartWeek.update({
+            duration: 2000,
+            easing: 'linear'
+        });
+
+        chartDay.data = data.relatorios.diario.data;
+        chartDay.update({
+            duration: 2000,
+            easing: 'linear'
+        });
+
+        circliful(data.relatorios.circliful);
+
+        constroi_table(data.tabela);
+
+    }).fail(function (data) {
+        console.log(data);
+    });
+}
+
+function circliful(data= false){
+    $("#circlefulMoney").html("");
+    $("#circlefulCard").html("");
+    $("#circlefulAtacado").html("");
+    $("#circlefulVarejo").html("");
+
+    var circliful= {};
+    if(data){
+        circliful= data;
+    } else{
+        circliful={
+            dinheiro:{porc:0,decimal:0},
+            cartao:{porc:0},decimal:0,
+            atacado:{porc:0},decimal:0,
+            varejo:{porc:0},decimal:0
+        }
+    }
+
+    $("#circlefulMoney").circliful({
+        animationStep: 3,
+        foregroundBorderWidth: 20,
+        backgroundBorderWidth: 20,
+        percent: circliful.dinheiro.porc,
+        decimals: circliful.dinheiro.decimal,
+        text: 'Dinheiro',
+        textY: 85
+    });
+    
+    $("#circlefulCard").circliful({
+        animationStep: 3,
+        foregroundBorderWidth: 20,
+        backgroundBorderWidth: 20,
+        percent: circliful.cartao.porc,
+        decimals: circliful.cartao.decimal,
+        text: 'Cartão',
+        textY: 85
+    });
+    
+    $("#circlefulAtacado").circliful({
+        animationStep: 3,
+        foregroundBorderWidth: 20,
+        backgroundBorderWidth: 20,
+        percent: circliful.atacado.porc,
+        decimals: circliful.atacado.decimal,
+        text: 'Atacado',
+        textY: 85
+    });
+    
+    $("#circlefulVarejo").circliful({
+        animationStep: 3,
+        foregroundBorderWidth: 20,
+        backgroundBorderWidth: 20,
+        percent: circliful.varejo.porc,
+        decimals: circliful.varejo.decimal,
+        text: 'Varejo',
+        textY: 85
+    });
+}
+
+function constroi_table(pega_data= false) {
+    if ($.fn.dataTable.isDataTable('#mostra_tabela')) {
+        $('#mostra_tabela').dataTable().fnClearTable();
+        $('#mostra_tabela').dataTable().fnDestroy();
+    }
+
+    $("#mostra_tabela").dataTable({
+        "info": false,
+        "ordering": false,
+        "dom": "ftip",
+        data: pega_data,
+        columns: [
+            { "data": 'data_venda' },
+            { "data": 'valor_total' },
+            { "data": 'itens' },
+            { "data": 'ver' }
+        ],
+        "columnDefs": [
+            { "width": "50%", "targets": 0 },
+            { "width": "30%", "targets": 1 }
+        ],
+        "language": {
+            "sEmptyTable": "Nenhum registro encontrado",
+            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sInfoThousands": ".",
+            "sLengthMenu": "_MENU_ resultados por página",
+            "sLoadingRecords": "Carregando...",
+            "sProcessing": "Processando...",
+            "sZeroRecords": "Nenhum registro encontrado",
+            "sSearch": "Pesquisar",
+            "oPaginate": {
+                "sNext": "Próximo",
+                "sPrevious": "Anterior",
+                "sFirst": "Primeiro",
+                "sLast": "Último"
+            },
+            "oAria": {
+                "sSortAscending": ": Ordenar colunas de forma ascendente",
+                "sSortDescending": ": Ordenar colunas de forma descendente"
+            }
+        }
+    });
+}

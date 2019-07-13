@@ -104,11 +104,6 @@
 <script src="<?php echo base_url("assets/js/maskMoney.min.js"); ?>"></script>
 <script src="<?php echo base_url("assets/js/chartjs.min.js"); ?>"></script>
 <script src="<?php echo base_url("assets/js/circliful.min.js"); ?>"></script>
-<script>
-    var data_dinamico= <?php echo $relatorios; ?>;
-
-    var table_dinamico= <?php echo $table; ?>;
-</script>
 <script src="<?php echo base_url("assets/js/relatorios.js"); ?>"></script>
 </body>
 

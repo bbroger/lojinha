@@ -24,25 +24,26 @@ class Relatorios extends CI_Controller
         $tabela= $this->tabela_transacao();
 
         $this->load->view('head');
-        $this->load->view('relatorios', ["relatorios"=> json_encode($data), "table"=> json_encode($tabela)]);
+        $this->load->view('relatorios');
     }
 
-    public function monta_relatorio()
+    public function monta_relatorio($tipo= null)
     {
-        $data['mensal'] = $this->vendas_mensal();
-        $data['semanal'] = $this->vendas_semanal();
-        $data['diario'] = $this->vendas_diario();
-        $pega= $this->transacao();
+        $data['mensal'] = $this->vendas_mensal($tipo);
+        $data['semanal'] = $this->vendas_semanal($tipo);
+        $data['diario'] = $this->vendas_diario($tipo);
+        $pega= $this->transacao($tipo);
         $data['transacao'] = $pega['transacao'];
         $data['circliful'] = $pega['circliful'];
-        $data['total_produtos'] = $this->total_produtos();
+        $data['total_produtos'] = $this->total_produtos($tipo);
+        $tabela= $this->tabela_transacao($tipo);
 
-        echo json_encode($data);
+        echo json_encode(["relatorios"=>$data, "tabela"=>$tabela]);
     }
 
-    public function vendas_mensal()
+    public function vendas_mensal($tipo= null)
     {
-        $dados = $this->Relatorios_model->vendas('%c');
+        $dados = $this->Relatorios_model->vendas('%c', $tipo);
 
         if(!$dados){
             return $obj['data']= false;
@@ -110,9 +111,9 @@ class Relatorios extends CI_Controller
         return $obj;
     }
 
-    public function vendas_semanal()
+    public function vendas_semanal($tipo= null)
     {
-        $dados = $this->Relatorios_model->vendas('%V');
+        $dados = $this->Relatorios_model->vendas('%V', $tipo);
         
         if(!$dados){
             return $obj['data']= false;
@@ -184,9 +185,9 @@ class Relatorios extends CI_Controller
         return $obj;
     }
 
-    public function vendas_diario()
+    public function vendas_diario($tipo= null)
     {
-        $dados = $this->Relatorios_model->vendas('%Y-%m-%d');
+        $dados = $this->Relatorios_model->vendas('%Y-%m-%d', $tipo);
         
         if(!$dados){
             return $obj['data']= false;
@@ -258,9 +259,9 @@ class Relatorios extends CI_Controller
         return $obj;
     }
 
-    public function transacao()
+    public function transacao($tipo= null)
     {
-        $dados = $this->Relatorios_model->transacao();
+        $dados = $this->Relatorios_model->transacao($tipo);
 
         if(!$dados){
             $obj['transacao']['data']= false;
@@ -333,9 +334,9 @@ class Relatorios extends CI_Controller
         return $circli;
     }
 
-    public function total_produtos()
+    public function total_produtos($tipo= null)
     {
-        $dados = $this->Relatorios_model->total_produtos();
+        $dados = $this->Relatorios_model->total_produtos($tipo);
 
         foreach ($dados as $key => $value) {
             foreach ($value as $chave => $valor) {
@@ -368,9 +369,13 @@ class Relatorios extends CI_Controller
         return $obj;
     }
 
-    public function tabela_transacao()
+    public function tabela_transacao($tipo= null)
     {
-        $dados = $this->Relatorios_model->tabela_transacao();
+        $dados = $this->Relatorios_model->tabela_transacao($tipo);
+
+        if(!$dados){
+            return ['data'=> false];
+        }
 
         foreach ($dados as $key => $value) {
             foreach ($value as $chave => $valor) {
