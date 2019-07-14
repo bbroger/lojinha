@@ -13,55 +13,61 @@ class Relatorios_model extends CI_Model
 
         $ano = date('Y');
         $sql = "SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
-            SUM(valor_pago) - SUM(troco) AS valor_pago, 
+            SUM(valor_total) - SUM(desconto) AS valor_total, 
             NULL AS valor_atacado, 
+            NULL AS valor_desconto_atacado,
             NULL AS valor_varejo, 
-            NULL AS valor_desconto, 
+            NULL AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE YEAR(timestamp) = $ano $where GROUP BY chave 
-            UNION ALL 
-        SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
-            NULL AS valor_pago, 
-            NULL AS valor_atacado, 
-            NULL AS valor_varejo, 
-            NULL AS valor_desconto, 
-            NULL AS valor_retirado, 
-            NULL AS valor_inserido 
-            FROM transacao WHERE YEAR(timestamp) = $ano $where GROUP BY chave 
+            FROM transacao WHERE YEAR(timestamp) = $ano$where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
             SUM(valor_total) AS valor_atacado, 
+            NULL AS valor_desconto_atacado,
             NULL AS valor_varejo, 
-            NULL AS valor_desconto, 
+            NULL AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano $where GROUP BY chave 
+            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano$where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
             NULL AS valor_atacado, 
+            SUM(desconto) AS valor_desconto_atacado, 
+            NULL AS valor_varejo, 
+            NULL AS valor_desconto_varejo, 
+            NULL AS valor_retirado, 
+            NULL AS valor_inserido 
+            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano$where GROUP BY chave 
+            UNION ALL 
+            SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
+            NULL AS valor_pago, 
+            NULL AS valor_atacado, 
+            NULL AS valor_desconto_atacado, 
             SUM(valor_total) AS valor_varejo,
-            NULL AS valor_desconto, 
+            NULL AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano $where GROUP BY chave 
+            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano$where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
             NULL AS valor_atacado, 
+            NULL AS valor_desconto_atacado, 
             NULL AS valor_varejo, 
-            SUM(desconto) AS valor_desconto, 
+            SUM(desconto) AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE YEAR(timestamp) = $ano $where GROUP BY chave 
+            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano$where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
             NULL AS valor_atacado, 
+            NULL AS valor_desconto_atacado,
             NULL AS valor_varejo, 
-            NULL AS valor_desconto, 
+            NULL AS valor_desconto_varejo, 
             SUM(valor) AS valor_retirado, 
             NULL AS valor_inserido 
             FROM movimentacao WHERE tipo= 'retirado' AND YEAR(timestamp) = $ano GROUP BY chave 
@@ -69,8 +75,9 @@ class Relatorios_model extends CI_Model
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
             NULL AS valor_atacado, 
+            NULL AS valor_desconto_atacado,
             NULL AS valor_varejo, 
-            NULL AS valor_desconto, 
+            NULL AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             SUM(valor) AS valor_inserido 
             FROM movimentacao WHERE tipo= 'inserido' AND YEAR(timestamp) = $ano GROUP BY chave";

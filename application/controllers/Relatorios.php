@@ -32,10 +32,10 @@ class Relatorios extends CI_Controller
         echo json_encode(["relatorios" => $data, "tabela" => $tabela]);
     }
 
-    public function consultar_transacao($id= null)
+    public function consultar_transacao($id = null)
     {
-        $dados= $this->Relatorios_model->consultar_transacao($id);
-        
+        $dados = $this->Relatorios_model->consultar_transacao($id);
+
         echo json_encode($dados);
     }
 
@@ -50,7 +50,7 @@ class Relatorios extends CI_Controller
         foreach ($dados as $key => $value) {
             foreach ($value as $chave => $valor) {
                 if ($chave != 'chave' && $valor) {
-                    if ($chave == 'valor_desconto' || $chave == 'valor_retirado') {
+                    if ($chave == 'valor_desconto_atacado' || $chave == 'valor_desconto_varejo' || $chave == 'valor_retirado') {
                         $arr[$value['chave']][$chave] = ($valor > 0) ? -$valor : 0;
                     } else {
                         $arr[$value['chave']][$chave] = $valor;
@@ -62,8 +62,8 @@ class Relatorios extends CI_Controller
         }
 
         foreach ($arr as $key => $value) {
-            $arr[$key]['valor_pago'] = $value['valor_pago'] + ($value['valor_inserido'] - abs($value['valor_retirado']));
-            $arr[$key]['valor_vendas'] = $value['valor_atacado'] + $value['valor_varejo'] - abs($value['valor_desconto']);
+            $arr[$key]['valor_total'] = $value['valor_total'] + ($value['valor_inserido'] - abs($value['valor_retirado']));
+            $arr[$key]['valor_vendas'] = $value['valor_atacado'] + $value['valor_varejo'] - abs($value['valor_desconto_atacado']) - abs($value['valor_desconto_varejo']);
         }
 
         if ($cal != '%c') {
@@ -74,12 +74,27 @@ class Relatorios extends CI_Controller
             ksort($arr);
         }
 
+        if ($tipo != 'vendas') {
+            foreach ($arr as $key => $value) {
+                unset($arr[$key]['valor_total']);
+                unset($arr[$key]['valor_retirado']);
+                unset($arr[$key]['valor_inserido']);
+            }
+
+            $supp = [
+                "label" => [4 => "Total das vendas", 0 => "Atacado", 1 => "Desconto atacado", 2 => "Varejo", 3 => "Desconto varejo"],
+                "cores" => ['rgba(0,128,0,0.6)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188,0.6)', 'rgba(100,206,188,0.6)', 'rgb(188,143,143)'],
+                "borda" => ['rgb(0,128,0)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(100,206,188)', 'rgb(188,143,143)']
+            ];
+        } else {
+            $supp = [
+                "label" => [0 => "Lucro", 7 => "Total das vendas", 1 => "Atacado", 2 => "Desconto atacado", 3 => "Varejo", 4 => "Desconto varejo", 5 => "Retirado", 6 => "Inserido"],
+                "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188,0.6)', 'rgba(100,206,188,0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgb(188,143,143)'],
+                "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(100,206,188)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(188,143,143)']
+            ];
+        }
+
         $meses = [1 => 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-        $supp = [
-            "label" => [0=>"Total dos valores", 6=>"Total das vendas", 1=>"Atacado", 2=>"Varejo", 3=>"Desconto", 4=>"Retirado", 5=>"Inserido"],
-            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188,0.6)', 'rgba(255,0,0,0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgb(188,143,143)'],
-            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(255,0,0)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(188,143,143)']
-        ];
 
         $count = 0;
         foreach ($arr as $key => $value) {
@@ -100,9 +115,9 @@ class Relatorios extends CI_Controller
                 array_push($label, DateTime::createFromFormat("Y-m-d", $key)->format("d/m"));
             }
             foreach ($value as $chave => $valor) {
-                if ($count == 0 || $count == 6) {
+                if (($tipo == 'vendas' && ($count == 0 || $count == 7)) || ($tipo != 'vendas' && $count == 4)) {
                     $vendas[$count]['type'] = 'line';
-                    $vendas[$count]['borderDash']= [5,5];
+                    $vendas[$count]['borderDash'] = [5, 5];
                     $vendas[$count]['borderColor'] = $supp['cores'][$count];
                     $vendas[$count]['fill'] = false;
                 } else {
@@ -120,7 +135,7 @@ class Relatorios extends CI_Controller
 
         $obj['data']['labels'] = $label;
         $obj['data']['datasets'] = $vendas;
-        
+
         return $obj;
     }
 

@@ -26,21 +26,12 @@ CREATE TABLE `acao_estoque` (
   `id_acao_estoque` int(11) NOT NULL AUTO_INCREMENT,
   `id_produto` int(11) NOT NULL,
   `quantidade_atual` int(11) NOT NULL,
-  `quantidade_inserido` int(11) NOT NULL,
-  `acao` varchar(10) NOT NULL,
+  `quantidade_inserido` int(11) DEFAULT NULL,
+  `acao` varchar(10) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_acao_estoque`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `acao_estoque`
---
-
-LOCK TABLES `acao_estoque` WRITE;
-/*!40000 ALTER TABLE `acao_estoque` DISABLE KEYS */;
-/*!40000 ALTER TABLE `acao_estoque` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `movimentacao`
@@ -57,17 +48,8 @@ CREATE TABLE `movimentacao` (
   `status` varchar(10) DEFAULT 'ativo',
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_movimentacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `movimentacao`
---
-
-LOCK TABLES `movimentacao` WRITE;
-/*!40000 ALTER TABLE `movimentacao` DISABLE KEYS */;
-/*!40000 ALTER TABLE `movimentacao` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `produtos`
@@ -80,23 +62,14 @@ CREATE TABLE `produtos` (
   `id_produto` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) NOT NULL,
   `descricao` varchar(45) DEFAULT NULL,
-  `valorVarejo` decimal(6,2) NOT NULL,
-  `valorAtacado` decimal(6,2) NOT NULL,
-  `quantidade` int(11) DEFAULT '0',
-  `status` varchar(45) DEFAULT 'ativo',
+  `valorVarejo` decimal(6,2) NOT NULL DEFAULT '0.00',
+  `valorAtacado` decimal(6,2) NOT NULL DEFAULT '0.00',
+  `quantidade` int(11) NOT NULL DEFAULT '0',
+  `status` varchar(45) NOT NULL DEFAULT 'ativo',
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_produto`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `produtos`
---
-
-LOCK TABLES `produtos` WRITE;
-/*!40000 ALTER TABLE `produtos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `produtos` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `promocao`
@@ -113,17 +86,8 @@ CREATE TABLE `promocao` (
   `status` varchar(45) DEFAULT 'ativo',
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_promocao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `promocao`
---
-
-LOCK TABLES `promocao` WRITE;
-/*!40000 ALTER TABLE `promocao` DISABLE KEYS */;
-/*!40000 ALTER TABLE `promocao` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `transacao`
@@ -142,17 +106,8 @@ CREATE TABLE `transacao` (
   `venda` varchar(10) NOT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_transacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=340 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `transacao`
---
-
-LOCK TABLES `transacao` WRITE;
-/*!40000 ALTER TABLE `transacao` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transacao` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `vendas`
@@ -169,17 +124,8 @@ CREATE TABLE `vendas` (
   `quantidade` int(11) NOT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_vendas`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=808 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vendas`
---
-
-LOCK TABLES `vendas` WRITE;
-/*!40000 ALTER TABLE `vendas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vendas` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -190,4 +136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-10 22:56:34
+-- Dump completed on 2019-07-14  2:33:27
