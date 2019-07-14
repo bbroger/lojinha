@@ -175,4 +175,15 @@ class Relatorios_model extends CI_Model
         $query = $this->db->query($sql);
         return $query->result_array();
     }
+
+    public function consultar_transacao($id)
+    {
+        $sql= "SELECT transacao.*, vendas.*, vendas.quantidade AS qtd_vendido, produtos.* FROM vendas 
+        INNER JOIN transacao ON vendas.id_transacao = transacao.id_transacao 
+        INNER JOIN produtos ON vendas.id_produto = produtos.id_produto 
+        WHERE vendas.id_transacao= $id";
+
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
 }

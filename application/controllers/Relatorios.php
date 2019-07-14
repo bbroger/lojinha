@@ -32,6 +32,13 @@ class Relatorios extends CI_Controller
         echo json_encode(["relatorios" => $data, "tabela" => $tabela]);
     }
 
+    public function consultar_transacao($id= null)
+    {
+        $dados= $this->Relatorios_model->consultar_transacao($id);
+        
+        echo json_encode($dados);
+    }
+
     public function vendas($tipo, $cal)
     {
         $dados = $this->Relatorios_model->vendas($cal, $tipo);
@@ -237,7 +244,7 @@ class Relatorios extends CI_Controller
             foreach ($value as $chave => $valor) {
                 $data[$key][$chave] = $valor;
             }
-            $data[$key]['ver'] = 'Ver';
+            $data[$key]['ver'] = '<button type="button" style="margin: 0; padding: 0 3px;" class="btn btn-link ver_detalhes" id="' . $value['id_transacao'] . '">Ver</button>';
         }
 
         return $data;

@@ -79,10 +79,10 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
-                                            <canvas id="graphWeek" style="height: 290px;"></canvas>
+                                            <canvas id="graphWeek" style="height: 300px;"></canvas>
                                         </div>
                                         <div class="col-12 mt-2">
-                                            <canvas id="graphDay" style="height: 290px;"></canvas>
+                                            <canvas id="graphDay" style="height: 300px;"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -94,6 +94,41 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal_details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Detalhes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped text-center">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID transacao</th>
+                                <th scope="col">Venda</th>
+                                <th scope="col">Produto</th>
+                                <th scope="col">Valor unid.</th>
+                                <th scope="col">Qtd</th>
+                                <th scope="col">Valor total</th>
+                                <th scope="col">Desconto</th>
+                                <th scope="col">Data</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal_details_table">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script src="<?php echo base_url("assets/js/jquery.min.js"); ?>"></script>
 <script src="<?php echo base_url("assets/js/popper.min.js"); ?>"></script>
