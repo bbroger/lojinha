@@ -232,6 +232,7 @@ function atualiza_graph(tipo = null) {
         constroi_table(data.tabela);
 
     }).fail(function (data) {
+       alert("Erro ao trazer os relatórios. Não foi possível carregar as informaçoes");
         console.log(data);
     });
 }
@@ -354,8 +355,6 @@ $("#mostra_tabela").on('click', '.ver_detalhes', function(){
         type: 'Get',
         dataType: 'json'
     }).done(function(data){
-        console.log(data);
-
         var tr = null;
         $.each(data, function (key, value) {
             tr += "<tr><td>" + value.id_transacao + "</td>";
@@ -365,13 +364,14 @@ $("#mostra_tabela").on('click', '.ver_detalhes', function(){
             tr += "<td>" + value.qtd_vendido + "</td>";
             tr += "<td>R$ " + value.valor_total + "</td>";
             tr += "<td>R$ " + value.desconto + "</td>";
-            tr += "<td>" + moment(value.timestamp).format('DD/MM HH:mm') + "</td>";
+            tr += "<td>" + moment(value.data_venda).format('DD/MM HH:mm') + "</td>";
             tr += "</tr>";
         });
 
         table.html(tr);
         $("#modal_details").modal('show');
     }).fail(function(data){
+        alert("Erro ao trazer os detalhes. Não foi possível trazer os detalhes da venda.");
         console.log(data);
     });
 });
