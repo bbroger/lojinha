@@ -185,7 +185,7 @@ class Relatorios_model extends CI_Model
 
     public function consultar_transacao($id)
     {
-        $sql= "SELECT transacao.*, vendas.*, vendas.quantidade AS qtd_vendido, produtos.* FROM vendas 
+        $sql= "SELECT transacao.*, transacao.timestamp AS data_venda, vendas.*, vendas.quantidade AS qtd_vendido, produtos.* FROM vendas 
         INNER JOIN transacao ON vendas.id_transacao = transacao.id_transacao 
         INNER JOIN produtos ON vendas.id_produto = produtos.id_produto 
         WHERE vendas.id_transacao= $id";
