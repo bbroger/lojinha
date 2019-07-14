@@ -68,12 +68,12 @@
                         <div class="form-group">
                             <label for="search_id_produto">CÓDIGO PRODUTO</label>
                             <input type="number" min="0" id="search_id_produto" class="form-control">
-                            <small style="color: red;" id="msg_search_id_produto"></small>
+                            <small style="color: white; background: red;" id="msg_search_id_produto"></small>
                         </div>
                         <div class="form-group">
                             <label for="exampleFormControlInput1">QUANTIDADE</label>
                             <input type="number" min="0" id="search_quantidade" class="form-control">
-                            <small style="color: red;" id="msg_search_quantidade"></small>
+                            <small style="color: white; background: red" id="msg_search_quantidade"></small>
                         </div>
                         <button class="btn btn-primary" id="search_inserir" style="width: 100%;">INSERIR PRODUTO</button>
                     </div>
@@ -84,7 +84,7 @@
                         <div class="form-group">
                             <label for="insere_valor_pago">VALOR PAGO</label>
                             <input type="text" data-decimal="." id="insere_valor_pago" class="form-control">
-                            <small style="color: red;" id="msg_finalizar_venda"></small>
+                            <small style="color: white; background: red" id="msg_finalizar_venda"></small>
                             <div class="form-check mt-2">
                                 <input class="form-check-input" type="checkbox" value="pagcartao" id="pagcartao">
                                 <label class="form-check-label" for="pagcartao">
@@ -153,7 +153,7 @@
                 </div>
             </div>
         </div>
-    </div>s
+    </div>
 
     <script src="<?php echo base_url("assets/js/jquery.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/popper.min.js"); ?>"></script>
@@ -162,6 +162,7 @@
     <script src="<?php echo base_url("assets/js/dataTables.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/dataTables.bootstrap4.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/maskMoney.min.js"); ?>"></script>
+    <script>var venda = '<?php echo $venda; ?>'</script>
     <script src="<?php echo base_url("assets/js/caixa.js"); ?>"></script>
 </body>
 

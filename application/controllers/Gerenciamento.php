@@ -8,12 +8,22 @@ class Gerenciamento extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        if(!$this->session->login){
+            redirect(base_url("Login"));
+        }
         $this->load->model('Gerenciamento_model');
     }
 
     public function index()
     {
+        $this->load->view('head');
         $this->load->view('gerenciamento');
+    }
+    
+    public function sair()
+    {
+        $this->session->unset_userdata("login");
+        redirect(base_url("Login"));
     }
 
     public function tabela_retirados()

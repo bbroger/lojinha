@@ -4,7 +4,9 @@ class Produtos_model extends CI_Model
 {
     public function tabela_produtos()
     {
-        $sql= "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, (produtos.quantidade - SUM(vendas.quantidade)) AS nova_quantidade 
+        $sql= "SELECT produtos.*, CONCAT('R$ ',produtos.valorVarejo) AS valorVarejo, 
+            CONCAT('R$ ',produtos.valorAtacado) AS valorAtacado, 
+            (produtos.quantidade - SUM(vendas.quantidade)) AS nova_quantidade 
             FROM produtos LEFT JOIN vendas ON produtos.id_produto = vendas.id_produto GROUP BY produtos.id_produto";
         $query= $this->db->query($sql);
         return $query->result_array();
@@ -42,15 +44,19 @@ class Produtos_model extends CI_Model
         $this->db->update('produtos', $data);
     }
 
-    public function acao_estoque($data, $id)
+    public function acao_estoque($data, $acao, $id)
     {
-        if($data['acao'] == 'add'){
+        if($acao == 'add'){
             $this->db->set('quantidade', 'quantidade+'.$data['quantidade'], FALSE);
         } else{
             $this->db->set('quantidade', 'quantidade-'.$data['quantidade'], FALSE);
         }
         $this->db->where('id_produto', $id);
         $this->db->update('produtos');
+    }
+
+    public function save_acao_estoque($data){
+        $this->db->insert('acao_estoque', $data);
     }
 
     public function salvar_promocao($data)

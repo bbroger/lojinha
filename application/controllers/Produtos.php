@@ -7,11 +7,15 @@ class Produtos extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        if (!$this->session->login) {
+            redirect(base_url("Login"));
+        }
         $this->load->model('Produtos_model');
     }
 
     public function index()
     {
+        $this->load->view('head');
         $this->load->view('cadastrar_produtos');
     }
 
@@ -23,20 +27,20 @@ class Produtos extends CI_Controller
             foreach ($produtos as $key => $value) {
                 foreach ($value as $chave => $valor) {
                     $data['data'][$key][$chave] = $valor;
-                    if($chave == 'nova_quantidade' && !is_null($valor)){
+                    if ($chave == 'nova_quantidade' && !is_null($valor)) {
                         $data['data'][$key]['quantidade'] = $valor;
                     }
                 }
-                if($value['status'] == 'ativo'){
-                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
+                if ($value['status'] == 'ativo') {
+                    $buttonStatus = '<button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button> 
                     <button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
-                } else{
-                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-danger activ"><i class="fas fa-check-square"></i></button>';
+                } else {
+                    $buttonStatus = '<button style="padding: 0 5px;" class="btn btn-warning edit" disabled><i class="fas fa-edit"></i></button> 
+                    <button style="padding: 0 5px;" class="btn btn-danger activ"><i class="fas fa-check"></i></button>';
                 }
                 $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
-                    '.$buttonStatus
-                    .' <button style="padding: 0 5px;" class="btn btn-primary add"><i class="fas fa-shopping-cart"></i></button>';
+                    ' . $buttonStatus
+                    . ' <button style="padding: 0 5px;" class="btn btn-primary add"><i class="fas fa-shopping-cart"></i></button>';
             }
 
             echo json_encode($data);
@@ -54,13 +58,12 @@ class Produtos extends CI_Controller
                 foreach ($value as $chave => $valor) {
                     $data['data'][$key][$chave] = $valor;
                 }
-                if($value['status'] == 'ativo'){
-                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
-                } else{
-                    $buttonStatus= '<button style="padding: 0 5px;" class="btn btn-secondary activ"><i class="fas fa-check-square"></i></button>';
+                if ($value['status'] == 'ativo') {
+                    $buttonStatus = '<button style="padding: 0 5px;" class="btn btn-danger block"><i class="fas fa-ban"></i></button>';
+                } else {
+                    $buttonStatus = '<button style="padding: 0 5px;" class="btn btn-danger activ"><i class="fas fa-check"></i></button>';
                 }
-                $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
-                    '.$buttonStatus;
+                $data['data'][$key]['button'] = $buttonStatus;
             }
 
             echo json_encode($data);
@@ -73,7 +76,8 @@ class Produtos extends CI_Controller
     {
         $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]|max_length[255]|is_unique[produtos.nome]");
         $this->form_validation->set_rules("descricao", "<b>Nome Descrição</b>", "trim|min_length[3]|max_length[255]");
-        $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|required|decimal|min_length[3]");
+        $this->form_validation->set_rules("valorVarejo", "<b>Valor Varejo</b>", "trim|decimal|min_length[3]|callback_check_valores");
+        $this->form_validation->set_rules("valorAtacado", "<b>Valor Atacado</b>", "trim|decimal|min_length[3]|callback_check_valores");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors();
@@ -84,7 +88,10 @@ class Produtos extends CI_Controller
         } else {
             $data['nome'] = $this->input->post("nome");
             $data['descricao'] = $this->input->post("descricao");
-            $data['valor'] = $this->input->post("valor");
+            $vare = $this->input->post("valorVarejo");
+            $data['valorVarejo'] = ($vare) ? $vare : 0;
+            $ata = $this->input->post("valorAtacado");
+            $data['valorAtacado'] = ($ata) ? $ata : 0;
 
             $this->Produtos_model->salvar_produto($data);
 
@@ -96,12 +103,26 @@ class Produtos extends CI_Controller
         }
     }
 
+    public function check_valores()
+    {
+        $varejo = $this->input->post("valorVarejo");
+        $atacado = $this->input->post("valorAtacado");
+
+        if ($varejo || $atacado) {
+            return true;
+        } else {
+            $this->form_validation->set_message("check_valores", "Erro nos <b>valores</b>. Informe pelo menos um <b>Valor</b>");
+            return false;
+        }
+    }
+
     public function editar_produto()
     {
         $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
         $this->form_validation->set_rules("nome", "Nome", "trim|required|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("descricao", "Descrição", "trim|min_length[3]|max_length[255]");
-        $this->form_validation->set_rules("valor", "Valor", "trim|required|decimal|min_length[3]");
+        $this->form_validation->set_rules("valorVarejo", "Valor Varejo", "trim|required|greater_than[0]|decimal|min_length[3]");
+        $this->form_validation->set_rules("valorAtacado", "Valor Atacado", "trim|decimal|min_length[3]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors(" ", " ");
@@ -113,7 +134,8 @@ class Produtos extends CI_Controller
             $id_produto = $this->input->post("id_produto");
             $data['nome'] = $this->input->post("nome");
             $data['descricao'] = $this->input->post("descricao");
-            $data['valor'] = $this->input->post("valor");
+            $data['valorVarejo'] = $this->input->post("valorVarejo");
+            $data['valorAtacado'] = $this->input->post("valorAtacado");
 
             $this->Produtos_model->editar_produto($data, $id_produto);
             $data['status'] = true;
@@ -163,8 +185,9 @@ class Produtos extends CI_Controller
 
     public function acao_estoque()
     {
-        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
-        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|greater_than[0]|max_length[11]");
+        $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|integer|max_length[11]|combines[produtos.id_produto]");
+        $this->form_validation->set_rules("quantidade", "Quantidade", "trim|required|integer|greater_than[0]|max_length[11]", ["required" => "Você precisa <b>inserir</b> um valor para Adicionar/Remover"]);
+        $this->form_validation->set_rules("qtdeAtual", "Quantidade atual", "trim|required|integer|max_length[11]");
         $this->form_validation->set_rules("acao", "Ação", "trim|in_list[add,remover]");
 
         if (!$this->form_validation->run()) {
@@ -175,12 +198,19 @@ class Produtos extends CI_Controller
             return false;
         } else {
             $id_produto = $this->input->post("id_produto");
+            $acao = $this->input->post("acao");
             $data['quantidade'] = $this->input->post("quantidade");
-            $data['acao'] = $this->input->post("acao");
 
-            $this->Produtos_model->acao_estoque($data, $id_produto);
+            $this->Produtos_model->acao_estoque($data, $acao, $id_produto);
 
-            $data['msg'] = ($data['acao'] == 'add') ? "<p><b>Estoque adicionado com sucesso!</b></p>" : "<p><b>Estoque removido com sucesso!</b></p>";
+            $data2['id_produto'] = $id_produto;
+            $data2['quantidade_atual'] = $this->input->post("qtdeAtual");
+            $data2['quantidade_inserido'] = $this->input->post("quantidade");
+            $data2['acao'] = $acao;
+
+            $this->Produtos_model->save_acao_estoque($data2, $id_produto);
+
+            $data['msg'] = ($acao == 'add') ? "<p><b>Estoque adicionado com sucesso!</b></p>" : "<p><b>Estoque removido com sucesso!</b></p>";
             $data['status'] = true;
             echo json_encode($data);
         }

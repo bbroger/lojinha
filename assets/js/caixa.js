@@ -1,6 +1,5 @@
 var produtos_inseridos = [];
 $("#insere_valor_pago").maskMoney();
-
 //Serve para limitar o numero de botoes da paginaçao
 $.fn.DataTable.ext.pager.numbers_length = 3;
 var table = $("#catalogo").DataTable({
@@ -8,7 +7,7 @@ var table = $("#catalogo").DataTable({
     "ordering": false,
     "info": false,
     "dom": "ftip",
-    ajax: url_ajax("Caixa/catalogo"),
+    ajax: url_ajax("Caixa/catalogo/"+venda),
     "columns": [
         { "data": "id_produto" },
         { "data": "nome" },
@@ -72,7 +71,7 @@ $("#search_inserir").click(function () {
     }
 
     if (valid) {
-        $.getJSON(url_ajax("Caixa/tabela_produtos/" + id_produto.val()), function (result) {
+        $.getJSON(url_ajax("Caixa/busca_produto/" + venda + "/" + id_produto.val()), function (result) {
             if (!result) {
                 id_produto.css({ border: "1px solid red", color: "red" });
                 $("#msg_search_id_produto").html("Código produto não encontrado.<br> Confira na tabela ao lado");
@@ -136,7 +135,7 @@ $("#finalizar_venda").click(function () {
             url: url_ajax("Caixa/finalizar_venda"),
             type: 'Post',
             dataType: 'json',
-            data: { valor_pago: valor_pago.val(), tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
+            data: { valor_pago: valor_pago.val().replace(",",""), tipo_pag: tipo_pag, itens_produto: produtos_inseridos, venda: venda }
         }).done(function (data) {
             if (data.status) {
                 valor_pago.val("");
@@ -146,9 +145,16 @@ $("#finalizar_venda").click(function () {
                 $("#mostra_valor_pago").html("R$ 0,00");
                 $("#pagcartao").prop('checked', false);
                 $("#mostra_troco").html("R$ 0,00");
+                $("#msg_search_id_produto").html("");
+                $("#msg_search_quantidade").html("");
+                $("#search_id_produto").val("").css({ border: "1px solid #ccc", color: "#737373" });
+                $("#search_quantidade").val("").css({ border: "1px solid #ccc", color: "#737373" });
+            } else{
+                alert(data.msg);
             }
         }).fail(function (data) {
-            alert(data.msg);
+            console.log(data);
+            alert("Erro! Não foi possível finalizar a venda. Tente mais tarde.")
         });
     }
 });
@@ -226,6 +232,7 @@ $("#btnUltimasVendas").click(function(){
         table.html(tr);
         $("#ultimasVendas").modal('show');
     }).fail(function(data){
-        console.log(data)
+        console.log(data);
+        alert("Erro! Não foi possível trazer as últimas vendas. Tente mais tarde");
     });
 });

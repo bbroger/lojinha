@@ -1,55 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-br">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Produtos</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap.min.css") ?>">
-    <link rel="stylesheet" href="<?php echo base_url("assets/css/dataTables.bootstrap4.min.css") ?>">
-    <link rel="stylesheet" href="<?php echo base_url("assets/css/fontawesome.min.css") ?>">
-    <link rel="stylesheet" href="<?php echo base_url("assets/css/main.css") ?>">
-    <script>
-        function url_ajax(destino) {
-            return "<?php echo base_url(); ?>" + destino;
-        }
-    </script>
-    <style>
-        body {
-            background-image: url('<?php echo base_url('assets/images/background.jpg'); ?>');
-            background-attachment: fixed;
-        }
-    </style>
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
-        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample10" aria-controls="navbarsExample10" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse justify-content-md-center collapse" id="navbarsExample10" style="">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url(); ?>">Caixa</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="<?php echo base_url('Produtos/'); ?>">Cadastrar produto</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Relatórios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url("Gerenciamento/"); ?>">Gerenciamento</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
     <div class="container">
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#novoProduto"><i class="fas fa-plus-circle"></i> Cadastrar novo produto</button>
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#novaPromocao"><i class="fas fa-plus-circle"></i> Cadastrar nova promoção</button>
+                    <button type="button" class="btn btn-success clearModal" data-toggle="modal" data-target="#novoProduto"><i class="fas fa-plus-circle"></i> Cadastrar novo produto</button>
+                    <button type="button" class="btn btn-info clearModal" data-toggle="modal" data-target="#novaPromocao"><i class="fas fa-plus-circle"></i> Cadastrar nova promoção</button>
                 </div>
             </div>
         </div>
@@ -61,7 +16,8 @@
                             <th scope="col">Código</th>
                             <th scope="col">Produto</th>
                             <th scope="col">Descrição</th>
-                            <th scope="col">Valor</th>
+                            <th scope="col">Varejo</th>
+                            <th scope="col">Atacado</th>
                             <th scope="col">Qtde</th>
                             <th scope="col">Status</th>
                             <th scope="col">Ação</th>
@@ -123,12 +79,12 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="col">
-                                        <label for="valor">Valor</label>
-                                        <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
+                                        <label for="valorVarejo">Valor varejo</label>
+                                        <input type="text" class="form-control" id="valorVarejo" data-decimal="." value="" placeholder="" autocomplete="off">
                                     </div>
                                     <div class="col">
-                                        <label for="quantidade">Data de cadastro</label>
-                                        <input type="text" class="form-control" value="<?php echo date('d/m/Y H:i') ?>" placeholder="" autocomplete="off" disabled>
+                                    <label for="valorAtacado">Valor atacado</label>
+                                        <input type="text" class="form-control" id="valorAtacado" data-decimal="." value="" placeholder="" autocomplete="off">
                                     </div>
                                 </div>
                                 <br>
