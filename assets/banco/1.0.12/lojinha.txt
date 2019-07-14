@@ -1,4 +1,3 @@
-Tirei o trigger
 Na tabela acao_estoque adicionei a coluna acao required, a coluna quantidade_atual virou quantidade_anterior e a coluna quantidade_novo virou quantidade_inserido 
-Na tabela produtos adicionei a coluna valorAtacado default 0 e a coluna valor virou valorVarejo. A coluna quantidade agora tem default 0
+Na tabela produtos tirei o trigger adicionei a coluna valorAtacado default 0 e a coluna valor virou valorVarejo. A coluna quantidade agora tem default 0
 Na tabela transacao adicionei a coluna Venda required

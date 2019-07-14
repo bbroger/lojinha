@@ -102,7 +102,8 @@ table.on('click', '.save', function () {
             tdNome.html(allUp(tdNome.find('input').val()));
             tdDesc.html(firstUp(tdDesc.find('input').val()));
             tdVarejo.html("R$ " + tdVarejo.find('input').val().replace(",", ""));
-            tdAtacado.html("R$ " + tdAtacado.find('input').val().replace(",", ""));
+            var ata= (tdAtacado.find('input').val()) ? tdAtacado.find('input').val().replace(",", "") : '0.00';
+            tdAtacado.html("R$ " + ata);
 
             tr.find("td").eq(7).find('button').eq(0).prop('disabled', true);
             tr.find("td").eq(7).find('button').eq(1).prop('disabled', false);
@@ -213,12 +214,15 @@ table.on('click', '.add', function () {
     var tdQtde = tr.find("td").eq(5);
     qtdeAtual.val(tdQtde.html());
 
+    $("#mostra_msg_estoque").html("");
+
     $("#addEstoque").modal('show');
 });
 
 $("input[name='acao_estoque'").click(function () {
     $("#qtde_total_estoque").val("");
     $("#qtde_acao_estoque").val("");
+    $("#mostra_msg_estoque").html("");
     if ($(this).val() == 'add') {
         $("#label_acao_estoque").html("Adicionar");
         $("#salvar_novo_estoque").removeClass('btn-danger').addClass('btn-primary').html("Adicionar estoque");
@@ -394,15 +398,14 @@ $("#salvar_produto").click(function () {
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
-            $("#mostra_msg").html(data.msg).addClass("text-success").fadeIn();
-            $("#mostra_msg").fadeOut(4000);
+            $("#mostra_msg").html(data.msg).addClass("text-success");
             pega_nome.val("");
             pega_descricao.val("");
             pega_varejo.val("");
             pega_atacado.val("");
             table.ajax.reload();
         } else {
-            $("#mostra_msg").html(data.msg).addClass("text-danger").fadeIn();
+            $("#mostra_msg").html(data.msg).addClass("text-danger");
         }
     }).fail(function (data) {
         console.log(data);
@@ -428,14 +431,13 @@ $("#salvar_promocao").click(function () {
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
-            $("#mostra_msg_promo").html(data.msg).addClass("text-success").fadeIn();
-            $("#mostra_msg_promo").fadeOut(4000);
+            $("#mostra_msg_promo").html(data.msg).addClass("text-success")
             id_produto.val("");
             quantidade.val(0);
             valor.val("");
             table_promocao.ajax.reload();
         } else {
-            $("#mostra_msg_promo").html(data.msg).addClass("text-danger").fadeIn();
+            $("#mostra_msg_promo").html(data.msg).addClass("text-danger")
         }
     }).fail(function (data) {
         alert('Erro! Nao foi possível criar promoção. Tente mais tarde');
@@ -467,14 +469,13 @@ $("#salvar_novo_estoque").click(function () {
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
-            $("#mostra_msg_estoque").html(data.msg).addClass("text-success").fadeIn();
-            $("#mostra_msg_estoque").fadeOut(4000);
+            $("#mostra_msg_estoque").html(data.msg).addClass("text-success")
             qtdeAtual.val(qtdeTotal.val());
             qtdeNova.val("");
             qtdeTotal.val("");
             table.ajax.reload();
         } else {
-            $("#mostra_msg_estoque").html(data.msg).addClass("text-danger").fadeIn();
+            $("#mostra_msg_estoque").html(data.msg).addClass("text-danger")
         }
     }).fail(function (data) {
         console.log(data);
