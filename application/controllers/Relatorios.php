@@ -63,6 +63,7 @@ class Relatorios extends CI_Controller
 
         foreach ($arr as $key => $value) {
             $arr[$key]['valor_pago'] = $value['valor_pago'] + ($value['valor_inserido'] - abs($value['valor_retirado']));
+            $arr[$key]['valor_vendas'] = $value['valor_atacado'] + $value['valor_varejo'] - abs($value['valor_desconto']);
         }
 
         if ($cal != '%c') {
@@ -75,9 +76,9 @@ class Relatorios extends CI_Controller
 
         $meses = [1 => 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         $supp = [
-            "label" => ["Total pago", "Atacado", "Varejo", "Retirado", "Inserido", "Desconto"],
-            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188,0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgba(255,0,0,0.6)'],
-            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(255,0,0)']
+            "label" => [0=>"Total dos valores", 6=>"Total das vendas", 1=>"Atacado", 2=>"Varejo", 3=>"Desconto", 4=>"Retirado", 5=>"Inserido"],
+            "cores" => ['rgb(0,0,255)', 'rgba(0,128,0,0.6)', 'rgba(100,206,188,0.6)', 'rgba(255,0,0,0.6)', 'rgba(255,165,0,0.6)', 'rgba(70,130,180,0.6)', 'rgb(188,143,143)'],
+            "borda" => ['rgb(0,0,255)', 'rgb(0,128,0)', 'rgb(100,206,188)', 'rgb(255,0,0)', 'rgb(255,165,0)', 'rgb(70,130,180)', 'rgb(188,143,143)']
         ];
 
         $count = 0;
@@ -99,8 +100,9 @@ class Relatorios extends CI_Controller
                 array_push($label, DateTime::createFromFormat("Y-m-d", $key)->format("d/m"));
             }
             foreach ($value as $chave => $valor) {
-                if ($count == 0) {
+                if ($count == 0 || $count == 6) {
                     $vendas[$count]['type'] = 'line';
+                    $vendas[$count]['borderDash']= [5,5];
                     $vendas[$count]['borderColor'] = $supp['cores'][$count];
                     $vendas[$count]['fill'] = false;
                 } else {
@@ -118,7 +120,7 @@ class Relatorios extends CI_Controller
 
         $obj['data']['labels'] = $label;
         $obj['data']['datasets'] = $vendas;
-
+        
         return $obj;
     }
 

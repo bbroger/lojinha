@@ -13,7 +13,7 @@ class Relatorios_model extends CI_Model
 
         $ano = date('Y');
         $sql = "SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
-            SUM(valor_pago) AS valor_pago, 
+            SUM(valor_pago) - SUM(troco) AS valor_pago, 
             NULL AS valor_atacado, 
             NULL AS valor_varejo, 
             NULL AS valor_desconto, 
