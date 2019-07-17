@@ -131,6 +131,7 @@ $("#finalizar_venda").click(function () {
     }
 
     if (valid) {
+        $(this).html('<i class="fas fa-spinner fa-pulse"></i> Finalizando').prop('disabled', true);
         $.ajax({
             url: url_ajax("Caixa/finalizar_venda"),
             type: 'Post',
@@ -149,8 +150,10 @@ $("#finalizar_venda").click(function () {
                 $("#msg_search_quantidade").html("");
                 $("#search_id_produto").val("").css({ border: "1px solid #ccc", color: "#737373" });
                 $("#search_quantidade").val("").css({ border: "1px solid #ccc", color: "#737373" });
+                $("#finalizar_venda").html("FINALIZAR VENDA").prop('disabled', false);
             } else{
                 alert(data.msg);
+                $("#finalizar_venda").html("FINALIZAR VENDA").prop('disabled', false);
             }
         }).fail(function (data) {
             console.log(data);
