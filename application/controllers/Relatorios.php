@@ -27,9 +27,9 @@ class Relatorios extends CI_Controller
         $data['transacao'] = $pega['transacao'];
         $data['circliful'] = $pega['circliful'];
         $data['total_produtos'] = $this->total_produtos($tipo);
-        $tabela = $this->tabela_transacao($tipo);
+        $tabela_semanal = $this->tabela_transacao_semanal($tipo);
 
-        echo json_encode(["relatorios" => $data, "tabela" => $tabela]);
+        echo json_encode(["relatorios" => $data, "tabela_semanal" => $tabela_semanal]);
     }
 
     public function consultar_transacao($id = null)
@@ -249,21 +249,14 @@ class Relatorios extends CI_Controller
         return $obj;
     }
 
-    public function tabela_transacao($tipo = null)
+    public function tabela_transacao_semanal($tipo = null)
     {
-        $dados = $this->Relatorios_model->tabela_transacao($tipo);
+        $dados = $this->Relatorios_model->tabela_transacao_semanal($tipo);
 
         if (!$dados) {
             return ['data' => false];
         }
 
-        foreach ($dados as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                $data[$key][$chave] = $valor;
-            }
-            $data[$key]['ver'] = '<button type="button" style="margin: 0; padding: 0 3px;" class="btn btn-link ver_detalhes" id="' . $value['id_transacao'] . '">Ver</button>';
-        }
-
-        return $data;
+        return $dados;
     }
 }

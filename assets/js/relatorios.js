@@ -88,7 +88,7 @@ var chartTotalVendas = new Chart($("#graphTotalVendas"), {
 
 circliful();
 
-constroi_table(false);
+constroi_table_semanal(false);
 
 var chartWeek = new Chart($("#graphWeek"), {
     // The type of chart we want to create
@@ -229,7 +229,7 @@ function atualiza_graph(tipo = null) {
 
         circliful(data.relatorios.circliful);
 
-        constroi_table(data.tabela);
+        constroi_table_semanal(data.tabela_semanal);
 
     }).fail(function (data) {
        alert("Erro ao trazer os relatórios. Não foi possível carregar as informaçoes");
@@ -296,27 +296,28 @@ function circliful(data= false){
     });
 }
 
-function constroi_table(pega_data= false) {
-    if ($.fn.dataTable.isDataTable('#mostra_tabela')) {
-        $('#mostra_tabela').dataTable().fnClearTable();
-        $('#mostra_tabela').dataTable().fnDestroy();
+function constroi_table_semanal(pega_data= false) {
+    if ($.fn.dataTable.isDataTable('#mostra_tabela_semanal')) {
+        $('#mostra_tabela_semanal').dataTable().fnClearTable();
+        $('#mostra_tabela_semanal').dataTable().fnDestroy();
     }
 
-    $.fn.DataTable.ext.pager.numbers_length = 4;
-    $("#mostra_tabela").dataTable({
+    $("#mostra_tabela_semanal").dataTable({
         "info": false,
         "ordering": false,
         "dom": "ftip",
+        pageLength: 5,
         data: pega_data,
         columns: [
-            { "data": 'data_venda' },
+            { "data": 'string' },
             { "data": 'valor_pago' },
-            { "data": 'itens' },
-            { "data": 'ver' }
+            { "data": 'desconto' },
+            { "data": 'vendas' }
         ],
         "columnDefs": [
-            { "width": "50%", "targets": 0 },
-            { "width": "30%", "targets": 1 }
+            { "width": "35%", "targets": 0 },
+            { "width": "20%", "targets": 1 },
+            { "width": "20%", "targets": 2 },
         ],
         "language": {
             "sEmptyTable": "Nenhum registro encontrado",
@@ -344,7 +345,7 @@ function constroi_table(pega_data= false) {
     });
 }
 
-$("#mostra_tabela").on('click', '.ver_detalhes', function(){
+$("#mostra_tabela_semanal").on('click', '.ver_detalhes', function(){
     var id= $(this)[0].id;
 
     var table= $("#modal_details_table");

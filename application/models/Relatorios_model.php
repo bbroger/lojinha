@@ -165,7 +165,7 @@ class Relatorios_model extends CI_Model
         return $query->result_array();
     }
 
-    public function tabela_transacao($tipo)
+    public function tabela_transacao_semanal($tipo)
     {
         $where = "";
         if ($tipo == 'dinheiro') {
@@ -175,9 +175,13 @@ class Relatorios_model extends CI_Model
         }
 
         $ano = date('Y');
-        $sql = "SELECT transacao.*, CONCAT('R$ ',transacao.valor_pago) AS valor_pago, DATE_FORMAT(transacao.timestamp, 'S%V %d/%m %H:%i') AS data_venda, COUNT(vendas.id_vendas) AS itens FROM transacao 
-        INNER JOIN vendas ON transacao.id_transacao = vendas.id_transacao 
-        WHERE YEAR(transacao.timestamp)= $ano$where GROUP BY id_transacao ORDER BY id_transacao DESC";
+        $sql = "SELECT DATE_FORMAT(transacao.timestamp, '%V') AS semana_venda, 
+            CONCAT(DATE_FORMAT(transacao.timestamp, 'S%V - '),DATE_FORMAT(MIN(transacao.timestamp),'%d/%m até '),DATE_FORMAT(MAX(transacao.timestamp),'%d/%m')) AS string, 
+            CONCAT('R$ ',SUM(transacao.valor_pago)) AS valor_pago, 
+            CONCAT('R$ ',SUM(transacao.desconto)) AS desconto, 
+            COUNT(transacao.id_transacao) AS vendas 
+            FROM transacao 
+            WHERE YEAR(transacao.timestamp)= $ano$where GROUP BY semana_venda ORDER BY semana_venda DESC";
 
         $query = $this->db->query($sql);
         return $query->result_array();
