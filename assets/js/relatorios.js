@@ -89,6 +89,7 @@ var chartTotalVendas = new Chart($("#graphTotalVendas"), {
 circliful();
 
 constroi_table_semanal(false);
+constroi_table_diario(false);
 
 var chartWeek = new Chart($("#graphWeek"), {
     // The type of chart we want to create
@@ -230,6 +231,7 @@ function atualiza_graph(tipo = null) {
         circliful(data.relatorios.circliful);
 
         constroi_table_semanal(data.tabela_semanal);
+        constroi_table_diario(data.tabela_diario);
 
     }).fail(function (data) {
        alert("Erro ao trazer os relatórios. Não foi possível carregar as informaçoes");
@@ -306,7 +308,7 @@ function constroi_table_semanal(pega_data= false) {
         "info": false,
         "ordering": false,
         "dom": "ftip",
-        pageLength: 5,
+        pageLength: 4,
         data: pega_data,
         columns: [
             { "data": 'string' },
@@ -345,7 +347,56 @@ function constroi_table_semanal(pega_data= false) {
     });
 }
 
-$("#mostra_tabela_semanal").on('click', '.ver_detalhes', function(){
+function constroi_table_diario(pega_data= false) {
+    if ($.fn.dataTable.isDataTable('#mostra_tabela_diario')) {
+        $('#mostra_tabela_diario').dataTable().fnClearTable();
+        $('#mostra_tabela_diario').dataTable().fnDestroy();
+    }
+
+    $("#mostra_tabela_diario").dataTable({
+        "info": false,
+        "ordering": false,
+        "dom": "ftip",
+        pageLength: 4,
+        data: pega_data,
+        columns: [
+            { "data": 'dia_venda' },
+            { "data": 'valor_pago' },
+            { "data": 'desconto' },
+            { "data": 'itens' },
+            { "data": 'ver' }
+        ],
+        "columnDefs": [
+            { "width": "20%", "targets": 1 },
+            { "width": "20%", "targets": 2 },
+        ],
+        "language": {
+            "sEmptyTable": "Nenhum registro encontrado",
+            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sInfoThousands": ".",
+            "sLengthMenu": "_MENU_ resultados por página",
+            "sLoadingRecords": "Carregando...",
+            "sProcessing": "Processando...",
+            "sZeroRecords": "Nenhum registro encontrado",
+            "sSearch": "Pesquisar",
+            "oPaginate": {
+                "sNext": "Próximo",
+                "sPrevious": "Anterior",
+                "sFirst": "Primeiro",
+                "sLast": "Último"
+            },
+            "oAria": {
+                "sSortAscending": ": Ordenar colunas de forma ascendente",
+                "sSortDescending": ": Ordenar colunas de forma descendente"
+            }
+        }
+    });
+}
+
+$("#mostra_tabela_diario").on('click', '.ver_detalhes', function(){
     var id= $(this)[0].id;
 
     var table= $("#modal_details_table");

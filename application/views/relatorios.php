@@ -74,6 +74,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-6">
+                                            <p style="font-size: 13px; font-weight: bold; text-align: center; color: rgb(102,102,102)">Vendas semanal</p>
                                             <div class="table-responsive">
                                                 <table class="table table-striped text-center" id="mostra_tabela_semanal">
                                                     <thead class="thead-dark">
@@ -90,6 +91,7 @@
                                             </div>
                                         </div>
                                         <div class="col-6">
+                                            <p style="font-size: 13px; font-weight: bold; text-align: center; color: rgb(102,102,102)">Vendas diário</p>
                                             <div class="table-responsive">
                                                 <table class="table table-striped text-center" id="mostra_tabela_diario">
                                                     <thead class="thead-dark">
@@ -97,7 +99,8 @@
                                                             <th scope="col">Data</th>
                                                             <th scope="col">Valor</th>
                                                             <th scope="col">Desconto</th>
-                                                            <th scope="col">Ação</th>
+                                                            <th scope="col">Itens</th>
+                                                            <th scope="col">Ver</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>

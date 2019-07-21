@@ -20,7 +20,7 @@ class Relatorios_model extends CI_Model
             NULL AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE YEAR(timestamp) = $ano$where GROUP BY chave 
+            FROM transacao WHERE YEAR(timestamp) = $ano $where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
@@ -30,7 +30,7 @@ class Relatorios_model extends CI_Model
             NULL AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano$where GROUP BY chave 
+            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano $where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
@@ -40,7 +40,7 @@ class Relatorios_model extends CI_Model
             NULL AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano$where GROUP BY chave 
+            FROM transacao WHERE venda= 'atacado' AND YEAR(timestamp) = $ano $where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
@@ -50,7 +50,7 @@ class Relatorios_model extends CI_Model
             NULL AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano$where GROUP BY chave 
+            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano $where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
@@ -60,7 +60,7 @@ class Relatorios_model extends CI_Model
             SUM(desconto) AS valor_desconto_varejo, 
             NULL AS valor_retirado, 
             NULL AS valor_inserido 
-            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano$where GROUP BY chave 
+            FROM transacao WHERE venda= 'varejo' AND YEAR(timestamp) = $ano $where GROUP BY chave 
             UNION ALL 
             SELECT DATE_FORMAT(timestamp, '$var') AS chave, 
             NULL AS valor_pago, 
@@ -181,7 +181,27 @@ class Relatorios_model extends CI_Model
             CONCAT('R$ ',SUM(transacao.desconto)) AS desconto, 
             COUNT(transacao.id_transacao) AS vendas 
             FROM transacao 
-            WHERE YEAR(transacao.timestamp)= $ano$where GROUP BY semana_venda ORDER BY semana_venda DESC";
+            WHERE YEAR(transacao.timestamp)= $ano $where GROUP BY semana_venda ORDER BY semana_venda DESC";
+
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
+    public function tabela_transacao_diario($tipo)
+    {
+        $where = "";
+        if ($tipo == 'dinheiro') {
+            $where = " AND transacao.tipo_pagamento='dinheiro'";
+        } else if ($tipo == 'cartao') {
+            $where = " AND transacao.tipo_pagamento='cartao'";
+        }
+        $ano = date('Y');
+
+        $sql = "SELECT transacao.id_transacao, DATE_FORMAT(transacao.timestamp, '%d/%m') AS dia_venda, 
+        CONCAT('R$ ',transacao.valor_pago) AS valor_pago, CONCAT('R$ ',transacao.desconto) AS desconto, COUNT(vendas.id_vendas) AS itens 
+        FROM transacao 
+        INNER JOIN vendas ON transacao.id_transacao = vendas.id_transacao 
+        WHERE YEAR(transacao.timestamp)= $ano $where GROUP BY id_transacao ORDER BY id_transacao DESC";
 
         $query = $this->db->query($sql);
         return $query->result_array();
@@ -189,7 +209,7 @@ class Relatorios_model extends CI_Model
 
     public function consultar_transacao($id)
     {
-        $sql= "SELECT transacao.*, transacao.timestamp AS data_venda, vendas.*, vendas.quantidade AS qtd_vendido, produtos.* FROM vendas 
+        $sql = "SELECT transacao.*, transacao.timestamp AS data_venda, vendas.*, vendas.quantidade AS qtd_vendido, produtos.* FROM vendas 
         INNER JOIN transacao ON vendas.id_transacao = transacao.id_transacao 
         INNER JOIN produtos ON vendas.id_produto = produtos.id_produto 
         WHERE vendas.id_transacao= $id";
