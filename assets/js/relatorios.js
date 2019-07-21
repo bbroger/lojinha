@@ -403,24 +403,12 @@ $("#mostra_tabela_diario").on('click', '.ver_detalhes', function(){
     table.html("");
 
     $.ajax({
-        url: url_ajax("Relatorios/consultar_transacao/"+id),
+        url: url_ajax("Relatorios/consulta_venda_diario/"+id),
         type: 'Get',
         dataType: 'json'
     }).done(function(data){
-        var tr = null;
-        $.each(data, function (key, value) {
-            tr += "<tr><td>" + value.id_transacao + "</td>";
-            tr += "<td>" + value.venda + "</td>";
-            tr += "<td>" + value.nome + "</td>";
-            tr += "<td>R$ " + value.valor + "</td>";
-            tr += "<td>" + value.qtd_vendido + "</td>";
-            tr += "<td>R$ " + value.valor_total + "</td>";
-            tr += "<td>R$ " + value.desconto + "</td>";
-            tr += "<td>" + moment(value.data_venda).format('DD/MM HH:mm') + "</td>";
-            tr += "</tr>";
-        });
 
-        table.html(tr);
+        table.html(data.table);
         $("#modal_details").modal('show');
     }).fail(function(data){
         alert("Erro ao trazer os detalhes. Não foi possível trazer os detalhes da venda.");
