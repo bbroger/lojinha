@@ -407,7 +407,6 @@ $("#mostra_tabela_diario").on('click', '.ver_detalhes', function(){
         type: 'Get',
         dataType: 'json'
     }).done(function(data){
-
         table.html(data.table);
         $("#modal_details").modal('show');
     }).fail(function(data){

@@ -28,7 +28,7 @@ class Relatorios extends CI_Controller
         $data['circliful'] = $pega['circliful'];
         $data['total_produtos'] = $this->total_produtos($tipo);
         $tabela_semanal = $this->tabela_transacao_semanal($tipo);
-        $tabela_diario= $this->tabela_transacao_diario($tipo);
+        $tabela_diario = $this->tabela_transacao_diario($tipo);
 
         echo json_encode(["relatorios" => $data, "tabela_semanal" => $tabela_semanal, "tabela_diario" => $tabela_diario]);
     }
@@ -278,35 +278,30 @@ class Relatorios extends CI_Controller
 
     public function consulta_venda_diario($id_transacao)
     {
-        $dados= $this->Relatorios_model->consulta_venda_diario($id_transacao);
+        $dados = $this->Relatorios_model->consulta_venda_diario($id_transacao);
 
         foreach ($dados as $key => $value) {
             foreach ($value as $chave => $valor) {
-                $arr[$value['id_transacao']][$value['id_produto']][$chave]= $valor;
+                $arr[$value['id_transacao']][$value['id_produto']][$chave] = $valor;
             }
         }
 
-        $tr= null;
-        $cor[1]= 'style="background-color: #F2F2F2"';
-        $cor[0]= '';
-        $count= 1;
+        $tr = null;
         foreach ($arr as $key => $value) {
             foreach ($value as $chave => $valor) {
-                $tr.= "<tr><td>".$valor['nome']."</td>";
-                $tr.= "<td>R$ ".$valor['valor']."</td>";
-                $tr.= "<td>".$valor['quantidade_vendido']."</td>";
-                $tr.= "<td>R$ ".number_format($valor['valor'] * $valor['quantidade_vendido'],2,'.','')."</td></tr>";
+                $tr .= "<tr><td>" . $valor['nome'] . "</td>";
+                $tr .= "<td>R$ " . $valor['valor'] . "</td>";
+                $tr .= "<td>" . $valor['quantidade_vendido'] . "</td>";
+                $tr .= "<td>R$ " . number_format($valor['valor'] * $valor['quantidade_vendido'], 2, '.', '') . "</td></tr>";
             }
-            $tr.= "<tr><td></td><td>Pago: R$ ".$valor['valor_pago']."</td><td>Total: R$ ".$valor['valor_total']."</td></td><td>Desconto: R$ ".$valor['desconto']."</td></tr>";
-            $tr.= "<tr><td></td><td>18/12 12:00</td><td>Dinheiro</td><td>Varejo</td></tr>";
-            if($count != count($arr)){
-                $tr.= "<tr style='background: #A4A4A4'><td colspan='4'>&nbsp;</td></tr>";
-            }
-
+            $tr .= "<tr><td></td><td>Pago: R$ " . $valor['valor_pago'] . "</td><td>Total: R$ " . $valor['valor_total'] . "</td></td><td>Desconto: R$ " . $valor['desconto'] . "</td></tr>";
+            $tr .= "<tr><td></td><td>" . DateTime::createFromFormat('Y-m-d H:i:s', $valor['timestamp'])->format("d/m H:i");
+            $tr .= "</td><td>" . ucfirst($valor['tipo_pagamento']) . "</td><td>" . ucfirst($valor['venda']) . "</td></tr>";
+            $tr .= "<tr style='background: #A4A4A4'><td colspan='4'>&nbsp;</td></tr>";
         }
 
-        $data['status']= true;
-        $data['table']= $tr;
+        $data['status'] = true;
+        $data['table'] = $tr;
 
         echo json_encode($data);
     }

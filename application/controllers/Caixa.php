@@ -13,17 +13,18 @@ class Caixa extends CI_Controller
 
     public function index()
     {
-        $this->load->view('caixa', ["venda"=>"varejo"]);
+        $this->load->view('caixa', ["venda" => "varejo"]);
     }
 
-    public function atacado(){
-        $this->load->view('caixa', ["venda"=>"atacado"]);
+    public function atacado()
+    {
+        $this->load->view('caixa', ["venda" => "atacado"]);
     }
 
     public function busca_produto($venda, $id_produto)
     {
         $produtos = $this->Caixa_model->busca_produto($venda, $id_produto);
-        
+
         echo json_encode($produtos);
     }
 
@@ -63,24 +64,24 @@ class Caixa extends CI_Controller
         $transacao['tipo_pagamento'] = $this->input->post("tipo_pag");
         $itens = $this->input->post("itens_produto");
 
-        $transacao['valor_total']= 0;
+        $transacao['valor_total'] = 0;
         foreach ($itens as $key => $value) {
-            $valor= ($value['valorPromo'] == 0) ? $value['valor'] : $value['valorPromo'];
-            $transacao['valor_total']+= $value['quantidade'] * $valor;
+            $valor = ($value['valorPromo'] == 0) ? $value['valor'] : $value['valorPromo'];
+            $transacao['valor_total'] += $value['quantidade'] * $valor;
         }
 
-        $transacao['troco']= ($transacao['valor_pago'] - $transacao['valor_total'] > 0)? $transacao['valor_pago'] - $transacao['valor_total']:0 ;
-        $transacao['desconto']= ($transacao['valor_pago'] - $transacao['valor_total'] < 0)? $transacao['valor_total'] - $transacao['valor_pago']:0 ;
-        $transacao['venda']= $this->input->post("venda");
+        $transacao['troco'] = ($transacao['valor_pago'] - $transacao['valor_total'] > 0) ? $transacao['valor_pago'] - $transacao['valor_total'] : 0;
+        $transacao['desconto'] = ($transacao['valor_pago'] - $transacao['valor_total'] < 0) ? $transacao['valor_total'] - $transacao['valor_pago'] : 0;
+        $transacao['venda'] = $this->input->post("venda");
 
-        $id_transacao= $this->Caixa_model->inserir_transacao($transacao);
+        $id_transacao = $this->Caixa_model->inserir_transacao($transacao);
 
         foreach ($itens as $key => $value) {
-            $salvar_produtos[$key]['id_transacao']= $id_transacao;
-            $salvar_produtos[$key]['id_produto']= $value['id_produto'];
-            $valor= ($value['valorPromo'] == 0) ? $value['valor'] : $value['valorPromo'];
-            $salvar_produtos[$key]['valor']= $valor;
-            $salvar_produtos[$key]['quantidade']= $value['quantidade'];
+            $salvar_produtos[$key]['id_transacao'] = $id_transacao;
+            $salvar_produtos[$key]['id_produto'] = $value['id_produto'];
+            $valor = ($value['valorPromo'] == 0) ? $value['valor'] : $value['valorPromo'];
+            $salvar_produtos[$key]['valor'] = $valor;
+            $salvar_produtos[$key]['quantidade'] = $value['quantidade'];
         }
 
         $this->Caixa_model->salvar_venda($salvar_produtos);
@@ -95,7 +96,7 @@ class Caixa extends CI_Controller
     public function itens_produto_check()
     {
         $itens = $this->input->post("itens_produto");
-        $venda= $this->input->post("venda");
+        $venda = $this->input->post("venda");
 
         if (!is_array($itens)) {
             $this->form_validation->set_message("itens_produto_check", "Produtos no formato inválido.");
@@ -115,22 +116,38 @@ class Caixa extends CI_Controller
         return true;
     }
 
-    public function ultimas_vendas()
+    public function ultimas_vendas($tipo)
     {
-        $vendas= $this->Caixa_model->ultimas_vendas();
+        $dados = $this->Caixa_model->ultimas_vendas($tipo);
 
-        $arr= [];
-        foreach($vendas as $key=>$value){
-            array_push($arr, $value['id_transacao']);
-            if(count(array_unique($arr)) == 4){
-                break;
-            }
+        foreach ($dados as $key => $value) {
             foreach ($value as $chave => $valor) {
-                $ultimas[$key][$chave]= $valor;
+                $arr[$value['id_transacao']][$value['id_produto']][$chave] = $valor;
             }
-
         }
 
-        echo json_encode($ultimas);
+        $tr = null;
+        $count= 0;
+        foreach ($arr as $key => $value) {
+            foreach ($value as $chave => $valor) {
+                $tr .= "<tr><td>" . $valor['nome'] . "</td>";
+                $tr .= "<td>R$ " . $valor['valor'] . "</td>";
+                $tr .= "<td>" . $valor['quantidade_vendido'] . "</td>";
+                $tr .= "<td>R$ " . number_format($valor['valor'] * $valor['quantidade_vendido'], 2, '.', '') . "</td></tr>";
+            }
+            $tr .= "<tr><td></td><td>Pago: R$ " . $valor['valor_pago'] . "</td><td>Total: R$ " . $valor['valor_total'] . "</td></td><td>Desconto: R$ " . $valor['desconto'] . "</td></tr>";
+            $tr .= "<tr><td></td><td>" . DateTime::createFromFormat('Y-m-d H:i:s', $valor['timestamp'])->format("d/m H:i");
+            $tr .= "</td><td>" . ucfirst($valor['tipo_pagamento']) . "</td><td>" . ucfirst($valor['venda']) . "</td></tr>";
+            $tr .= "<tr style='background: #A4A4A4'><td colspan='4'>&nbsp;</td></tr>";
+            $count++;
+            if($count == 3){
+                break;
+            }
+        }
+
+        $data['status'] = true;
+        $data['table'] = $tr;
+
+        echo json_encode($data);
     }
 }

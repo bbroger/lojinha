@@ -213,29 +213,17 @@ function calcula_todos_valores() {
 setInterval(function () { table.ajax.reload(); }, 30000);
 
 $("#btnUltimasVendas").click(function(){
-    var table= $("#table_ultimasVendas_modal");
+    var table= $("#modal_details_table");
     table.html("");
-
     $.ajax({
-        url: url_ajax("Caixa/ultimas_vendas"),
-        type: "Post",
-        dataType: "Json"
+        url: url_ajax("Caixa/ultimas_vendas/"+venda),
+        type: 'Get',
+        dataType: 'json'
     }).done(function(data){
-        var tr= null;
-        $.each(data, function(key, value){
-            tr+= "<tr><td>"+value.id_transacao+"</td>";
-            tr+= "<td>"+value.nome+"</td>";
-            tr+= "<td>"+value.quantidade+"</td>";
-            tr+= "<td>R$ "+value.valor+"</td>";
-            tr+= "<td>R$ "+value.valor_total+"</td>";
-            tr+= "<td>"+moment(value.timestamp).format('DD/MM/YYYY HH:mm')+"</td>";
-            tr+= "</tr>";
-        });
-
-        table.html(tr);
+        table.html(data.table);
         $("#ultimasVendas").modal('show');
     }).fail(function(data){
+        alert("Erro ao trazer os detalhes. Não foi possível trazer os detalhes da venda.");
         console.log(data);
-        alert("Erro! Não foi possível trazer as últimas vendas. Tente mais tarde");
     });
 });

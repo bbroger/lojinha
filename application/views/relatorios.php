@@ -132,26 +132,26 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Detalhes</h5>
+                <h5 class="modal-title" id="exampleModalCenterTitle">Detalhes da venda</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-                <div class="row">
-                    <div class="col-12">
-                            <table class="table text-center" style="margin-bottom: 0; padding-bottom: 0;">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">Produto</th>
-                                        <th scope="col">Valor unid.</th>
-                                        <th scope="col">Qtd</th>
-                                        <th scope="col">Valor total</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="modal_details_table">
+            <div class="row">
+                <div class="col-12">
+                    <table class="table text-center" style="margin-bottom: 0; padding-bottom: 0;">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Produto</th>
+                                <th scope="col">Valor unid.</th>
+                                <th scope="col">Qtd</th>
+                                <th scope="col">Valor total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal_details_table">
 
-                                </tbody>
-                            </table>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal-footer">
