@@ -87,7 +87,7 @@ $("#salvar_retirado").click(function () {
     var valor = $("#valor_retirado");
     var descricao = $("#descricao_retirado");
 
-    $("#mostra_msg_retirado").removeClass();
+    $("#mostra_msg_retirado").html("").removeClass();
     $.ajax({
         url: url_ajax("Gerenciamento/salvar_valor_retirado"),
         type: "Post",
@@ -99,13 +99,12 @@ $("#salvar_retirado").click(function () {
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
-            $("#mostra_msg_promo").html(data.msg).addClass("text-success").fadeIn();
-            $("#mostra_msg_promo").fadeOut(4000);
+            $("#mostra_msg_retirado").html(data.msg).addClass("text-success");
             valor.val("");
             descricao.val("");
             table.ajax.reload();
         } else {
-            $("#mostra_msg_retirado").html(data.msg).addClass("text-danger").fadeIn();
+            $("#mostra_msg_retirado").html(data.msg).addClass("text-danger");
         }
     }).fail(function (data) {
         alert('Erro ao criar o valor retirado. Tente mais tarde');
@@ -198,7 +197,7 @@ $("#salvar_inserido").click(function () {
     var valor = $("#valor_inserido");
     var descricao = $("#descricao_inserido");
 
-    $("#mostra_msg_inserido").removeClass();
+    $("#mostra_msg_inserido").html("fsdfds").removeClass();
     $.ajax({
         url: url_ajax("Gerenciamento/salvar_valor_inserido"),
         type: "Post",
@@ -209,13 +208,13 @@ $("#salvar_inserido").click(function () {
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
-            $("#mostra_msg_inserido").html(data.msg).addClass("text-success").fadeIn();
-            $("#mostra_msg_inserido").fadeOut(4000);
+            $("#mostra_msg_inserido").html(data.msg).addClass("text-success");
+            $("#mostra_msg_inserido");
             valor.val("");
             descricao.val("");
             table_inserido.ajax.reload();
         } else {
-            $("#mostra_msg_inserido").html(data.msg).addClass("text-danger").fadeIn();
+            $("#mostra_msg_inserido").html(data.msg).addClass("text-danger");
         }
     }).fail(function (data) {
         alert('Erro ao registrar o valor inserido. Tente mais tarde');

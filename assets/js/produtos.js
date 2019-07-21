@@ -351,7 +351,7 @@ $(".clearModal").click(function () {
     $("#quantidade_promo").val("");
     $("#valor_promo").val("");
     $("#mostra_msg").html("");
-    $("#mostra_msg_promo").html();
+    $("#mostra_msg_promo").html("");
 });
 
 $("#salvar_produto").click(function () {
@@ -419,7 +419,7 @@ $("#salvar_promocao").click(function () {
     var quantidade = $("#quantidade_promo");
     var valor = $("#valor_promo");
 
-    $("#mostra_msg").removeClass();
+    $("#mostra_msg_promo").removeClass();
     $.ajax({
         url: url_ajax("Produtos/salvar_promocao"),
         type: "Post",
