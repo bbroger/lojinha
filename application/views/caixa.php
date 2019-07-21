@@ -126,27 +126,27 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">As 3 últimas vendas</h5>
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Últimas 3 vendas</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <table class="table table-striped text-center">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">ID transacao</th>
-                                <th scope="col">Produto</th>
-                                <th scope="col">Qtd</th>
-                                <th scope="col">Valor unid</th>
-                                <th scope="col">Valor total</th>
-                                <th scope="col">Data</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table_ultimasVendas_modal">
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table text-center" style="margin-bottom: 0; padding-bottom: 0;">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Produto</th>
+                                    <th scope="col">Valor unid.</th>
+                                    <th scope="col">Qtd</th>
+                                    <th scope="col">Valor total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal_details_table">
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -162,7 +162,9 @@
     <script src="<?php echo base_url("assets/js/dataTables.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/dataTables.bootstrap4.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/maskMoney.min.js"); ?>"></script>
-    <script>var venda = '<?php echo $venda; ?>'</script>
+    <script>
+        var venda = '<?php echo $venda; ?>'
+    </script>
     <script src="<?php echo base_url("assets/js/caixa.js"); ?>"></script>
 </body>
 

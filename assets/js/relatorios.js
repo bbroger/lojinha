@@ -88,7 +88,8 @@ var chartTotalVendas = new Chart($("#graphTotalVendas"), {
 
 circliful();
 
-constroi_table(false);
+constroi_table_semanal(false);
+constroi_table_diario(false);
 
 var chartWeek = new Chart($("#graphWeek"), {
     // The type of chart we want to create
@@ -229,7 +230,8 @@ function atualiza_graph(tipo = null) {
 
         circliful(data.relatorios.circliful);
 
-        constroi_table(data.tabela);
+        constroi_table_semanal(data.tabela_semanal);
+        constroi_table_diario(data.tabela_diario);
 
     }).fail(function (data) {
        alert("Erro ao trazer os relatórios. Não foi possível carregar as informaçoes");
@@ -296,27 +298,28 @@ function circliful(data= false){
     });
 }
 
-function constroi_table(pega_data= false) {
-    if ($.fn.dataTable.isDataTable('#mostra_tabela')) {
-        $('#mostra_tabela').dataTable().fnClearTable();
-        $('#mostra_tabela').dataTable().fnDestroy();
+function constroi_table_semanal(pega_data= false) {
+    if ($.fn.dataTable.isDataTable('#mostra_tabela_semanal')) {
+        $('#mostra_tabela_semanal').dataTable().fnClearTable();
+        $('#mostra_tabela_semanal').dataTable().fnDestroy();
     }
 
-    $.fn.DataTable.ext.pager.numbers_length = 4;
-    $("#mostra_tabela").dataTable({
+    $("#mostra_tabela_semanal").dataTable({
         "info": false,
         "ordering": false,
         "dom": "ftip",
+        pageLength: 4,
         data: pega_data,
         columns: [
-            { "data": 'data_venda' },
+            { "data": 'string' },
             { "data": 'valor_pago' },
-            { "data": 'itens' },
-            { "data": 'ver' }
+            { "data": 'desconto' },
+            { "data": 'vendas' }
         ],
         "columnDefs": [
-            { "width": "50%", "targets": 0 },
-            { "width": "30%", "targets": 1 }
+            { "width": "35%", "targets": 0 },
+            { "width": "20%", "targets": 1 },
+            { "width": "20%", "targets": 2 },
         ],
         "language": {
             "sEmptyTable": "Nenhum registro encontrado",
@@ -344,31 +347,67 @@ function constroi_table(pega_data= false) {
     });
 }
 
-$("#mostra_tabela").on('click', '.ver_detalhes', function(){
+function constroi_table_diario(pega_data= false) {
+    if ($.fn.dataTable.isDataTable('#mostra_tabela_diario')) {
+        $('#mostra_tabela_diario').dataTable().fnClearTable();
+        $('#mostra_tabela_diario').dataTable().fnDestroy();
+    }
+
+    $("#mostra_tabela_diario").dataTable({
+        "info": false,
+        "ordering": false,
+        "dom": "ftip",
+        pageLength: 4,
+        data: pega_data,
+        columns: [
+            { "data": 'dia_venda' },
+            { "data": 'valor_pago' },
+            { "data": 'desconto' },
+            { "data": 'itens' },
+            { "data": 'ver' }
+        ],
+        "columnDefs": [
+            { "width": "20%", "targets": 1 },
+            { "width": "20%", "targets": 2 },
+        ],
+        "language": {
+            "sEmptyTable": "Nenhum registro encontrado",
+            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sInfoThousands": ".",
+            "sLengthMenu": "_MENU_ resultados por página",
+            "sLoadingRecords": "Carregando...",
+            "sProcessing": "Processando...",
+            "sZeroRecords": "Nenhum registro encontrado",
+            "sSearch": "Pesquisar",
+            "oPaginate": {
+                "sNext": "Próximo",
+                "sPrevious": "Anterior",
+                "sFirst": "Primeiro",
+                "sLast": "Último"
+            },
+            "oAria": {
+                "sSortAscending": ": Ordenar colunas de forma ascendente",
+                "sSortDescending": ": Ordenar colunas de forma descendente"
+            }
+        }
+    });
+}
+
+$("#mostra_tabela_diario").on('click', '.ver_detalhes', function(){
     var id= $(this)[0].id;
 
     var table= $("#modal_details_table");
     table.html("");
 
     $.ajax({
-        url: url_ajax("Relatorios/consultar_transacao/"+id),
+        url: url_ajax("Relatorios/consulta_venda_diario/"+id),
         type: 'Get',
         dataType: 'json'
     }).done(function(data){
-        var tr = null;
-        $.each(data, function (key, value) {
-            tr += "<tr><td>" + value.id_transacao + "</td>";
-            tr += "<td>" + value.venda + "</td>";
-            tr += "<td>" + value.nome + "</td>";
-            tr += "<td>R$ " + value.valor + "</td>";
-            tr += "<td>" + value.qtd_vendido + "</td>";
-            tr += "<td>R$ " + value.valor_total + "</td>";
-            tr += "<td>R$ " + value.desconto + "</td>";
-            tr += "<td>" + moment(value.data_venda).format('DD/MM HH:mm') + "</td>";
-            tr += "</tr>";
-        });
-
-        table.html(tr);
+        table.html(data.table);
         $("#modal_details").modal('show');
     }).fail(function(data){
         alert("Erro ao trazer os detalhes. Não foi possível trazer os detalhes da venda.");

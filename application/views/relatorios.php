@@ -60,31 +60,64 @@
                         </div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-4">
-                            <table class="table table-striped text-center" id="mostra_tabela">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">Data</th>
-                                        <th scope="col">Valor</th>
-                                        <th scope="col">Itens</th>
-                                        <th scope="col">Ação</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <canvas id="graphWeek" style="height: 380px;"></canvas>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-8">
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-12">
-                                            <canvas id="graphWeek" style="height: 300px;"></canvas>
+                                        <div class="col-6">
+                                            <p style="font-size: 13px; font-weight: bold; text-align: center; color: rgb(102,102,102)">Vendas semanal</p>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped text-center" id="mostra_tabela_semanal">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th scope="col">Data</th>
+                                                            <th scope="col">Valor</th>
+                                                            <th scope="col">Desconto</th>
+                                                            <th scope="col">Vendas</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                        <div class="col-12 mt-2">
-                                            <canvas id="graphDay" style="height: 300px;"></canvas>
+                                        <div class="col-6">
+                                            <p style="font-size: 13px; font-weight: bold; text-align: center; color: rgb(102,102,102)">Vendas diário</p>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped text-center" id="mostra_tabela_diario">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th scope="col">Data</th>
+                                                            <th scope="col">Valor</th>
+                                                            <th scope="col">Desconto</th>
+                                                            <th scope="col">Itens</th>
+                                                            <th scope="col">Ver</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <canvas id="graphDay" style="height: 380px;"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -96,26 +129,23 @@
 </div>
 
 <div class="modal fade" id="modal_details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Detalhes</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-striped text-center">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Detalhes da venda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table text-center" style="margin-bottom: 0; padding-bottom: 0;">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">ID transacao</th>
-                                <th scope="col">Venda</th>
                                 <th scope="col">Produto</th>
                                 <th scope="col">Valor unid.</th>
                                 <th scope="col">Qtd</th>
                                 <th scope="col">Valor total</th>
-                                <th scope="col">Desconto</th>
-                                <th scope="col">Data</th>
                             </tr>
                         </thead>
                         <tbody id="modal_details_table">
@@ -123,12 +153,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>
+</div>
 
 <script src="<?php echo base_url("assets/js/jquery.min.js"); ?>"></script>
 <script src="<?php echo base_url("assets/js/popper.min.js"); ?>"></script>

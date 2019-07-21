@@ -27,9 +27,10 @@ class Relatorios extends CI_Controller
         $data['transacao'] = $pega['transacao'];
         $data['circliful'] = $pega['circliful'];
         $data['total_produtos'] = $this->total_produtos($tipo);
-        $tabela = $this->tabela_transacao($tipo);
+        $tabela_semanal = $this->tabela_transacao_semanal($tipo);
+        $tabela_diario = $this->tabela_transacao_diario($tipo);
 
-        echo json_encode(["relatorios" => $data, "tabela" => $tabela]);
+        echo json_encode(["relatorios" => $data, "tabela_semanal" => $tabela_semanal, "tabela_diario" => $tabela_diario]);
     }
 
     public function consultar_transacao($id = null)
@@ -249,21 +250,59 @@ class Relatorios extends CI_Controller
         return $obj;
     }
 
-    public function tabela_transacao($tipo = null)
+    public function tabela_transacao_semanal($tipo = null)
     {
-        $dados = $this->Relatorios_model->tabela_transacao($tipo);
+        $dados = $this->Relatorios_model->tabela_transacao_semanal($tipo);
+
+        if (!$dados) {
+            return ['data' => false];
+        }
+
+        return $dados;
+    }
+
+    public function tabela_transacao_diario($tipo = null)
+    {
+        $dados = $this->Relatorios_model->tabela_transacao_diario($tipo);
 
         if (!$dados) {
             return ['data' => false];
         }
 
         foreach ($dados as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                $data[$key][$chave] = $valor;
-            }
-            $data[$key]['ver'] = '<button type="button" style="margin: 0; padding: 0 3px;" class="btn btn-link ver_detalhes" id="' . $value['id_transacao'] . '">Ver</button>';
+            $dados[$key]['ver'] = '<button type="button" style="margin: 0; padding: 0 3px;" class="btn btn-link ver_detalhes" id="' . $value['id_transacao'] . '">Ver</button>';
         }
 
-        return $data;
+        return $dados;
+    }
+
+    public function consulta_venda_diario($id_transacao)
+    {
+        $dados = $this->Relatorios_model->consulta_venda_diario($id_transacao);
+
+        foreach ($dados as $key => $value) {
+            foreach ($value as $chave => $valor) {
+                $arr[$value['id_transacao']][$value['id_produto']][$chave] = $valor;
+            }
+        }
+
+        $tr = null;
+        foreach ($arr as $key => $value) {
+            foreach ($value as $chave => $valor) {
+                $tr .= "<tr><td>" . $valor['nome'] . "</td>";
+                $tr .= "<td>R$ " . $valor['valor'] . "</td>";
+                $tr .= "<td>" . $valor['quantidade_vendido'] . "</td>";
+                $tr .= "<td>R$ " . number_format($valor['valor'] * $valor['quantidade_vendido'], 2, '.', '') . "</td></tr>";
+            }
+            $tr .= "<tr><td></td><td>Pago: R$ " . $valor['valor_pago'] . "</td><td>Total: R$ " . $valor['valor_total'] . "</td></td><td>Desconto: R$ " . $valor['desconto'] . "</td></tr>";
+            $tr .= "<tr><td></td><td>" . DateTime::createFromFormat('Y-m-d H:i:s', $valor['timestamp'])->format("d/m H:i");
+            $tr .= "</td><td>" . ucfirst($valor['tipo_pagamento']) . "</td><td>" . ucfirst($valor['venda']) . "</td></tr>";
+            $tr .= "<tr style='background: #A4A4A4'><td colspan='4'>&nbsp;</td></tr>";
+        }
+
+        $data['status'] = true;
+        $data['table'] = $tr;
+
+        echo json_encode($data);
     }
 }
