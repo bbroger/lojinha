@@ -312,7 +312,7 @@ function constroi_table_semanal(pega_data= false) {
         data: pega_data,
         columns: [
             { "data": 'string' },
-            { "data": 'valor_pago' },
+            { "data": 'valor_total' },
             { "data": 'desconto' },
             { "data": 'vendas' }
         ],
@@ -361,7 +361,7 @@ function constroi_table_diario(pega_data= false) {
         data: pega_data,
         columns: [
             { "data": 'dia_venda' },
-            { "data": 'valor_pago' },
+            { "data": 'valor_total' },
             { "data": 'desconto' },
             { "data": 'itens' },
             { "data": 'ver' }

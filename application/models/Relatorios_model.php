@@ -177,7 +177,7 @@ class Relatorios_model extends CI_Model
         $ano = date('Y');
         $sql = "SELECT DATE_FORMAT(transacao.timestamp, '%V') AS semana_venda, 
             CONCAT(DATE_FORMAT(transacao.timestamp, 'S%V - '),DATE_FORMAT(MIN(transacao.timestamp),'%d/%m até '),DATE_FORMAT(MAX(transacao.timestamp),'%d/%m')) AS string, 
-            CONCAT('R$ ',SUM(transacao.valor_pago)) AS valor_pago, 
+            CONCAT('R$ ',SUM(transacao.valor_total)) AS valor_total, 
             CONCAT('R$ ',SUM(transacao.desconto)) AS desconto, 
             COUNT(transacao.id_transacao) AS vendas 
             FROM transacao 
@@ -198,7 +198,7 @@ class Relatorios_model extends CI_Model
         $ano = date('Y');
 
         $sql = "SELECT transacao.id_transacao, DATE_FORMAT(transacao.timestamp, '%d/%m') AS dia_venda, 
-            CONCAT('R$ ',transacao.valor_pago) AS valor_pago, CONCAT('R$ ',transacao.desconto) AS desconto, COUNT(vendas.id_vendas) AS itens 
+            CONCAT('R$ ',transacao.valor_total) AS valor_total, CONCAT('R$ ',transacao.desconto) AS desconto, COUNT(vendas.id_vendas) AS itens 
             FROM transacao 
             INNER JOIN vendas ON transacao.id_transacao = vendas.id_transacao 
             WHERE YEAR(transacao.timestamp)= $ano $where GROUP BY id_transacao ORDER BY id_transacao DESC";
