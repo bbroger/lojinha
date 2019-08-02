@@ -4,8 +4,7 @@
             <h1>Varejo dinheiro</h1>
             <table class="table table-striped text-center" id="varejo_dinheiro">
                 <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Dia</th>
+                    <tr>fia</th>
                         <th scope="col">Valor total</th>
                         <th scope="col">Desconto</th>
                         <th scope="col">Itens</th>
