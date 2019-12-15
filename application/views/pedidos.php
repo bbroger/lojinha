@@ -165,7 +165,7 @@
     <script>
         var venda = '<?php echo $venda; ?>'
     </script>
-    <script src="<?php echo base_url("assets/js/caixa.js"); ?>"></script>
+    <script src="<?php echo base_url("assets/js/pedidos.js"); ?>"></script>
 </body>
 
 </html>

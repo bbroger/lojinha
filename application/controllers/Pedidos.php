@@ -1,36 +1,36 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Caixa extends CI_Controller
+class Pedidos extends CI_Controller
 {
     public $produtos;
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Caixa_model');
+        $this->load->model('Pedidos_model');
     }
 
     public function index()
     {
-        $this->load->view('caixa', ["venda" => "varejo"]);
+        $this->load->view('pedidos', ["venda" => "varejo"]);
     }
 
     public function atacado()
     {
-        $this->load->view('caixa', ["venda" => "atacado"]);
+        $this->load->view('pedidos', ["venda" => "atacado"]);
     }
 
     public function busca_produto($venda, $id_produto)
     {
-        $produtos = $this->Caixa_model->busca_produto($venda, $id_produto);
+        $produtos = $this->Pedidos_model->busca_produto($venda, $id_produto);
 
         echo json_encode($produtos);
     }
 
     public function catalogo($venda)
     {
-        $produtos = $this->Caixa_model->catalogo($venda);
+        $produtos = $this->Pedidos_model->catalogo($venda);
 
         if ($produtos) {
             foreach ($produtos as $key => $value) {
@@ -74,7 +74,7 @@ class Caixa extends CI_Controller
         $transacao['desconto'] = ($transacao['valor_pago'] - $transacao['valor_total'] < 0) ? $transacao['valor_total'] - $transacao['valor_pago'] : 0;
         $transacao['venda'] = $this->input->post("venda");
 
-        $id_transacao = $this->Caixa_model->inserir_transacao($transacao);
+        $id_transacao = $this->Pedidos_model->inserir_transacao($transacao);
 
         foreach ($itens as $key => $value) {
             $salvar_produtos[$key]['id_transacao'] = $id_transacao;
@@ -84,7 +84,7 @@ class Caixa extends CI_Controller
             $salvar_produtos[$key]['quantidade'] = $value['quantidade'];
         }
 
-        $this->Caixa_model->salvar_venda($salvar_produtos);
+        $this->Pedidos_model->salvar_venda($salvar_produtos);
 
         $data['msg'] = "Venda finalizada com sucesso";
         $data['status'] = true;
@@ -103,7 +103,7 @@ class Caixa extends CI_Controller
             return false;
         }
 
-        $produtos = $this->Caixa_model->catalogo($venda);
+        $produtos = $this->Pedidos_model->catalogo($venda);
 
         $coluna_id_produto = array_column($produtos, 'id_produto');
         foreach ($itens as $key => $value) {
@@ -118,7 +118,7 @@ class Caixa extends CI_Controller
 
     public function ultimas_vendas($tipo)
     {
-        $dados = $this->Caixa_model->ultimas_vendas($tipo);
+        $dados = $this->Pedidos_model->ultimas_vendas($tipo);
 
         foreach ($dados as $key => $value) {
             foreach ($value as $chave => $valor) {

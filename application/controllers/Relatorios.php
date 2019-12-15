@@ -6,9 +6,6 @@ class Relatorios extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if (!$this->session->login) {
-            redirect(base_url("Login"));
-        }
         $this->load->model('Relatorios_model');
     }
 

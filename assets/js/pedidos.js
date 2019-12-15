@@ -7,7 +7,7 @@ var table = $("#catalogo").DataTable({
     "ordering": false,
     "info": false,
     "dom": "ftip",
-    ajax: url_ajax("Caixa/catalogo/"+venda),
+    ajax: url_ajax("Pedidos/catalogo/"+venda),
     "columns": [
         { "data": "id_produto" },
         { "data": "nome" },
@@ -71,7 +71,7 @@ $("#search_inserir").click(function () {
     }
 
     if (valid) {
-        $.getJSON(url_ajax("Caixa/busca_produto/" + venda + "/" + id_produto.val()), function (result) {
+        $.getJSON(url_ajax("Pedidos/busca_produto/" + venda + "/" + id_produto.val()), function (result) {
             if (!result) {
                 id_produto.css({ border: "1px solid red", color: "red" });
                 $("#msg_search_id_produto").html("Código produto não encontrado.<br> Confira na tabela ao lado");
@@ -133,7 +133,7 @@ $("#finalizar_venda").click(function () {
     if (valid) {
         $(this).html('<i class="fas fa-spinner fa-pulse"></i> Finalizando').prop('disabled', true);
         $.ajax({
-            url: url_ajax("Caixa/finalizar_venda"),
+            url: url_ajax("Pedidos/finalizar_venda"),
             type: 'Post',
             dataType: 'json',
             data: { valor_pago: valor_pago.val().replace(",",""), tipo_pag: tipo_pag, itens_produto: produtos_inseridos, venda: venda }
@@ -216,7 +216,7 @@ $("#btnUltimasVendas").click(function(){
     var table= $("#modal_details_table");
     table.html("");
     $.ajax({
-        url: url_ajax("Caixa/ultimas_vendas/"+venda),
+        url: url_ajax("Pedidos/ultimas_vendas/"+venda),
         type: 'Get',
         dataType: 'json'
     }).done(function(data){
