@@ -27,25 +27,28 @@
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample10" aria-controls="navbarsExample10" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse justify-content-md-center collapse" id="navbarsExample10" style="">
-            <ul class="navbar-nav">
+        <div class="navbar-collapse justify-content-md-center collapse" id="navbarsExample10">
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url(); ?>">Caixa Varejo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url("Caixa/atacado"); ?>">Caixa Atacado</a>
+                    <a class="nav-link" href="<?php echo base_url("Pedidos/"); ?>">Pedidos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url('Produtos/'); ?>">Cadastrar produto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url('Relatorios/'); ?>">Relatórios</a>
+                    <a class="nav-link" href="<?php echo base_url('Vendas/'); ?>">Vendas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url("Gerenciamento/"); ?>">Gerenciamento</a>
+                    <a class="nav-link" href="<?php echo base_url("Contas/"); ?>">Contas</a>
+                </li>
+            </ul>
+            <a class="navbar-brand mr-auto" href="#">Tato Sorvetes</a>
+            <ul class="navbar-nav">
+                <li class="nav-item mr-1">
+                    <button class="btn btn-info disabled">0 lembrete(s) pendente(s)</button>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-primary" href="<?php echo base_url("Gerenciamento/sair"); ?>">Sair</a>
+                    <button class="btn btn-danger disabled">0 lembrete(s) vence(m) hoje</button>
                 </li>
             </ul>
         </div>

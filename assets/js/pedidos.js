@@ -7,7 +7,7 @@ var table = $("#catalogo").DataTable({
     "ordering": false,
     "info": false,
     "dom": "ftip",
-    ajax: url_ajax("Caixa/catalogo/"+venda),
+    ajax: url_ajax("Pedidos/catalogo/"+venda),
     "columns": [
         { "data": "id_produto" },
         { "data": "nome" },
@@ -71,7 +71,7 @@ $("#search_inserir").click(function () {
     }
 
     if (valid) {
-        $.getJSON(url_ajax("Caixa/busca_produto/" + venda + "/" + id_produto.val()), function (result) {
+        $.getJSON(url_ajax("Pedidos/busca_produto/" + venda + "/" + id_produto.val()), function (result) {
             if (!result) {
                 id_produto.css({ border: "1px solid red", color: "red" });
                 $("#msg_search_id_produto").html("Código produto não encontrado.<br> Confira na tabela ao lado");
@@ -110,8 +110,28 @@ $("#insere_valor_pago").keyup(function () {
     calcula_todos_valores();
 });
 
+$(".transacao").change(function (){
+    if($(this).val() == "venda"){
+        $("#insere_valor_pago").prop('disabled', false);
+        $("#pagcartao").prop('disabled', false);
+        $("#text-pagcartao").css({textDecoration: "none"});
+    } else{
+        $("#insere_valor_pago").prop('disabled', true);
+        $("#pagcartao").prop('disabled', true);
+        $("#text-pagcartao").css({textDecoration: "line-through"});
+    }
+});
+
 $("#finalizar_venda").click(function () {
     $("#msg_finalizar_venda").html("");
+
+    var nome = $("#nome");
+    nome.css({ border: "1px solid #ccc", color: "#737373" });
+    var endereco = $("#endereco");
+    var entrega = $("#entrega");
+    var obs = $("#obs");
+
+    var transacao = ($("#tipo_pedido").is(':checked')) ? 'pedido' : 'venda';
 
     var valor_pago = $("#insere_valor_pago");
     valor_pago.css({ border: "1px solid #ccc", color: "#737373" });
@@ -122,9 +142,12 @@ $("#finalizar_venda").click(function () {
 
     if(produtos_inseridos.length == 0){
         valid = false;
-        valor_pago.css({ border: "1px solid red", color: "red" });
         $("#msg_finalizar_venda").html("Não existem produtos inseridos.");
-    } else if (valor_pago.val().length == 0 || valor_pago.val() == '0.00') {
+    } else if (nome.val().length == 0) {
+        valid = false;
+        nome.css({ border: "1px solid red", color: "red" });
+        $("#msg_finalizar_venda").html("Nome é obrigatório");
+    } else if ((valor_pago.val().length == 0 || valor_pago.val() == '0.00') && transacao == 'venda') {
         valid = false;
         valor_pago.css({ border: "1px solid red", color: "red" });
         $("#msg_finalizar_venda").html("Insira o valor antes de finalizar");
@@ -133,7 +156,7 @@ $("#finalizar_venda").click(function () {
     if (valid) {
         $(this).html('<i class="fas fa-spinner fa-pulse"></i> Finalizando').prop('disabled', true);
         $.ajax({
-            url: url_ajax("Caixa/finalizar_venda"),
+            url: url_ajax("Pedidos/finalizar_venda"),
             type: 'Post',
             dataType: 'json',
             data: { valor_pago: valor_pago.val().replace(",",""), tipo_pag: tipo_pag, itens_produto: produtos_inseridos, venda: venda }
@@ -211,19 +234,3 @@ function calcula_todos_valores() {
 }
 
 setInterval(function () { table.ajax.reload(); }, 30000);
-
-$("#btnUltimasVendas").click(function(){
-    var table= $("#modal_details_table");
-    table.html("");
-    $.ajax({
-        url: url_ajax("Caixa/ultimas_vendas/"+venda),
-        type: 'Get',
-        dataType: 'json'
-    }).done(function(data){
-        table.html(data.table);
-        $("#ultimasVendas").modal('show');
-    }).fail(function(data){
-        alert("Erro ao trazer os detalhes. Não foi possível trazer os detalhes da venda.");
-        console.log(data);
-    });
-});

@@ -1,6 +1,6 @@
 <?php
 
-class Caixa_model extends CI_Model
+class Pedidos_model extends CI_Model
 {
     public function busca_produto($venda, $id_produto)
     {
