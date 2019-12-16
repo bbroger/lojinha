@@ -63,42 +63,65 @@
                 </div>
             </div>
             <div class="col-2" style="padding-top: 20px;">
-                <div class="row mb-5">
+                <div class="row">
                     <div class="col-12">
-                        <div class="form-group">
-                            <label for="search_id_produto">CÓDIGO PRODUTO</label>
-                            <input type="number" min="0" id="search_id_produto" class="form-control">
-                            <small style="color: white; background: red;" id="msg_search_id_produto"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleFormControlInput1">QUANTIDADE</label>
-                            <input type="number" min="0" id="search_quantidade" class="form-control">
-                            <small style="color: white; background: red" id="msg_search_quantidade"></small>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="search_id_produto">CÓDIGO</label>
+                                <input type="number" min="0" id="search_id_produto" class="form-control">
+                                <small style="color: white; background: red;" id="msg_search_id_produto"></small>
+                            </div>
+                            <div class="col">
+                                <label for="exampleFormControlInput1">QUANTIDADE</label>
+                                <input type="number" min="0" id="search_quantidade" class="form-control">
+                                <small style="color: white; background: red" id="msg_search_quantidade"></small>
+                            </div>
                         </div>
                         <button class="btn btn-primary" id="search_inserir" style="width: 100%;">INSERIR PRODUTO</button>
                     </div>
                 </div>
                 <hr>
-                <div class="row my-5">
+                <div class="row bg-light pb-2">
                     <div class="col-12">
                         <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input type="text" id="nome" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" id="endereco" placeholder="Opcional" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="entrega">Data entrega</label>
+                            <input type="date" id="entrega" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="obs">Observação</label>
+                            <input type="text" id="obs" placeholder="Opcional" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Pedido ou venda?</label><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input transacao" type="radio" name="transacao" id="tipo_pedido" value="pedido" checked>
+                                <label class="form-check-label" for="tipo_pedido">Pedido</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input transacao" type="radio" name="transacao" id="tipo_venda" value="venda">
+                                <label class="form-check-label" for="tipo_venda">Venda</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="insere_valor_pago">VALOR PAGO</label>
-                            <input type="text" data-decimal="." id="insere_valor_pago" class="form-control">
+                            <input type="text" data-decimal="." id="insere_valor_pago" class="form-control" disabled>
                             <small style="color: white; background: red" id="msg_finalizar_venda"></small>
                             <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" value="pagcartao" id="pagcartao">
-                                <label class="form-check-label" for="pagcartao">
+                                <input class="form-check-input" type="checkbox" value="pagcartao" id="pagcartao" disabled>
+                                <label class="form-check-label" for="pagcartao" id="text-pagcartao" style="text-decoration: line-through;">
                                     Pagamento cartão
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" id="finalizar_venda" style="width: 100%;">FINALIZAR VENDA</button>
-                    </div>
-                </div>
-                <hr>
-                <div class="row mt-5">
-                    <div class="col-12 text-center">
-                        <button class="btn btn-dark" style="width: 100%;" id="btnUltimasVendas">Ver últimas vendas</button>
+                        <button type="submit" class="btn btn-primary" id="finalizar_venda" style="width: 100%;">FINALIZAR PEDIDO</button>
                     </div>
                 </div>
             </div>

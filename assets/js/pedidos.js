@@ -110,8 +110,28 @@ $("#insere_valor_pago").keyup(function () {
     calcula_todos_valores();
 });
 
+$(".transacao").change(function (){
+    if($(this).val() == "venda"){
+        $("#insere_valor_pago").prop('disabled', false);
+        $("#pagcartao").prop('disabled', false);
+        $("#text-pagcartao").css({textDecoration: "none"});
+    } else{
+        $("#insere_valor_pago").prop('disabled', true);
+        $("#pagcartao").prop('disabled', true);
+        $("#text-pagcartao").css({textDecoration: "line-through"});
+    }
+});
+
 $("#finalizar_venda").click(function () {
     $("#msg_finalizar_venda").html("");
+
+    var nome = $("#nome");
+    nome.css({ border: "1px solid #ccc", color: "#737373" });
+    var endereco = $("#endereco");
+    var entrega = $("#entrega");
+    var obs = $("#obs");
+
+    var transacao = ($("#tipo_pedido").is(':checked')) ? 'pedido' : 'venda';
 
     var valor_pago = $("#insere_valor_pago");
     valor_pago.css({ border: "1px solid #ccc", color: "#737373" });
@@ -122,9 +142,12 @@ $("#finalizar_venda").click(function () {
 
     if(produtos_inseridos.length == 0){
         valid = false;
-        valor_pago.css({ border: "1px solid red", color: "red" });
         $("#msg_finalizar_venda").html("Não existem produtos inseridos.");
-    } else if (valor_pago.val().length == 0 || valor_pago.val() == '0.00') {
+    } else if (nome.val().length == 0) {
+        valid = false;
+        nome.css({ border: "1px solid red", color: "red" });
+        $("#msg_finalizar_venda").html("Nome é obrigatório");
+    } else if ((valor_pago.val().length == 0 || valor_pago.val() == '0.00') && transacao == 'venda') {
         valid = false;
         valor_pago.css({ border: "1px solid red", color: "red" });
         $("#msg_finalizar_venda").html("Insira o valor antes de finalizar");
@@ -211,19 +234,3 @@ function calcula_todos_valores() {
 }
 
 setInterval(function () { table.ajax.reload(); }, 30000);
-
-$("#btnUltimasVendas").click(function(){
-    var table= $("#modal_details_table");
-    table.html("");
-    $.ajax({
-        url: url_ajax("Pedidos/ultimas_vendas/"+venda),
-        type: 'Get',
-        dataType: 'json'
-    }).done(function(data){
-        table.html(data.table);
-        $("#ultimasVendas").modal('show');
-    }).fail(function(data){
-        alert("Erro ao trazer os detalhes. Não foi possível trazer os detalhes da venda.");
-        console.log(data);
-    });
-});
