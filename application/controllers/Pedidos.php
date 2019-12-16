@@ -45,12 +45,16 @@ class Pedidos extends CI_Controller
         }
     }
 
-    public function finalizar_venda()
+    public function finalizar_transacao()
     {
-        $this->form_validation->set_rules("valor_pago", "Valor pago", "trim|required|decimal|min_length[3]");
+        $this->form_validation->set_rules("nome", "Nome", "trim|required||min_length[3]|max_length[100]");
+        $this->form_validation->set_rules("endereco", "Endereço", "trim|min_length[3]|max_length[100]");
+        $this->form_validation->set_rules("entrega", "Entrega", "trim|required|min_length[3]|max_length[100]");
+        $this->form_validation->set_rules("obs", "Observação", "trim|required|min_length[3]|max_length[100]");
+        $this->form_validation->set_rules("tipo_transacao", "Transação", "trim|required|in_list[venda,pedido]");
+        $this->form_validation->set_rules("valor_pago", "Valor pago", "trim|decimal|min_length[3]");
         $this->form_validation->set_rules("tipo_pag", "Forma pagamento", "trim|in_list[cartao,dinheiro]");
         $this->form_validation->set_rules("itens_produto", "Produtos", "callback_itens_produto_check");
-        $this->form_validation->set_rules("venda", "Tipo da venda", "trim|required|in_list[varejo,atacado]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors(" ", " ");
@@ -60,6 +64,11 @@ class Pedidos extends CI_Controller
             return false;
         }
 
+        $transacao['nome']= $this->input->post("nome");
+        $transacao['endereco']= $this->input->post("endereco");
+        $transacao['entrega']= $this->input->post("entrega");
+        $transacao['obs']= $this->input->post("obs");
+        $transacao['tipo_transacao']= $this->input->post("tipo_transacao");
         $transacao['valor_pago'] = $this->input->post("valor_pago");
         $transacao['tipo_pagamento'] = $this->input->post("tipo_pag");
         $itens = $this->input->post("itens_produto");

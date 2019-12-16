@@ -102,11 +102,11 @@
                         <div class="form-group">
                             <label for="">Pedido ou venda?</label><br>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input transacao" type="radio" name="transacao" id="tipo_pedido" value="pedido" checked>
+                                <input class="form-check-input transacao" type="radio" name="tipo_transacao" id="tipo_pedido" value="pedido" checked>
                                 <label class="form-check-label" for="tipo_pedido">Pedido</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input transacao" type="radio" name="transacao" id="tipo_venda" value="venda">
+                                <input class="form-check-input transacao" type="radio" name="tipo_transacao" id="tipo_venda" value="venda">
                                 <label class="form-check-label" for="tipo_venda">Venda</label>
                             </div>
                         </div>

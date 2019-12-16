@@ -115,14 +115,16 @@ $(".transacao").change(function (){
         $("#insere_valor_pago").prop('disabled', false);
         $("#pagcartao").prop('disabled', false);
         $("#text-pagcartao").css({textDecoration: "none"});
+        $("#finalizar_transacao").html("FINALIZAR VENDA");
     } else{
         $("#insere_valor_pago").prop('disabled', true);
         $("#pagcartao").prop('disabled', true);
         $("#text-pagcartao").css({textDecoration: "line-through"});
+        $("#finalizar_transacao").html("FINALIZAR PEDIDO");
     }
 });
 
-$("#finalizar_venda").click(function () {
+$("#finalizar_transacao").click(function () {
     $("#msg_finalizar_venda").html("");
 
     var nome = $("#nome");
@@ -131,35 +133,36 @@ $("#finalizar_venda").click(function () {
     var entrega = $("#entrega");
     var obs = $("#obs");
 
-    var transacao = ($("#tipo_pedido").is(':checked')) ? 'pedido' : 'venda';
+    var tipo_transacao = ($("#tipo_pedido").is(':checked')) ? 'pedido' : 'venda';
 
     var valor_pago = $("#insere_valor_pago");
     valor_pago.css({ border: "1px solid #ccc", color: "#737373" });
+    var valor_pago_real= (tipo_transacao == 'venda') ? valor_pago.val().replace(",","") : 0;
 
-    var tipo_pag = ($("#pagcartao").is(':checked')) ? 'cartao' : 'dinheiro';
+    var tipo_pag = ($("#pagcartao").is(':checked')) ? 'cartao' : ((tipo_transacao == 'venda') ? 'dinheiro' : null);
 
     var valid = true;
 
     if(produtos_inseridos.length == 0){
         valid = false;
-        $("#msg_finalizar_venda").html("Não existem produtos inseridos.");
+        $("#msg_transacao").html("Não existem produtos inseridos.");
     } else if (nome.val().length == 0) {
         valid = false;
         nome.css({ border: "1px solid red", color: "red" });
-        $("#msg_finalizar_venda").html("Nome é obrigatório");
-    } else if ((valor_pago.val().length == 0 || valor_pago.val() == '0.00') && transacao == 'venda') {
+        $("#msg_transacao").html("Nome é obrigatório");
+    } else if ((valor_pago.val().length == 0 || valor_pago.val() == '0.00') && tipo_transacao == 'venda') {
         valid = false;
         valor_pago.css({ border: "1px solid red", color: "red" });
-        $("#msg_finalizar_venda").html("Insira o valor antes de finalizar");
+        $("#msg_transacao").html("Insira o valor antes de finalizar");
     }
 
     if (valid) {
         $(this).html('<i class="fas fa-spinner fa-pulse"></i> Finalizando').prop('disabled', true);
         $.ajax({
-            url: url_ajax("Pedidos/finalizar_venda"),
+            url: url_ajax("Pedidos/finalizar_transacao"),
             type: 'Post',
             dataType: 'json',
-            data: { valor_pago: valor_pago.val().replace(",",""), tipo_pag: tipo_pag, itens_produto: produtos_inseridos, venda: venda }
+            data: { nome: nome.val(), endereco: endereco.val(), entrega: entrega.val(), obs: obs.val(), tipo_transacao: tipo_transacao, valor_pago: valor_pago_real, tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
         }).done(function (data) {
             if (data.status) {
                 valor_pago.val("");
@@ -167,16 +170,29 @@ $("#finalizar_venda").click(function () {
                 $("#tabela_produtos_inseridos").html("");
                 $("#mostra_valor_total").html("R$ 0,00");
                 $("#mostra_valor_pago").html("R$ 0,00");
-                $("#pagcartao").prop('checked', false);
                 $("#mostra_troco").html("R$ 0,00");
+
+                $("#nome").val("");
+                $("#endereco").val("");
+                $("#entrega").val(moment().format('YYYY-MM-DD'));
+                $("#obs").val("");
+                $("#tipo_pedido").prop('checked', true);
+                $("#insere_valor_pago").val("");
+                $("#pagcartao").prop('checked', false).prop('disabled', true);
+                $("#text-pagcartao").css({textDecoration: "line-through"});
+                
                 $("#msg_search_id_produto").html("");
                 $("#msg_search_quantidade").html("");
                 $("#search_id_produto").val("").css({ border: "1px solid #ccc", color: "#737373" });
                 $("#search_quantidade").val("").css({ border: "1px solid #ccc", color: "#737373" });
-                $("#finalizar_venda").html("FINALIZAR VENDA").prop('disabled', false);
+                $("#finalizar_transacao").html("FINALIZAR PEDIDO").prop('disabled', false);
             } else{
                 alert(data.msg);
-                $("#finalizar_venda").html("FINALIZAR VENDA").prop('disabled', false);
+                if(tipo_transacao == 'venda'){
+                    $("#finalizar_venda").html("FINALIZAR VENDA").prop('disabled', false);
+                } else{
+                    $("#finalizar_venda").html("FINALIZAR PEDIDO").prop('disabled', false);
+                }
             }
         }).fail(function (data) {
             console.log(data);

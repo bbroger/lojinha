@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?php echo base_url("assets/css/fontawesome.min.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/css/main.css") ?>">
     <script>
+        moment.locale('pt-BR');
         function url_ajax(destino) {
             return "<?php echo base_url(); ?>" + destino;
         }
