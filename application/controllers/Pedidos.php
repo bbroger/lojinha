@@ -16,21 +16,16 @@ class Pedidos extends CI_Controller
         $this->load->view('pedidos', ["venda" => "varejo"]);
     }
 
-    public function atacado()
+    public function busca_produto($id_produto)
     {
-        $this->load->view('pedidos', ["venda" => "atacado"]);
-    }
-
-    public function busca_produto($venda, $id_produto)
-    {
-        $produtos = $this->Pedidos_model->busca_produto($venda, $id_produto);
+        $produtos = $this->Pedidos_model->busca_produto($id_produto);
 
         echo json_encode($produtos);
     }
 
-    public function catalogo($venda)
+    public function catalogo()
     {
-        $produtos = $this->Pedidos_model->catalogo($venda);
+        $produtos = $this->Pedidos_model->catalogo();
 
         if ($produtos) {
             foreach ($produtos as $key => $value) {
@@ -95,7 +90,7 @@ class Pedidos extends CI_Controller
 
         $this->Pedidos_model->salvar_venda($salvar_produtos);
 
-        $data['msg'] = "Venda finalizada com sucesso";
+        $data['msg'] = "Transação finalizada com sucesso";
         $data['status'] = true;
         echo json_encode($data);
 
@@ -105,14 +100,13 @@ class Pedidos extends CI_Controller
     public function itens_produto_check()
     {
         $itens = $this->input->post("itens_produto");
-        $venda = $this->input->post("venda");
 
         if (!is_array($itens)) {
             $this->form_validation->set_message("itens_produto_check", "Produtos no formato inválido.");
             return false;
         }
 
-        $produtos = $this->Pedidos_model->catalogo($venda);
+        $produtos = $this->Pedidos_model->catalogo();
 
         $coluna_id_produto = array_column($produtos, 'id_produto');
         foreach ($itens as $key => $value) {
@@ -123,40 +117,5 @@ class Pedidos extends CI_Controller
         }
 
         return true;
-    }
-
-    public function ultimas_vendas($tipo)
-    {
-        $dados = $this->Pedidos_model->ultimas_vendas($tipo);
-
-        foreach ($dados as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                $arr[$value['id_transacao']][$value['id_produto']][$chave] = $valor;
-            }
-        }
-
-        $tr = null;
-        $count= 0;
-        foreach ($arr as $key => $value) {
-            foreach ($value as $chave => $valor) {
-                $tr .= "<tr><td>" . $valor['nome'] . "</td>";
-                $tr .= "<td>R$ " . $valor['valor'] . "</td>";
-                $tr .= "<td>" . $valor['quantidade_vendido'] . "</td>";
-                $tr .= "<td>R$ " . number_format($valor['valor'] * $valor['quantidade_vendido'], 2, '.', '') . "</td></tr>";
-            }
-            $tr .= "<tr><td></td><td>Pago: R$ " . $valor['valor_pago'] . "</td><td>Total: R$ " . $valor['valor_total'] . "</td></td><td>Desconto: R$ " . $valor['desconto'] . "</td></tr>";
-            $tr .= "<tr><td></td><td>" . DateTime::createFromFormat('Y-m-d H:i:s', $valor['timestamp'])->format("d/m H:i");
-            $tr .= "</td><td>" . ucfirst($valor['tipo_pagamento']) . "</td><td>" . ucfirst($valor['venda']) . "</td></tr>";
-            $tr .= "<tr style='background: #A4A4A4'><td colspan='4'>&nbsp;</td></tr>";
-            $count++;
-            if($count == 3){
-                break;
-            }
-        }
-
-        $data['status'] = true;
-        $data['table'] = $tr;
-
-        echo json_encode($data);
     }
 }

@@ -196,7 +196,7 @@ $("#finalizar_transacao").click(function () {
             }
         }).fail(function (data) {
             console.log(data);
-            alert("Erro! Não foi possível finalizar a venda. Tente mais tarde.")
+            alert("Erro! Não foi possível finalizar a transação. Tente mais tarde.")
         });
     }
 });

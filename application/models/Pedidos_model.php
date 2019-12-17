@@ -2,29 +2,20 @@
 
 class Pedidos_model extends CI_Model
 {
-    public function busca_produto($venda, $id_produto)
+    public function busca_produto($id_produto)
     {
-        if ($venda == "varejo") {
-            $sql = "SELECT produtos.*, produtos.valorVarejo AS valor, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo 
+        $sql = "SELECT produtos.*, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo 
                 FROM produtos LEFT JOIN promocao ON produtos.id_produto = promocao.id_produto AND produtos.status = promocao.status 
-                WHERE produtos.id_produto= $id_produto AND produtos.status = 'ativo' AND produtos.valorVarejo > 0 ORDER BY qtdPromo ASC";
-        } else {
-            $sql = "SELECT produtos.*, produtos.valorAtacado AS valor, NULL AS qtdPromo FROM produtos 
-                WHERE produtos.id_produto= $id_produto AND produtos.status = 'ativo' AND produtos.valorAtacado > 0 ORDER BY qtdPromo ASC";
-        }
+                WHERE produtos.id_produto= $id_produto AND produtos.status = 'ativo' AND produtos.valor > 0 ORDER BY qtdPromo ASC";
+
         $query = $this->db->query($sql);
 
         return (count($query->result_array()) > 0) ? $query->result_array() : false;
     }
 
-    public function catalogo($venda)
+    public function catalogo()
     {
-        if($venda == "varejo"){
-            $valor= "valorVarejo";
-        } else{
-            $valor= "valorAtacado";
-        }
-        $this->db->select("*, CONCAT('R$',$valor) AS valor")->from('produtos')->where(['status' => 'ativo', "$valor >" => '0'])->order_by('id_produto', 'DESC');
+        $this->db->select("*, CONCAT('R$', valor) AS mostra_valor")->from('produtos')->where(['status' => 'ativo', "valor >" => '0'])->order_by('id_produto', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
     }
