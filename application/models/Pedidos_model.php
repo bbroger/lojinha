@@ -15,7 +15,7 @@ class Pedidos_model extends CI_Model
 
     public function catalogo()
     {
-        $this->db->select("*, CONCAT('R$', valor) AS mostra_valor")->from('produtos')->where(['status' => 'ativo', "valor >" => '0'])->order_by('id_produto', 'DESC');
+        $this->db->select("*, CONCAT('R$', valor) AS valor")->from('produtos')->where(['status' => 'ativo', "valor >" => '0'])->order_by('id_produto', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
     }
