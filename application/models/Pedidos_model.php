@@ -15,8 +15,12 @@ class Pedidos_model extends CI_Model
 
     public function catalogo()
     {
-        $this->db->select("*, CONCAT('R$', valor) AS valor")->from('produtos')->where(['status' => 'ativo', "valor >" => '0'])->order_by('id_produto', 'DESC');
-        $query = $this->db->get();
+        $sql = "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, 
+            (produtos.quantidade - SUM(transacao.quantidade)) AS nova_quantidade 
+            FROM produtos LEFT JOIN transacao ON produtos.id_produto = transacao.id_produto AND transacao.status= 'ativo' 
+            WHERE produtos.status= 'ativo' 
+            GROUP BY produtos.id_produto HAVING nova_quantidade > 0";
+        $query = $this->db->query($sql);
         return $query->result_array();
     }
 
@@ -28,19 +32,8 @@ class Pedidos_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    public function salvar_venda($data)
+    public function salvar_transacao($data)
     {
-        $this->db->insert_batch('vendas', $data);
-    }
-
-    public function ultimas_vendas($tipo)
-    {
-        $sql = "SELECT vendas.*, vendas.quantidade AS quantidade_vendido, produtos.*, transacao.* FROM vendas 
-            INNER JOIN transacao ON vendas.id_transacao = transacao.id_transacao 
-            INNER JOIN produtos ON vendas.id_produto = produtos.id_produto 
-            WHERE transacao.venda= '$tipo' ORDER BY transacao.id_transacao DESC";
-
-        $query = $this->db->query($sql);
-        return $query->result_array();
+        $this->db->insert_batch('transacao', $data);
     }
 }

@@ -4,19 +4,19 @@ class Produtos_model extends CI_Model
 {
     public function tabela_produtos()
     {
-        $sql= "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, 
-            (produtos.quantidade - SUM(vendas.quantidade)) AS nova_quantidade 
-            FROM produtos LEFT JOIN vendas ON produtos.id_produto = vendas.id_produto GROUP BY produtos.id_produto";
-        $query= $this->db->query($sql);
+        $sql = "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, 
+            (produtos.quantidade - SUM(transacao.quantidade)) AS nova_quantidade 
+            FROM produtos LEFT JOIN transacao ON produtos.id_produto = transacao.id_produto AND transacao.status= 'ativo' GROUP BY produtos.id_produto";
+        $query = $this->db->query($sql);
         return $query->result_array();
     }
 
     public function tabela_promocao()
     {
-        $sql="SELECT promocao.*, produtos.nome AS nomeProduto, CONCAT('R$ ',promocao.valor) AS valor 
+        $sql = "SELECT promocao.*, produtos.nome AS nomeProduto, CONCAT('R$ ',promocao.valor) AS valor 
             FROM promocao INNER JOIN produtos ON promocao.id_produto = produtos.id_produto 
             ORDER BY promocao.id_promocao DESC";
-        $query= $this->db->query($sql);
+        $query = $this->db->query($sql);
         return $query->result_array();
     }
 
@@ -45,16 +45,17 @@ class Produtos_model extends CI_Model
 
     public function acao_estoque($data, $acao, $id)
     {
-        if($acao == 'add'){
-            $this->db->set('quantidade', 'quantidade+'.$data['quantidade'], FALSE);
-        } else{
-            $this->db->set('quantidade', 'quantidade-'.$data['quantidade'], FALSE);
+        if ($acao == 'add') {
+            $this->db->set('quantidade', 'quantidade+' . $data['quantidade'], FALSE);
+        } else {
+            $this->db->set('quantidade', 'quantidade-' . $data['quantidade'], FALSE);
         }
         $this->db->where('id_produto', $id);
         $this->db->update('produtos');
     }
 
-    public function save_acao_estoque($data){
+    public function save_acao_estoque($data)
+    {
         $this->db->insert('acao_estoque', $data);
     }
 

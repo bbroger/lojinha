@@ -88,7 +88,7 @@ class Pedidos extends CI_Controller
             $salvar_produtos[$key]['quantidade'] = $value['quantidade'];
         }
 
-        $this->Pedidos_model->salvar_venda($salvar_produtos);
+        $this->Pedidos_model->salvar_transacao($salvar_produtos);
 
         $data['msg'] = "Transação finalizada com sucesso";
         $data['status'] = true;
