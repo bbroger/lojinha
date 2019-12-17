@@ -16,8 +16,7 @@
                             <th scope="col">Código</th>
                             <th scope="col">Produto</th>
                             <th scope="col">Descrição</th>
-                            <th scope="col">Varejo</th>
-                            <th scope="col">Atacado</th>
+                            <th scope="col">Valor</th>
                             <th scope="col">Qtde</th>
                             <th scope="col">Status</th>
                             <th scope="col">Ação</th>

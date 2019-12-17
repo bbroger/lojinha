@@ -73,8 +73,7 @@ class Produtos extends CI_Controller
     {
         $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]|max_length[255]|is_unique[produtos.nome]");
         $this->form_validation->set_rules("descricao", "<b>Nome Descrição</b>", "trim|min_length[3]|max_length[255]");
-        $this->form_validation->set_rules("valorVarejo", "<b>Valor Varejo</b>", "trim|decimal|min_length[3]|callback_check_valores");
-        $this->form_validation->set_rules("valorAtacado", "<b>Valor Atacado</b>", "trim|decimal|min_length[3]|callback_check_valores");
+        $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|required|decimal|min_length[3]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors();
@@ -85,10 +84,8 @@ class Produtos extends CI_Controller
         } else {
             $data['nome'] = $this->input->post("nome");
             $data['descricao'] = $this->input->post("descricao");
-            $vare = $this->input->post("valorVarejo");
-            $data['valorVarejo'] = ($vare) ? $vare : 0;
-            $ata = $this->input->post("valorAtacado");
-            $data['valorAtacado'] = ($ata) ? $ata : 0;
+            $valor = $this->input->post("valor");
+            $data['valor'] = ($valor) ? $valor : 0;
 
             $this->Produtos_model->salvar_produto($data);
 
@@ -100,26 +97,12 @@ class Produtos extends CI_Controller
         }
     }
 
-    public function check_valores()
-    {
-        $varejo = $this->input->post("valorVarejo");
-        $atacado = $this->input->post("valorAtacado");
-
-        if ($varejo || $atacado) {
-            return true;
-        } else {
-            $this->form_validation->set_message("check_valores", "Erro nos <b>valores</b>. Informe pelo menos um <b>Valor</b>");
-            return false;
-        }
-    }
-
     public function editar_produto()
     {
         $this->form_validation->set_rules("id_produto", "ID produto", "trim|required|max_length[11]|combines[produtos.id_produto]");
         $this->form_validation->set_rules("nome", "Nome", "trim|required|min_length[3]|max_length[255]");
         $this->form_validation->set_rules("descricao", "Descrição", "trim|min_length[3]|max_length[255]");
-        $this->form_validation->set_rules("valorVarejo", "Valor Varejo", "trim|required|greater_than[0]|decimal|min_length[3]");
-        $this->form_validation->set_rules("valorAtacado", "Valor Atacado", "trim|decimal|min_length[3]");
+        $this->form_validation->set_rules("valor", "Valor", "trim|required|greater_than[0]|decimal|min_length[3]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors(" ", " ");
@@ -131,8 +114,7 @@ class Produtos extends CI_Controller
             $id_produto = $this->input->post("id_produto");
             $data['nome'] = $this->input->post("nome");
             $data['descricao'] = $this->input->post("descricao");
-            $data['valorVarejo'] = $this->input->post("valorVarejo");
-            $data['valorAtacado'] = $this->input->post("valorAtacado");
+            $data['valor'] = $this->input->post("valor");
 
             $this->Produtos_model->editar_produto($data, $id_produto);
             $data['status'] = true;

@@ -1,5 +1,4 @@
-$("#valorVarejo").maskMoney();
-$("#valorAtacado").maskMoney();
+$("#valor").maskMoney();
 $("#valor_promo").maskMoney();
 
 var table = $("#mostra_tabela").DataTable({
@@ -10,8 +9,7 @@ var table = $("#mostra_tabela").DataTable({
         { "data": "id_produto" },
         { "data": "nome" },
         { "data": "descricao" },
-        { "data": "valorVarejo" },
-        { "data": "valorAtacado" },
+        { "data": "valor" },
         { "data": "quantidade" },
         { "data": "status" },
         { "data": "button" }
@@ -48,15 +46,12 @@ table.on('click', '.edit', function () {
     var tr = $(this).closest("tr");
     var tdNome = tr.find("td").eq(1);
     var tdDesc = tr.find("td").eq(2);
-    var tdVarejo = tr.find("td").eq(3);
-    var tdAtacado = tr.find("td").eq(4);
+    var tdValor = tr.find("td").eq(3);
 
     tdNome.html("<input type='text' class='form-control' value='" + tdNome.html() + "'>");
     tdDesc.html("<input type='text' class='form-control' value='" + tdDesc.html() + "'>");
-    tdVarejo.html("<input type='text' data-decimal='.' class='form-control' value='" + tdVarejo.html().replace("R$ ", "") + "'>");
-    tdVarejo.find("input").maskMoney();
-    tdAtacado.html("<input type='text' data-decimal='.' class='form-control' value='" + tdAtacado.html().replace("R$ ", "") + "'>");
-    tdAtacado.find("input").maskMoney();
+    tdValor.html("<input type='text' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
+    tdValor.find("input").maskMoney();
 
     $(this).closest("td").find('button').eq(0).prop('disabled', false);
     $(this).closest("td").find('button').eq(1).prop('disabled', true);
@@ -71,8 +66,7 @@ table.on('click', '.save', function () {
     var nome;
     var tdDesc = tr.find("td").eq(2);
     var desc;
-    var tdVarejo = tr.find("td").eq(3);
-    var tdAtacado = tr.find("td").eq(4);
+    var tdValor = tr.find("td").eq(3);
 
     if (tdNome.find('input').val().length <= 0) {
         nome = null;
@@ -93,17 +87,14 @@ table.on('click', '.save', function () {
             id_produto: tdID.html(),
             nome: nome,
             descricao: desc,
-            valorVarejo: tdVarejo.find('input').val().replace(",", ""),
-            valorAtacado: tdAtacado.find('input').val().replace(",", "")
+            valor: tdValor.find('input').val().replace(",", ""),
         },
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
             tdNome.html(allUp(tdNome.find('input').val()));
             tdDesc.html(firstUp(tdDesc.find('input').val()));
-            tdVarejo.html("R$ " + tdVarejo.find('input').val().replace(",", ""));
-            var ata= (tdAtacado.find('input').val()) ? tdAtacado.find('input').val().replace(",", "") : '0.00';
-            tdAtacado.html("R$ " + ata);
+            tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
 
             tr.find("td").eq(7).find('button').eq(0).prop('disabled', true);
             tr.find("td").eq(7).find('button').eq(1).prop('disabled', false);
@@ -112,8 +103,7 @@ table.on('click', '.save', function () {
         } else {
             tdNome.find('input').css({ border: "1px solid red", color: "red" });
             tdDesc.find('input').css({ border: "1px solid red", color: "red" });
-            tdVarejo.find('input').css({ border: "1px solid red", color: "red" });
-            tdAtacado.find('input').css({ border: "1px solid red", color: "red" });
+            tdValor.find('input').css({ border: "1px solid red", color: "red" });
             alert(data.msg);
         }
     }).fail(function (data){
@@ -347,7 +337,7 @@ $(".clearModal").click(function () {
     $("#produto_promo").val("");
     $("#nome").val("");
     $("#descricao").val("");
-    $("#valorVarejo").val("");
+    $("#valor").val("");
     $("#quantidade_promo").val("");
     $("#valor_promo").val("");
     $("#mostra_msg").html("");
@@ -359,10 +349,8 @@ $("#salvar_produto").click(function () {
     var nome;
     var pega_descricao = $("#descricao");
     var descricao;
-    var pega_varejo = $("#valorVarejo");
-    var valorVarejo;
-    var pega_atacado = $("#valorAtacado");
-    var valorAtacado;
+    var pega_valor = $("#valor");
+    var valor;
 
     if ($.trim(pega_nome.val()).length <= 0) {
         nome= null;
@@ -374,15 +362,10 @@ $("#salvar_produto").click(function () {
     } else {
         descricao = firstUp($.trim(pega_descricao.val()));
     }
-    if (pega_varejo.val().length <= 0) {
-        valorVarejo = null;
+    if (pega_valor.val().length <= 0) {
+        valor = null;
     } else {
-        valorVarejo = pega_varejo.val().replace(",", "");
-    }
-    if (pega_atacado.val().length <= 0) {
-        valoratacado = null;
-    } else {
-        valorAtacado = pega_atacado.val().replace(",", "");
+        valor = pega_valor.val().replace(",", "");
     }
 
     $("#mostra_msg").html("").removeClass();
@@ -392,8 +375,7 @@ $("#salvar_produto").click(function () {
         data: {
             nome: nome,
             descricao: descricao,
-            valorVarejo: valorVarejo,
-            valorAtacado: valorAtacado
+            valor: valor,
         },
         dataType: "Json"
     }).done(function (data) {
@@ -401,8 +383,7 @@ $("#salvar_produto").click(function () {
             $("#mostra_msg").html(data.msg).addClass("text-success");
             pega_nome.val("");
             pega_descricao.val("");
-            pega_varejo.val("");
-            pega_atacado.val("");
+            pega_valor.val("");
             table.ajax.reload();
         } else {
             $("#mostra_msg").html(data.msg).addClass("text-danger");

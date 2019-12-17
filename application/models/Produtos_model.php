@@ -4,8 +4,7 @@ class Produtos_model extends CI_Model
 {
     public function tabela_produtos()
     {
-        $sql= "SELECT produtos.*, CONCAT('R$ ',produtos.valorVarejo) AS valorVarejo, 
-            CONCAT('R$ ',produtos.valorAtacado) AS valorAtacado, 
+        $sql= "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, 
             (produtos.quantidade - SUM(vendas.quantidade)) AS nova_quantidade 
             FROM produtos LEFT JOIN vendas ON produtos.id_produto = vendas.id_produto GROUP BY produtos.id_produto";
         $query= $this->db->query($sql);
