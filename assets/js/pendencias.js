@@ -4,7 +4,7 @@ $("#valor_inserido").maskMoney();
 var table = $("#mostra_retirado").DataTable({
     "processing": true,
     "order": [[0, "desc"]],
-    ajax: url_ajax("Gerenciamento/tabela_retirados"),
+    ajax: url_ajax("Pendencias/tabela_retirados"),
     "columns": [
         { "data": "id_movimentacao" },
         { "data": "valor" },
@@ -60,7 +60,7 @@ table.on('click', '.save', function () {
     var tdDesc = tr.find("td").eq(2);
 
     $.ajax({
-        url: url_ajax("Gerenciamento/editar_valor_retirado"),
+        url: url_ajax("Pendencias/editar_valor_retirado"),
         type: "Post",
         data: {
             id_movimentacao: tdID.html(),            
@@ -89,7 +89,7 @@ $("#salvar_retirado").click(function () {
 
     $("#mostra_msg_retirado").html("").removeClass();
     $.ajax({
-        url: url_ajax("Gerenciamento/salvar_valor_retirado"),
+        url: url_ajax("Pendencias/salvar_valor_retirado"),
         type: "Post",
         data: {
             valor: valor.val().replace(",", ""),
@@ -114,7 +114,7 @@ $("#salvar_retirado").click(function () {
 var table_inserido = $("#mostra_inserido").DataTable({
     "processing": true,
     "order": [[0, "desc"]],
-    ajax: url_ajax("Gerenciamento/tabela_inseridos"),
+    ajax: url_ajax("Pendencias/tabela_inseridos"),
     "columns": [
         { "data": "id_movimentacao" },
         { "data": "valor" },
@@ -170,7 +170,7 @@ table_inserido.on('click', '.save', function () {
     var tdDesc = tr.find("td").eq(2);
 
     $.ajax({
-        url: url_ajax("Gerenciamento/editar_valor_inserido"),
+        url: url_ajax("Pendencias/editar_valor_inserido"),
         type: "Post",
         data: {
             id_movimentacao: tdID.html(),            
@@ -199,7 +199,7 @@ $("#salvar_inserido").click(function () {
 
     $("#mostra_msg_inserido").html("fsdfds").removeClass();
     $.ajax({
-        url: url_ajax("Gerenciamento/salvar_valor_inserido"),
+        url: url_ajax("Pendencias/salvar_valor_inserido"),
         type: "Post",
         data: {
             valor: valor.val().replace(",", ""),

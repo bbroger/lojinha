@@ -1,26 +1,20 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Gerenciamento extends CI_Controller
+class Pendencias extends CI_Controller
 {
     public $produtos;
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Gerenciamento_model');
+        $this->load->model('Pendencias_model');
     }
 
     public function index()
     {
         $this->load->view('head');
-        $this->load->view('gerenciamento');
-    }
-    
-    public function sair()
-    {
-        $this->session->unset_userdata("login");
-        redirect(base_url("Login"));
+        $this->load->view('pendencias');
     }
 
     public function tabela_retirados()
