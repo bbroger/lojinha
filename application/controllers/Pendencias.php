@@ -17,11 +17,11 @@ class Pendencias extends CI_Controller
         $this->load->view('pendencias');
     }
 
-    public function tabela_retirados()
+    public function tabela_pendecias()
     {
-        $retirados = $this->Gerenciamento_model->tabela_retirados();
-        if ($retirados) {
-            foreach ($retirados as $key => $value) {
+        $pendencias = $this->Gerenciamento_model->pendencias();
+        if ($pendencias) {
+            foreach ($pendencias as $key => $value) {
                 foreach ($value as $chave => $valor) {
                     if ($chave == 'timestamp') {
                         $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d H:i:s', $valor)->format('d/m');

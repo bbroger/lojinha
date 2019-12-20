@@ -7,7 +7,7 @@ var table = $("#catalogo").DataTable({
     "ordering": false,
     "info": false,
     "dom": "ftip",
-    ajax: url_ajax("Pedidos/catalogo/"+venda),
+    ajax: url_ajax("Pedidos/catalogo/"),
     "columns": [
         { "data": "id_produto" },
         { "data": "nome" },
@@ -71,7 +71,7 @@ $("#search_inserir").click(function () {
     }
 
     if (valid) {
-        $.getJSON(url_ajax("Pedidos/busca_produto/" + venda + "/" + id_produto.val()), function (result) {
+        $.getJSON(url_ajax("Pedidos/busca_produto/" + id_produto.val()), function (result) {
             if (!result) {
                 id_produto.css({ border: "1px solid red", color: "red" });
                 $("#msg_search_id_produto").html("Código produto não encontrado.<br> Confira na tabela ao lado");
@@ -110,22 +110,8 @@ $("#insere_valor_pago").keyup(function () {
     calcula_todos_valores();
 });
 
-$(".transacao").change(function (){
-    if($(this).val() == "venda"){
-        $("#insere_valor_pago").prop('disabled', false);
-        $("#pagcartao").prop('disabled', false);
-        $("#text-pagcartao").css({textDecoration: "none"});
-        $("#finalizar_transacao").html("FINALIZAR VENDA");
-    } else{
-        $("#insere_valor_pago").prop('disabled', true);
-        $("#pagcartao").prop('disabled', true);
-        $("#text-pagcartao").css({textDecoration: "line-through"});
-        $("#finalizar_transacao").html("FINALIZAR PEDIDO");
-    }
-});
-
-$("#finalizar_transacao").click(function () {
-    $("#msg_finalizar_venda").html("");
+$("#finalizar_pedido").click(function () {
+    $("#msg_finalizar_pedido").html("");
 
     var nome = $("#nome");
     nome.css({ border: "1px solid #ccc", color: "#737373" });
@@ -133,13 +119,11 @@ $("#finalizar_transacao").click(function () {
     var entrega = $("#entrega");
     var obs = $("#obs");
 
-    var tipo_transacao = ($("#tipo_pedido").is(':checked')) ? 'pedido' : 'venda';
-
     var valor_pago = $("#insere_valor_pago");
     valor_pago.css({ border: "1px solid #ccc", color: "#737373" });
-    var valor_pago_real= (tipo_transacao == 'venda') ? valor_pago.val().replace(",","") : 0;
+    var valor_pago_real= (valor_pago.val().length > 0) ? valor_pago.val().replace(",","") : 0;
 
-    var tipo_pag = ($("#pagcartao").is(':checked')) ? 'cartao' : ((tipo_transacao == 'venda') ? 'dinheiro' : null);
+    var tipo_pag = ($("#pagcartao").is(':checked')) ? 'cartao' : 'dinheiro';
 
     var valid = true;
 
@@ -150,19 +134,15 @@ $("#finalizar_transacao").click(function () {
         valid = false;
         nome.css({ border: "1px solid red", color: "red" });
         $("#msg_transacao").html("Nome é obrigatório");
-    } else if ((valor_pago.val().length == 0 || valor_pago.val() == '0.00') && tipo_transacao == 'venda') {
-        valid = false;
-        valor_pago.css({ border: "1px solid red", color: "red" });
-        $("#msg_transacao").html("Insira o valor antes de finalizar");
     }
 
     if (valid) {
         $(this).html('<i class="fas fa-spinner fa-pulse"></i> Finalizando').prop('disabled', true);
         $.ajax({
-            url: url_ajax("Pedidos/finalizar_transacao"),
+            url: url_ajax("Pedidos/finalizar_pedido"),
             type: 'Post',
             dataType: 'json',
-            data: { nome: nome.val(), endereco: endereco.val(), entrega: entrega.val(), obs: obs.val(), tipo_transacao: tipo_transacao, valor_pago: valor_pago_real, tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
+            data: { nome: nome.val(), endereco: endereco.val(), entrega: entrega.val(), obs: obs.val(), valor_pago: valor_pago_real, tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
         }).done(function (data) {
             if (data.status) {
                 valor_pago.val("");
@@ -176,10 +156,7 @@ $("#finalizar_transacao").click(function () {
                 $("#endereco").val("");
                 $("#entrega").val(moment().format('YYYY-MM-DD'));
                 $("#obs").val("");
-                $("#tipo_pedido").prop('checked', true);
                 $("#insere_valor_pago").val("");
-                $("#pagcartao").prop('checked', false).prop('disabled', true);
-                $("#text-pagcartao").css({textDecoration: "line-through"});
                 
                 $("#msg_search_id_produto").html("");
                 $("#msg_search_quantidade").html("");
@@ -188,11 +165,7 @@ $("#finalizar_transacao").click(function () {
                 $("#finalizar_transacao").html("FINALIZAR PEDIDO").prop('disabled', false);
             } else{
                 alert(data.msg);
-                if(tipo_transacao == 'venda'){
-                    $("#finalizar_venda").html("FINALIZAR VENDA").prop('disabled', false);
-                } else{
-                    $("#finalizar_venda").html("FINALIZAR PEDIDO").prop('disabled', false);
-                }
+                $("#finalizar_pedido").html("FINALIZAR PEDIDO").prop('disabled', false);
             }
         }).fail(function (data) {
             console.log(data);

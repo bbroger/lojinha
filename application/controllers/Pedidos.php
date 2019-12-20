@@ -13,7 +13,7 @@ class Pedidos extends CI_Controller
 
     public function index()
     {
-        $this->load->view('pedidos', ["venda" => "varejo"]);
+        $this->load->view('pedidos');
     }
 
     public function busca_produto($id_produto)
@@ -40,13 +40,12 @@ class Pedidos extends CI_Controller
         }
     }
 
-    public function finalizar_transacao()
+    public function finalizar_pedido()
     {
         $this->form_validation->set_rules("nome", "Nome", "trim|required||min_length[3]|max_length[100]");
         $this->form_validation->set_rules("endereco", "Endereço", "trim|min_length[3]|max_length[100]");
         $this->form_validation->set_rules("entrega", "Entrega", "trim|required|min_length[3]|max_length[100]");
         $this->form_validation->set_rules("obs", "Observação", "trim|required|min_length[3]|max_length[100]");
-        $this->form_validation->set_rules("tipo_transacao", "Transação", "trim|required|in_list[venda,pedido]");
         $this->form_validation->set_rules("valor_pago", "Valor pago", "trim|decimal|min_length[3]");
         $this->form_validation->set_rules("tipo_pag", "Forma pagamento", "trim|in_list[cartao,dinheiro]");
         $this->form_validation->set_rules("itens_produto", "Produtos", "callback_itens_produto_check");
@@ -59,36 +58,36 @@ class Pedidos extends CI_Controller
             return false;
         }
 
-        $transacao['nome']= $this->input->post("nome");
-        $transacao['endereco']= $this->input->post("endereco");
-        $transacao['entrega']= $this->input->post("entrega");
-        $transacao['obs']= $this->input->post("obs");
-        $transacao['tipo_transacao']= $this->input->post("tipo_transacao");
-        $transacao['valor_pago'] = $this->input->post("valor_pago");
-        $transacao['tipo_pagamento'] = $this->input->post("tipo_pag");
+        $pedido['nome']= $this->input->post("nome");
+        $pedido['endereco']= $this->input->post("endereco");
+        $pedido['entrega']= $this->input->post("entrega");
+        $pedido['obs']= $this->input->post("obs");
+        $pedido['valor_pago'] = $this->input->post("valor_pago");
+        $pedido['tipo_pagamento'] = $this->input->post("tipo_pag");
         $itens = $this->input->post("itens_produto");
 
-        $transacao['valor_total'] = 0;
+        $pedido['valor_total'] = 0;
         foreach ($itens as $key => $value) {
             $valor = ($value['valorPromo'] == 0) ? $value['valor'] : $value['valorPromo'];
-            $transacao['valor_total'] += $value['quantidade'] * $valor;
+            $pedido['valor_total'] += $value['quantidade'] * $valor;
         }
 
-        $transacao['troco'] = ($transacao['valor_pago'] - $transacao['valor_total'] > 0) ? $transacao['valor_pago'] - $transacao['valor_total'] : 0;
-        $transacao['desconto'] = ($transacao['valor_pago'] - $transacao['valor_total'] < 0) ? $transacao['valor_total'] - $transacao['valor_pago'] : 0;
-        $transacao['venda'] = $this->input->post("venda");
+        $pedido['troco'] = ($pedido['valor_pago'] - $pedido['valor_total'] > 0) ? $pedido['valor_pago'] - $pedido['valor_total'] : 0;
+        $pedido['desconto'] = ($pedido['valor_pago'] - $pedido['valor_total'] < 0) ? $pedido['valor_total'] - $pedido['valor_pago'] : 0;
+        $pedido['venda'] = $this->input->post("venda");
 
-        $id_transacao = $this->Pedidos_model->inserir_transacao($transacao);
+        $id_pedido = $this->Pedidos_model->salvar_pedido($pedido);
 
         foreach ($itens as $key => $value) {
-            $salvar_produtos[$key]['id_transacao'] = $id_transacao;
+            $salvar_produtos[$key]['id_pedido'] = $id_pedido;
             $salvar_produtos[$key]['id_produto'] = $value['id_produto'];
             $valor = ($value['valorPromo'] == 0) ? $value['valor'] : $value['valorPromo'];
             $salvar_produtos[$key]['valor'] = $valor;
             $salvar_produtos[$key]['quantidade'] = $value['quantidade'];
+            $salvar_produtos[$key]['promocao'] = ($value['valorPromo'] == 0) ? 'nao' : 'sim';
         }
 
-        $this->Pedidos_model->salvar_transacao($salvar_produtos);
+        $this->Pedidos_model->salvar_produtos_pedido($salvar_produtos);
 
         $data['msg'] = "Transação finalizada com sucesso";
         $data['status'] = true;

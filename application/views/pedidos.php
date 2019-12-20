@@ -100,28 +100,17 @@
                             <input type="text" id="obs" placeholder="Opcional" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="">Pedido ou venda?</label><br>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input transacao" type="radio" name="tipo_transacao" id="tipo_pedido" value="pedido" checked>
-                                <label class="form-check-label" for="tipo_pedido">Pedido</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input transacao" type="radio" name="tipo_transacao" id="tipo_venda" value="venda">
-                                <label class="form-check-label" for="tipo_venda">Venda</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="insere_valor_pago">VALOR PAGO</label>
-                            <input type="text" data-decimal="." id="insere_valor_pago" class="form-control" disabled>
-                            <small style="color: white; background: red" id="msg_finalizar_venda"></small>
+                            <label for="insere_valor_pago">Valor Pago (Opcional)</label>
+                            <input type="text" data-decimal="." id="insere_valor_pago" class="form-control" placeholder="Simular troco">
+                            <small style="color: white; background: red" id="msg_finalizar_pedido"></small>
                             <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" value="pagcartao" id="pagcartao" disabled>
-                                <label class="form-check-label" for="pagcartao" id="text-pagcartao" style="text-decoration: line-through;">
+                                <input class="form-check-input" type="checkbox" value="pagcartao" id="pagcartao">
+                                <label class="form-check-label" for="pagcartao" id="text-pagcartao">
                                     Pagamento cartão
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" id="finalizar_venda" style="width: 100%;">FINALIZAR PEDIDO</button>
+                        <button type="submit" class="btn btn-primary" id="finalizar_pedido" style="width: 100%;">FINALIZAR PEDIDO</button>
                     </div>
                 </div>
             </div>
@@ -185,9 +174,6 @@
     <script src="<?php echo base_url("assets/js/dataTables.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/dataTables.bootstrap4.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/js/maskMoney.min.js"); ?>"></script>
-    <script>
-        var venda = '<?php echo $venda; ?>'
-    </script>
     <script src="<?php echo base_url("assets/js/pedidos.js"); ?>"></script>
 </body>
 

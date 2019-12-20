@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-6">
             <button type="button" class="btn btn-danger my-3" data-toggle="modal" data-target="#pendencia"><i class="fas fa-plus-circle"></i> Pendências</button>
-            <table class="table table-striped text-center" id="mostra_retirado">
+            <table class="table table-striped text-center" id="mostra_pendencia">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
@@ -19,7 +19,7 @@
         </div>
         <div class="col-md-6">
             <button type="button" class="btn btn-success my-3" data-toggle="modal" data-target="#historico"><i class="fas fa-plus-circle"></i> Histórico</button>
-            <table class="table table-striped text-center" id="mostra_inserido">
+            <table class="table table-striped text-center" id="mostra_historico">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
