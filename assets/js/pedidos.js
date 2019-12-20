@@ -1,3 +1,5 @@
+moment.locale('pt-BR');
+
 var produtos_inseridos = [];
 $("#insere_valor_pago").maskMoney();
 //Serve para limitar o numero de botoes da paginaçao

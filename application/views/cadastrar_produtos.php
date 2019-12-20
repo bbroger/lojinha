@@ -78,12 +78,8 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="col">
-                                        <label for="valorVarejo">Valor varejo</label>
-                                        <input type="text" class="form-control" id="valorVarejo" data-decimal="." value="" placeholder="" autocomplete="off">
-                                    </div>
-                                    <div class="col">
-                                    <label for="valorAtacado">Valor atacado</label>
-                                        <input type="text" class="form-control" id="valorAtacado" data-decimal="." value="" placeholder="" autocomplete="off">
+                                        <label for="valor">Valor</label>
+                                        <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
                                     </div>
                                 </div>
                                 <br>
@@ -179,7 +175,7 @@
                                 <div class="form-row">
                                     <div class="col">
                                         <label for="qtde_atual_estoque">Qtde atual</label>
-                                        <input type="number" class="form-control" id="qtde_atual_estoque" value="" placeholder="" autocomplete="off" disabled>
+                                        <input type="number" class="form-control" id="qtde_atual_estoque" value="0" placeholder="" autocomplete="off" disabled>
                                     </div>
                                     <div class="col">
                                         <label for="qtde_acao_estoque" id="label_acao_estoque">Adicionar</label>

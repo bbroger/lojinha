@@ -5,8 +5,8 @@ class Produtos_model extends CI_Model
     public function tabela_produtos()
     {
         $sql = "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, 
-            (produtos.quantidade - SUM(transacao.quantidade)) AS nova_quantidade 
-            FROM produtos LEFT JOIN transacao ON produtos.id_produto = transacao.id_produto AND transacao.status= 'ativo' GROUP BY produtos.id_produto";
+            (produtos.quantidade - SUM(produtos_pedido.quantidade)) AS nova_quantidade 
+            FROM produtos LEFT JOIN produtos_pedido ON produtos.id_produto = produtos_pedido.id_produto AND produtos_pedido.status= 'ativo' GROUP BY produtos.id_produto";
         $query = $this->db->query($sql);
         return $query->result_array();
     }

@@ -96,10 +96,10 @@ table.on('click', '.save', function () {
             tdDesc.html(firstUp(tdDesc.find('input').val()));
             tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
 
-            tr.find("td").eq(7).find('button').eq(0).prop('disabled', true);
-            tr.find("td").eq(7).find('button').eq(1).prop('disabled', false);
-            tr.find("td").eq(7).find('button').eq(2).prop('disabled', false);
-            tr.find("td").eq(7).find('button').eq(3).prop('disabled', false);
+            tr.find("td").eq(6).find('button').eq(0).prop('disabled', true);
+            tr.find("td").eq(6).find('button').eq(1).prop('disabled', false);
+            tr.find("td").eq(6).find('button').eq(2).prop('disabled', false);
+            tr.find("td").eq(6).find('button').eq(3).prop('disabled', false);
         } else {
             tdNome.find('input').css({ border: "1px solid red", color: "red" });
             tdDesc.find('input').css({ border: "1px solid red", color: "red" });
@@ -115,9 +115,9 @@ table.on('click', '.save', function () {
 table.on('click', '.block', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
-    var tdStatus = tr.find("td").eq(6);
-    var tdButtonStatusEdit = tr.find("td").eq(7).find('button').eq(1);
-    var tdButtonStatus = tr.find("td").eq(7).find('button').eq(2);
+    var tdStatus = tr.find("td").eq(5);
+    var tdButtonStatusEdit = tr.find("td").eq(6).find('button').eq(1);
+    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(2);
 
     $.ajax({
         url: url_ajax("Produtos/desativar_produto"),
@@ -143,9 +143,9 @@ table.on('click', '.block', function () {
 table.on('click', '.activ', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
-    var tdStatus = tr.find("td").eq(6);
-    var tdButtonStatusEdit = tr.find("td").eq(7).find('button').eq(1);
-    var tdButtonStatus = tr.find("td").eq(7).find('button').eq(2);
+    var tdStatus = tr.find("td").eq(5);
+    var tdButtonStatusEdit = tr.find("td").eq(6).find('button').eq(1);
+    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(2);
 
     $.ajax({
         url: url_ajax("Produtos/ativar_produto"),
@@ -201,7 +201,7 @@ table.on('click', '.add', function () {
     var tdNome = tr.find("td").eq(1);
     nomeProduto.val(tdNome.html());
 
-    var tdQtde = tr.find("td").eq(5);
+    var tdQtde = tr.find("td").eq(4);
     qtdeAtual.val(tdQtde.html());
 
     $("#mostra_msg_estoque").html("");
@@ -285,7 +285,7 @@ table_promocao.on('click', '.block', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
     var tdStatus = tr.find("td").eq(5);
-    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(0);
+    var tdButtonStatus = tr.find("td").eq(5).find('button').eq(0);
 
     $.ajax({
         url: url_ajax("Produtos/desativar_promocao"),
@@ -311,7 +311,7 @@ table_promocao.on('click', '.activ', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
     var tdStatus = tr.find("td").eq(5);
-    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(0);
+    var tdButtonStatus = tr.find("td").eq(5).find('button').eq(0);
 
     $.ajax({
         url: url_ajax("Produtos/ativar_promocao"),
