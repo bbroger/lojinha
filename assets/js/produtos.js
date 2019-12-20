@@ -285,7 +285,7 @@ table_promocao.on('click', '.block', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
     var tdStatus = tr.find("td").eq(5);
-    var tdButtonStatus = tr.find("td").eq(5).find('button').eq(0);
+    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(0);
 
     $.ajax({
         url: url_ajax("Produtos/desativar_promocao"),
@@ -297,7 +297,7 @@ table_promocao.on('click', '.block', function () {
     }).done(function (data) {
         if (data.status) {
             tdStatus.html("desativado");
-            tdButtonStatus.removeClass('block').addClass('activ').html('<i class="fas fa-check"></i>');
+            tdButtonStatus.removeClass('block').removeClass('btn-danger').addClass('activ').addClass('btn-success').html('<i class="fas fa-check"></i>');
         } else {
             alert(data.msg);
         }
@@ -311,7 +311,7 @@ table_promocao.on('click', '.activ', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
     var tdStatus = tr.find("td").eq(5);
-    var tdButtonStatus = tr.find("td").eq(5).find('button').eq(0);
+    var tdButtonStatus = tr.find("td").eq(6).find('button').eq(0);
 
     $.ajax({
         url: url_ajax("Produtos/ativar_promocao"),
@@ -323,7 +323,7 @@ table_promocao.on('click', '.activ', function () {
     }).done(function (data) {
         if (data.status) {
             tdStatus.html("ativo");
-            tdButtonStatus.removeClass('activ').addClass('block').html('<i class="fas fa-ban"></i>');
+            tdButtonStatus.removeClass('activ').removeClass('btn-success').addClass('block').addClass('btn-danger').html('<i class="fas fa-ban"></i>');
         } else {
             alert(data.msg);
         }

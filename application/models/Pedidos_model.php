@@ -20,8 +20,7 @@ class Pedidos_model extends CI_Model
         $sql = "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, 
             (produtos.quantidade - IF(SUM(produtos_pedido.quantidade) > 0, SUM(produtos_pedido.quantidade), 0)) AS nova_quantidade 
             FROM produtos LEFT JOIN produtos_pedido ON produtos.id_produto = produtos_pedido.id_produto AND produtos_pedido.status= 'ativo' 
-            WHERE produtos.status= 'ativo' 
-            GROUP BY produtos.id_produto HAVING nova_quantidade > 0";
+            WHERE produtos.status= 'ativo' GROUP BY produtos.id_produto HAVING nova_quantidade > 0 ORDER BY produtos.id_produto DESC";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
