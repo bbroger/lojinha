@@ -65,18 +65,18 @@
             <div class="col-2" style="padding-top: 20px;">
                 <div class="row">
                     <div class="col-12">
-                        <div class="row mb-3">
+                        <div class="row">
                             <div class="col">
                                 <label for="search_id_produto">CÓDIGO</label>
                                 <input type="number" min="0" id="search_id_produto" class="form-control">
-                                <small style="color: white; background: red;" id="msg_search_id_produto"></small>
                             </div>
                             <div class="col">
                                 <label for="exampleFormControlInput1">QUANTIDADE</label>
                                 <input type="number" min="0" id="search_quantidade" class="form-control">
-                                <small style="color: white; background: red" id="msg_search_quantidade"></small>
                             </div>
                         </div>
+                        <small style="color: white; background: red" id="msg_search_quantidade"></small><br>
+                        <small style="color: white; background: red;" id="msg_search_id_produto"></small>
                         <button class="btn btn-primary" id="search_inserir" style="width: 100%;">INSERIR PRODUTO</button>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="form-group">
                             <label for="entrega">Data entrega</label>
-                            <input type="date" id="entrega" class="form-control">
+                            <input type="date" id="entrega" class="form-control" value="<?php echo date('Y-m-d'); ?>">
                         </div>
                         <div class="form-group">
                             <label for="obs">Observação</label>
@@ -102,7 +102,6 @@
                         <div class="form-group">
                             <label for="insere_valor_pago">Valor Pago (Opcional)</label>
                             <input type="text" data-decimal="." id="insere_valor_pago" class="form-control" placeholder="Simular troco">
-                            <small style="color: white; background: red" id="msg_finalizar_pedido"></small>
                             <div class="form-check mt-2">
                                 <input class="form-check-input" type="checkbox" value="pagcartao" id="pagcartao">
                                 <label class="form-check-label" for="pagcartao" id="text-pagcartao">
@@ -110,7 +109,8 @@
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" id="finalizar_pedido" style="width: 100%;">FINALIZAR PEDIDO</button>
+                        <small style="color: white; background: red; text-align: center" id="msg_finalizar_pedido"></small>
+                        <button class="btn btn-primary" id="finalizar_pedido" style="width: 100%;">FINALIZAR PEDIDO</button>
                     </div>
                 </div>
             </div>

@@ -42,10 +42,10 @@ class Pedidos extends CI_Controller
 
     public function finalizar_pedido()
     {
-        $this->form_validation->set_rules("nome", "Nome", "trim|required||min_length[3]|max_length[100]");
+        $this->form_validation->set_rules("nome", "Nome", "trim|required|min_length[3]|max_length[100]");
         $this->form_validation->set_rules("endereco", "Endereço", "trim|min_length[3]|max_length[100]");
         $this->form_validation->set_rules("entrega", "Entrega", "trim|required|min_length[3]|max_length[100]");
-        $this->form_validation->set_rules("obs", "Observação", "trim|required|min_length[3]|max_length[100]");
+        $this->form_validation->set_rules("obs", "Observação", "trim|min_length[3]|max_length[100]");
         $this->form_validation->set_rules("valor_pago", "Valor pago", "trim|decimal|min_length[3]");
         $this->form_validation->set_rules("tipo_pag", "Forma pagamento", "trim|in_list[cartao,dinheiro]");
         $this->form_validation->set_rules("itens_produto", "Produtos", "callback_itens_produto_check");
@@ -73,8 +73,7 @@ class Pedidos extends CI_Controller
         }
 
         $pedido['troco'] = ($pedido['valor_pago'] - $pedido['valor_total'] > 0) ? $pedido['valor_pago'] - $pedido['valor_total'] : 0;
-        $pedido['desconto'] = ($pedido['valor_pago'] - $pedido['valor_total'] < 0) ? $pedido['valor_total'] - $pedido['valor_pago'] : 0;
-        $pedido['venda'] = $this->input->post("venda");
+        $pedido['desconto'] = ($pedido['valor_pago'] > 0 && $pedido['valor_pago'] - $pedido['valor_total'] < 0) ? $pedido['valor_total'] - $pedido['valor_pago'] : 0;
 
         $id_pedido = $this->Pedidos_model->salvar_pedido($pedido);
 

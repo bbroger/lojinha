@@ -4,9 +4,11 @@ class Pedidos_model extends CI_Model
 {
     public function busca_produto($id_produto)
     {
-        $sql = "SELECT produtos.*, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo 
+        $sql = "SELECT produtos.*, promocao.quantidade AS qtdPromo, promocao.valor AS valorPromo, 
+                (produtos.quantidade - IF(SUM(produtos_pedido.quantidade) > 0, SUM(produtos_pedido.quantidade), 0)) AS nova_quantidade 
                 FROM produtos LEFT JOIN promocao ON produtos.id_produto = promocao.id_produto AND produtos.status = promocao.status 
-                WHERE produtos.id_produto= $id_produto AND produtos.status = 'ativo' AND produtos.valor > 0 ORDER BY qtdPromo ASC";
+                LEFT JOIN produtos_pedido ON produtos.id_produto = produtos_pedido.id_produto AND produtos_pedido.status= 'ativo' 
+                WHERE produtos.id_produto= $id_produto AND produtos.status = 'ativo' AND produtos.valor > 0 GROUP BY produtos.id_produto HAVING nova_quantidade > 0 ORDER BY qtdPromo ASC";
 
         $query = $this->db->query($sql);
 
@@ -16,7 +18,7 @@ class Pedidos_model extends CI_Model
     public function catalogo()
     {
         $sql = "SELECT produtos.*, CONCAT('R$ ',produtos.valor) AS valor, 
-            (produtos.quantidade - SUM(produtos_pedido.quantidade)) AS nova_quantidade 
+            (produtos.quantidade - IF(SUM(produtos_pedido.quantidade) > 0, SUM(produtos_pedido.quantidade), 0)) AS nova_quantidade 
             FROM produtos LEFT JOIN produtos_pedido ON produtos.id_produto = produtos_pedido.id_produto AND produtos_pedido.status= 'ativo' 
             WHERE produtos.status= 'ativo' 
             GROUP BY produtos.id_produto HAVING nova_quantidade > 0";
@@ -27,7 +29,7 @@ class Pedidos_model extends CI_Model
 
     public function salvar_pedido($data)
     {
-        $this->db->insert('pedido', $data);
+        $this->db->insert('pedidos', $data);
 
         return $this->db->insert_id();
     }

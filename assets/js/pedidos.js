@@ -101,6 +101,7 @@ $("#search_inserir").click(function () {
             }
         });
     }
+    $("#msg_finalizar_pedido").html("");
 });
 
 function delete_produto(row) {
@@ -113,6 +114,7 @@ $("#insere_valor_pago").keyup(function () {
 });
 
 $("#finalizar_pedido").click(function () {
+    table.search('').draw();
     $("#msg_finalizar_pedido").html("");
 
     var nome = $("#nome");
@@ -123,7 +125,7 @@ $("#finalizar_pedido").click(function () {
 
     var valor_pago = $("#insere_valor_pago");
     valor_pago.css({ border: "1px solid #ccc", color: "#737373" });
-    var valor_pago_real= (valor_pago.val().length > 0) ? valor_pago.val().replace(",","") : 0;
+    var valor_pago_real= (valor_pago.val().length > 0) ? valor_pago.val().replace(",","") : '0.00';
 
     var tipo_pag = ($("#pagcartao").is(':checked')) ? 'cartao' : 'dinheiro';
 
@@ -131,11 +133,11 @@ $("#finalizar_pedido").click(function () {
 
     if(produtos_inseridos.length == 0){
         valid = false;
-        $("#msg_transacao").html("Não existem produtos inseridos.");
+        $("#msg_finalizar_pedido").html("Não existem produtos inseridos.");
     } else if (nome.val().length == 0) {
         valid = false;
         nome.css({ border: "1px solid red", color: "red" });
-        $("#msg_transacao").html("Nome é obrigatório");
+        $("#msg_finalizar_pedido").html("Nome é obrigatório");
     }
 
     if (valid) {
@@ -164,14 +166,15 @@ $("#finalizar_pedido").click(function () {
                 $("#msg_search_quantidade").html("");
                 $("#search_id_produto").val("").css({ border: "1px solid #ccc", color: "#737373" });
                 $("#search_quantidade").val("").css({ border: "1px solid #ccc", color: "#737373" });
-                $("#finalizar_transacao").html("FINALIZAR PEDIDO").prop('disabled', false);
+                $("#finalizar_pedido").html("FINALIZAR PEDIDO").prop('disabled', false);
             } else{
                 alert(data.msg);
                 $("#finalizar_pedido").html("FINALIZAR PEDIDO").prop('disabled', false);
             }
         }).fail(function (data) {
             console.log(data);
-            alert("Erro! Não foi possível finalizar a transação. Tente mais tarde.")
+            alert("Erro! Não foi possível finalizar a transação. Tente mais tarde.");
+            $("#finalizar_pedido").html("FINALIZAR PEDIDO").prop('disabled', false);
         });
     }
 });
@@ -224,4 +227,4 @@ function calcula_todos_valores() {
     }
 }
 
-setInterval(function () { table.ajax.reload(); }, 30000);
+setInterval(function () { table.ajax.reload(); }, 3000);
