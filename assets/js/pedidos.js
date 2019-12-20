@@ -119,9 +119,9 @@ $("#finalizar_pedido").click(function () {
 
     var nome = $("#nome");
     nome.css({ border: "1px solid #ccc", color: "#737373" });
-    var endereco = $("#endereco");
+    var endereco = ($("#endereco").val().length > 0) ? $("#endereco").val() : null;
     var entrega = $("#entrega");
-    var obs = $("#obs");
+    var obs = ($("#obs").val().length > 0) ? $("#obs").val() : null;
 
     var valor_pago = $("#insere_valor_pago");
     valor_pago.css({ border: "1px solid #ccc", color: "#737373" });
@@ -146,7 +146,7 @@ $("#finalizar_pedido").click(function () {
             url: url_ajax("Pedidos/finalizar_pedido"),
             type: 'Post',
             dataType: 'json',
-            data: { nome: nome.val(), endereco: endereco.val(), entrega: entrega.val(), obs: obs.val(), valor_pago: valor_pago_real, tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
+            data: { nome: nome.val(), endereco: endereco, entrega: entrega.val(), obs: obs, valor_pago: valor_pago_real, tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
         }).done(function (data) {
             if (data.status) {
                 valor_pago.val("");
