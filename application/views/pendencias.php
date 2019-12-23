@@ -1,15 +1,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <button type="button" class="btn btn-danger my-3" data-toggle="modal" data-target="#pendencia"><i class="fas fa-plus-circle"></i> Pendências</button>
-            <table class="table table-striped text-center" id="mostra_pendencia">
+            <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#lembrete"><i class="fas fa-plus-circle"></i> Lembrete</button>
+            <table class="table table-striped table-bordered text-center" id="mostra_pendencia">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Nome</th>
                         <th scope="col">Valor</th>
                         <th scope="col">Vencimento</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Ação</th>
                     </tr>
                 </thead>
@@ -26,7 +25,6 @@
                         <th scope="col">Nome</th>
                         <th scope="col">Valor</th>
                         <th scope="col">Vencimento</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Ação</th>
                     </tr>
                 </thead>
@@ -75,11 +73,11 @@
     </div>
 </div>
 
-<div class="modal fade text-dark" id="valorInserido" tabindex="-1" role="dialog">
+<div class="modal fade text-dark" id="lembrete" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Registrar valor inserido</h5>
+                <h5 class="modal-title">Cadastrar um lembrete</h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
@@ -94,16 +92,22 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="nome">Qual o valor inserido?</label>
-                                <input type="text" class="form-control" id="valor_inserido" data-decimal="." value="" placeholder="" autocomplete="off">
+                                <label for="nome">Nome da pendencia</label>
+                                <input type="text" class="form-control" id="nome" value="" placeholder="" autocomplete="off">
                             </div>
-                            <div class="form-group">
-                                <label for="descricao">Descreva o motivo (Troco, devolvendo...)</label>
-                                <textarea class="form-control" id="descricao_inserido" value="" placeholder="" autocomplete="off"></textarea>
+                            <div class="row">
+                            <div class="col">
+                                    <label for="descricao">Valor (opcional)</label>
+                                    <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
+                                </div>
+                                <div class="col">
+                                    <label for="descricao">Vencimento</label>
+                                    <input type="date" class="form-control" id="vencimento" value="" placeholder="" autocomplete="off">
+                                </div>
                             </div>
                             <br>
-                            <button type="button" id="salvar_inserido" class="btn btn-primary">
-                                Registrar
+                            <button type="button" id="salvar_pendencia" class="btn btn-primary">
+                                Cadastrar
                             </button>
                         </div>
                     </div>

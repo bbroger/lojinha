@@ -1,19 +1,16 @@
-$("#valor_retirado").maskMoney();
-$("#valor_inserido").maskMoney();
+$("#valor").maskMoney();
 
-var table = $("#mostra_retirado").DataTable({
+var table_pendencia= $("#mostra_pendencia").DataTable({
     "processing": true,
+    "ordering": false,
     "order": [[0, "desc"]],
-    ajax: url_ajax("Pendencias/tabela_retirados"),
+    ajax: url_ajax("Pendencias/tabela_pendencias"),
     "columns": [
-        { "data": "id_movimentacao" },
+        { "data": "tipo" },
+        { "data": "nome" },
         { "data": "valor" },
-        { "data": "descricao" },
-        { "data": "timestamp" },
+        { "data": "vencimento" },
         { "data": "button" }
-    ],
-    "columnDefs": [
-        { "width": "40%", "targets": 2 }
     ],
     "language": {
         "sEmptyTable": "Nenhum registro encontrado",
@@ -40,20 +37,7 @@ var table = $("#mostra_retirado").DataTable({
     }
 });
 
-table.on('click', '.edit', function () {
-    var tr = $(this).closest("tr");
-    var tdValor = tr.find("td").eq(1);
-    var tdDesc = tr.find("td").eq(2);
-
-    tdValor.html("<input type='text' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
-    tdValor.find("input").maskMoney();
-    tdDesc.html("<textarea class='form-control'>" + tdDesc.html() + "</textarea>");
-
-    $(this).closest("td").find('button').eq(0).prop('disabled', false);
-    $(this).closest("td").find('button').eq(1).prop('disabled', true);
-});
-
-table.on('click', '.save', function () {
+table_pendencia.on('click', '.save', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
     var tdValor = tr.find("td").eq(1);
@@ -102,7 +86,7 @@ $("#salvar_retirado").click(function () {
             $("#mostra_msg_retirado").html(data.msg).addClass("text-success");
             valor.val("");
             descricao.val("");
-            table.ajax.reload();
+            table_pendencia.ajax.reload();
         } else {
             $("#mostra_msg_retirado").html(data.msg).addClass("text-danger");
         }
@@ -111,7 +95,7 @@ $("#salvar_retirado").click(function () {
     });
 });
 
-var table_inserido = $("#mostra_inserido").DataTable({
+var table_historico = $("#mostra_inserido").DataTable({
     "processing": true,
     "order": [[0, "desc"]],
     ajax: url_ajax("Pendencias/tabela_inseridos"),
@@ -150,74 +134,34 @@ var table_inserido = $("#mostra_inserido").DataTable({
     }
 });
 
-table_inserido.on('click', '.edit', function () {
-    var tr = $(this).closest("tr");
-    var tdValor = tr.find("td").eq(1);
-    var tdDesc = tr.find("td").eq(2);
+$("#salvar_pendencia").click(function () {
+    var nome = $("#nome");
+    var valor = $("#valor");
+    var vencimento = $("#vencimento");
 
-    tdValor.html("<input type='text' data-decimal='.' class='form-control' value='" + tdValor.html().replace("R$ ", "") + "'>");
-    tdValor.find("input").maskMoney();
-    tdDesc.html("<textarea class='form-control'>" + tdDesc.html() + "</textarea>");
-
-    $(this).closest("td").find('button').eq(0).prop('disabled', false);
-    $(this).closest("td").find('button').eq(1).prop('disabled', true);
-});
-
-table_inserido.on('click', '.save', function () {
-    var tr = $(this).closest("tr");
-    var tdID = tr.find("td").eq(0);
-    var tdValor = tr.find("td").eq(1);
-    var tdDesc = tr.find("td").eq(2);
-
+    $("#mostra_msg_penddencia").html("").removeClass();
     $.ajax({
-        url: url_ajax("Pendencias/editar_valor_inserido"),
+        url: url_ajax("Pendencias/salvar_pendencia"),
         type: "Post",
         data: {
-            id_movimentacao: tdID.html(),            
-            valor: tdValor.find('input').val().replace(",", ""),
-            descricao: firstUp(tdDesc.find('textarea').val())
-        },
-        dataType: "Json"
-    }).done(function (data) {
-        if (data.status) {
-            tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
-            tdDesc.html(firstUp(tdDesc.find('textarea').val()));
-
-            tr.find("td").eq(4).find('button').eq(0).prop('disabled', true);
-            tr.find("td").eq(4).find('button').eq(1).prop('disabled', false);
-        } else {
-            tdValor.find('input').css({ border: "1px solid red", color: "red" });
-            tdDesc.find('textarea').css({ border: "1px solid red", color: "red" });
-            alert(data.msg);
-        }
-    });
-});
-
-$("#salvar_inserido").click(function () {
-    var valor = $("#valor_inserido");
-    var descricao = $("#descricao_inserido");
-
-    $("#mostra_msg_inserido").html("fsdfds").removeClass();
-    $.ajax({
-        url: url_ajax("Pendencias/salvar_valor_inserido"),
-        type: "Post",
-        data: {
+            nome: firstUp(nome.val()),
             valor: valor.val().replace(",", ""),
-            descricao: firstUp(descricao.val())
+            vencimento: vencimento.val()
         },
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
-            $("#mostra_msg_inserido").html(data.msg).addClass("text-success");
-            $("#mostra_msg_inserido");
+            $("#mostra_msg_pendencia").html(data.msg).addClass("text-success");
+            
+            $("#nome").val("");
             valor.val("");
-            descricao.val("");
-            table_inserido.ajax.reload();
+            vencimento.val("");
+            table_pendencia.ajax.reload();
         } else {
-            $("#mostra_msg_inserido").html(data.msg).addClass("text-danger");
+            $("#mostra_msg_pendencia").html(data.msg).addClass("text-danger");
         }
     }).fail(function (data) {
-        alert('Erro ao registrar o valor inserido. Tente mais tarde');
+        alert('Erro ao registrar a pendencia. Tente mais tarde');
     });
 });
 

@@ -36,10 +36,10 @@
                     <a class="nav-link" href="<?php echo base_url('Produtos/'); ?>">Cadastrar produto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url('Vendas/'); ?>">Vendas</a>
+                    <a class="nav-link" href="<?php echo base_url('Pendencias/'); ?>">Pendências</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url("Contas/"); ?>">Contas</a>
+                    <a class="nav-link" href="<?php echo base_url("Contas/"); ?>">Relatório</a>
                 </li>
             </ul>
             <a class="navbar-brand mr-auto" href="#">Tato Sorvetes</a>

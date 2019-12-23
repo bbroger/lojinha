@@ -17,20 +17,22 @@ class Pendencias extends CI_Controller
         $this->load->view('pendencias');
     }
 
-    public function tabela_pendecias()
+    public function tabela_pendencias()
     {
-        $pendencias = $this->Gerenciamento_model->pendencias();
+        $pendencias = $this->Pendencias_model->pendencias();
         if ($pendencias) {
+            usort($pendencias, function($a, $b) {
+                return $b['vencimento'] <=> $a['vencimento'];
+            });
             foreach ($pendencias as $key => $value) {
                 foreach ($value as $chave => $valor) {
-                    if ($chave == 'timestamp') {
-                        $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d H:i:s', $valor)->format('d/m');
+                    if ($chave == 'vencimento') {
+                        $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d', $valor)->format('d/m');
                     } else {
                         $data['data'][$key][$chave] = $valor;
                     }
                 }
-                $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button>';
+                $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save"><i class="fas fa-check"></i>';
             }
 
             echo json_encode($data);
@@ -39,14 +41,14 @@ class Pendencias extends CI_Controller
         }
     }
 
-    public function tabela_inseridos()
+    public function tabela_historico()
     {
-        $inseridos = $this->Gerenciamento_model->tabela_inseridos();
-        if ($inseridos) {
-            foreach ($inseridos as $key => $value) {
+        $historico = $this->Pendencias_model->tabela_historico();
+        if ($historico) {
+            foreach ($historico as $key => $value) {
                 foreach ($value as $chave => $valor) {
-                    if ($chave == 'timestamp') {
-                        $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d H:i:s', $valor)->format('d/m');
+                    if ($chave == 'vencimento') {
+                        $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d ', $valor)->format('d/m');
                     } else {
                         $data['data'][$key][$chave] = $valor;
                     }
@@ -61,10 +63,11 @@ class Pendencias extends CI_Controller
         }
     }
 
-    public function salvar_valor_retirado()
+    public function salvar_pendencia()
     {
-        $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|required|decimal|min_length[3]");
-        $this->form_validation->set_rules("descricao", "<b>Nome Descrição</b>", "trim|required|min_length[3]");
+        $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]");
+        $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|decimal|min_length[3]");
+        $this->form_validation->set_rules("vencimento", "<b>Vencimento</b>", "trim|required|exact_length[10]", ["exact_length"=> "Data inválida"]);
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors();
@@ -73,13 +76,13 @@ class Pendencias extends CI_Controller
 
             return false;
         } else {
+            $data['nome'] = $this->input->post("nome");
             $data['valor'] = $this->input->post("valor");
-            $data['descricao'] = $this->input->post("descricao");
-            $data['tipo'] = 'retirado';
+            $data['vencimento'] = $this->input->post("vencimento");
 
-            $this->Gerenciamento_model->salvar_valor_retirado($data);
+            $this->Pendencias_model->salvar_pendencia($data);
 
-            $data['msg'] = "<p><b>Valor retirado registrado com sucesso!</b></p>";
+            $data['msg'] = "<p><b>Pendencia registrado com sucesso!</b></p>";
             $data['status'] = true;
             echo json_encode($data);
 
@@ -104,7 +107,7 @@ class Pendencias extends CI_Controller
             $data['valor'] = $this->input->post("valor");
             $data['descricao'] = $this->input->post("descricao");
 
-            $this->Gerenciamento_model->editar_valor_retirado($data, $id_movimentacao);
+            $this->Pendencias_model->editar_valor_retirado($data, $id_movimentacao);
             $data['status'] = true;
             echo json_encode($data);
         }
@@ -126,7 +129,7 @@ class Pendencias extends CI_Controller
             $data['descricao'] = $this->input->post("descricao");
             $data['tipo'] = 'inserido';
 
-            $this->Gerenciamento_model->salvar_valor_inserido($data);
+            $this->Pendencias_model->salvar_valor_inserido($data);
 
             $data['msg'] = "<p><b>Valor inserido registrado com sucesso!</b></p>";
             $data['status'] = true;
@@ -153,7 +156,7 @@ class Pendencias extends CI_Controller
             $data['valor'] = $this->input->post("valor");
             $data['descricao'] = $this->input->post("descricao");
 
-            $this->Gerenciamento_model->editar_valor_inserido($data, $id_movimentacao);
+            $this->Pendencias_model->editar_valor_inserido($data, $id_movimentacao);
             $data['status'] = true;
             echo json_encode($data);
         }

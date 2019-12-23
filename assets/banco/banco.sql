@@ -30,7 +30,7 @@ CREATE TABLE `acao_estoque` (
   `acao` varchar(10) DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_acao_estoque`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +48,49 @@ CREATE TABLE `movimentacao` (
   `status` varchar(10) DEFAULT 'ativo',
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_movimentacao`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pedidos`
+--
+
+DROP TABLE IF EXISTS `pedidos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `pedidos` (
+  `id_pedido` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) DEFAULT NULL,
+  `endereco` varchar(45) DEFAULT NULL,
+  `entrega` date DEFAULT NULL,
+  `obs` varchar(45) DEFAULT NULL,
+  `valor_total` decimal(6,2) NOT NULL,
+  `valor_pago` decimal(6,2) NOT NULL,
+  `troco` decimal(6,2) NOT NULL DEFAULT '0.00',
+  `desconto` decimal(6,2) NOT NULL DEFAULT '0.00',
+  `tipo_pagamento` varchar(10) NOT NULL,
+  `status` varchar(10) NOT NULL DEFAULT 'ativo',
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_pedido`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pendencias`
+--
+
+DROP TABLE IF EXISTS `pendencias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `pendencias` (
+  `id_pendencia` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) NOT NULL,
+  `valor` float(5,2) DEFAULT NULL,
+  `vencimento` date NOT NULL,
+  `status` varchar(45) DEFAULT 'ativo',
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_pendencia`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,13 +104,32 @@ CREATE TABLE `produtos` (
   `id_produto` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) NOT NULL,
   `descricao` varchar(45) DEFAULT NULL,
-  `valorVarejo` decimal(6,2) NOT NULL DEFAULT '0.00',
-  `valorAtacado` decimal(6,2) NOT NULL DEFAULT '0.00',
+  `valor` decimal(6,2) NOT NULL DEFAULT '0.00',
   `quantidade` int(11) NOT NULL DEFAULT '0',
   `status` varchar(45) NOT NULL DEFAULT 'ativo',
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_produto`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `produtos_pedido`
+--
+
+DROP TABLE IF EXISTS `produtos_pedido`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `produtos_pedido` (
+  `id_produto_pedido` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pedido` int(11) NOT NULL,
+  `id_produto` int(11) NOT NULL,
+  `valor` decimal(6,2) NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  `promocao` varchar(45) DEFAULT NULL,
+  `status` varchar(45) DEFAULT 'ativo',
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_produto_pedido`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,45 +147,7 @@ CREATE TABLE `promocao` (
   `status` varchar(45) DEFAULT 'ativo',
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_promocao`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `transacao`
---
-
-DROP TABLE IF EXISTS `transacao`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `transacao` (
-  `id_transacao` int(11) NOT NULL AUTO_INCREMENT,
-  `valor_total` decimal(6,2) NOT NULL,
-  `valor_pago` decimal(6,2) NOT NULL,
-  `troco` decimal(6,2) NOT NULL DEFAULT '0.00',
-  `desconto` decimal(6,2) NOT NULL DEFAULT '0.00',
-  `tipo_pagamento` varchar(10) NOT NULL,
-  `venda` varchar(10) NOT NULL,
-  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_transacao`)
-) ENGINE=InnoDB AUTO_INCREMENT=340 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `vendas`
---
-
-DROP TABLE IF EXISTS `vendas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `vendas` (
-  `id_vendas` int(11) NOT NULL AUTO_INCREMENT,
-  `id_transacao` int(11) NOT NULL,
-  `id_produto` int(11) NOT NULL,
-  `valor` decimal(6,2) NOT NULL,
-  `quantidade` int(11) NOT NULL,
-  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_vendas`)
-) ENGINE=InnoDB AUTO_INCREMENT=808 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -136,4 +159,4 @@ CREATE TABLE `vendas` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-14  2:33:27
+-- Dump completed on 2019-12-23 15:07:08
