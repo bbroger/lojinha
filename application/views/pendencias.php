@@ -97,7 +97,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="nome">Nome da pendencia</label>
+                                <label for="nome">Nome do lembrete</label>
                                 <input type="text" class="form-control" id="nome" value="" placeholder="" autocomplete="off">
                             </div>
                             <div class="row">

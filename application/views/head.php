@@ -36,7 +36,7 @@
                     <a class="nav-link" href="<?php echo base_url('Produtos/'); ?>">Cadastrar produto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url('Pendencias/'); ?>">Pendências</a>
+                    <a class="nav-link" href="<?php echo base_url('Pendencias/'); ?>">Lembrete</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url("Contas/"); ?>">Relatório</a>
@@ -45,10 +45,10 @@
             <a class="navbar-brand mr-auto" href="#">Tato Sorvetes</a>
             <ul class="navbar-nav">
                 <li class="nav-item mr-1">
-                    <button class="btn btn-info disabled">0 lembrete(s) pendente(s)</button>
+                    <?php echo $lembretes['lembretes']; ?>
                 </li>
                 <li class="nav-item">
-                    <button class="btn btn-danger disabled">0 lembrete(s) vence(m) hoje</button>
+                <?php echo $lembretes['vencidos']; ?>
                 </li>
             </ul>
         </div>
