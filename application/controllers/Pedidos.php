@@ -64,7 +64,7 @@ class Pedidos extends CI_Controller
         $pedido['entrega']= $this->input->post("entrega");
         $pedido['obs']= $this->input->post("obs");
         $pedido['obs']= (strlen($pedido['obs']) > 0) ? $pedido['obs'] : null;
-        $pedido['valor_pago'] = $this->input->post("valor_pago");
+        $pedido['valor_pago'] = 0;
         $pedido['tipo_pagamento'] = $this->input->post("tipo_pag");
         $itens = $this->input->post("itens_produto");
 

@@ -6,11 +6,53 @@ var table_pendencia= $("#mostra_pendencia").DataTable({
     "order": [[0, "desc"]],
     ajax: url_ajax("Pendencias/tabela_pendencias"),
     "columns": [
+        { "data": "id" },
         { "data": "tipo" },
         { "data": "nome" },
         { "data": "valor" },
+        { "data": "ende" },
+        { "data": "obs" },
         { "data": "vencimento" },
         { "data": "button" }
+    ],
+    "language": {
+        "sEmptyTable": "Nenhum registro encontrado",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "_MENU_ resultados por página",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "sSearch": "Pesquisar",
+        "oPaginate": {
+            "sNext": "Próximo",
+            "sPrevious": "Anterior",
+            "sFirst": "Primeiro",
+            "sLast": "Último"
+        },
+        "oAria": {
+            "sSortAscending": ": Ordenar colunas de forma ascendente",
+            "sSortDescending": ": Ordenar colunas de forma descendente"
+        }
+    }
+});
+
+var table_historico= $("#mostra_historico").DataTable({
+    "processing": true,
+    "ordering": false,
+    "order": [[0, "desc"]],
+    ajax: url_ajax("Pendencias/tabela_historico"),
+    "columns": [
+        { "data": "id" },
+        { "data": "tipo" },
+        { "data": "nome" },
+        { "data": "valor" },
+        { "data": "ende" },
+        { "data": "obs" },
+        { "data": "vencimento" }
     ],
     "language": {
         "sEmptyTable": "Nenhum registro encontrado",
@@ -40,98 +82,26 @@ var table_pendencia= $("#mostra_pendencia").DataTable({
 table_pendencia.on('click', '.save', function () {
     var tr = $(this).closest("tr");
     var tdID = tr.find("td").eq(0);
-    var tdValor = tr.find("td").eq(1);
-    var tdDesc = tr.find("td").eq(2);
+    var tdTipo = tr.find("td").eq(1);
 
     $.ajax({
-        url: url_ajax("Pendencias/editar_valor_retirado"),
+        url: url_ajax("Pendencias/tirar_pendencia"),
         type: "Post",
         data: {
-            id_movimentacao: tdID.html(),            
-            valor: tdValor.find('input').val().replace(",", ""),
-            descricao: firstUp(tdDesc.find('textarea').val())
+            tipo: tdTipo.html(),
+            id: tdID.html()
         },
         dataType: "Json"
     }).done(function (data) {
         if (data.status) {
-            tdValor.html("R$ " + tdValor.find('input').val().replace(",", ""));
-            tdDesc.html(firstUp(tdDesc.find('textarea').val()));
-
-            tr.find("td").eq(4).find('button').eq(0).prop('disabled', true);
-            tr.find("td").eq(4).find('button').eq(1).prop('disabled', false);
+            table_pendencia.ajax.reload();
+            table_historico.ajax.reload();            
         } else {
-            tdValor.find('input').css({ border: "1px solid red", color: "red" });
-            tdDesc.find('textarea').css({ border: "1px solid red", color: "red" });
             alert(data.msg);
         }
+    }).fail(function (data){
+        console.log(data);
     });
-});
-
-$("#salvar_retirado").click(function () {
-    var valor = $("#valor_retirado");
-    var descricao = $("#descricao_retirado");
-
-    $("#mostra_msg_retirado").html("").removeClass();
-    $.ajax({
-        url: url_ajax("Pendencias/salvar_valor_retirado"),
-        type: "Post",
-        data: {
-            valor: valor.val().replace(",", ""),
-            descricao: firstUp(descricao.val()),
-            tipo: 'retirado'
-        },
-        dataType: "Json"
-    }).done(function (data) {
-        if (data.status) {
-            $("#mostra_msg_retirado").html(data.msg).addClass("text-success");
-            valor.val("");
-            descricao.val("");
-            table_pendencia.ajax.reload();
-        } else {
-            $("#mostra_msg_retirado").html(data.msg).addClass("text-danger");
-        }
-    }).fail(function (data) {
-        alert('Erro ao criar o valor retirado. Tente mais tarde');
-    });
-});
-
-var table_historico = $("#mostra_inserido").DataTable({
-    "processing": true,
-    "order": [[0, "desc"]],
-    ajax: url_ajax("Pendencias/tabela_inseridos"),
-    "columns": [
-        { "data": "id_movimentacao" },
-        { "data": "valor" },
-        { "data": "descricao" },
-        { "data": "timestamp" },
-        { "data": "button" }
-    ],
-    "columnDefs": [
-        { "width": "40%", "targets": 2 }
-    ],
-    "language": {
-        "sEmptyTable": "Nenhum registro encontrado",
-        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-        "sInfoPostFix": "",
-        "sInfoThousands": ".",
-        "sLengthMenu": "_MENU_ resultados por página",
-        "sLoadingRecords": "Carregando...",
-        "sProcessing": "Processando...",
-        "sZeroRecords": "Nenhum registro encontrado",
-        "sSearch": "Pesquisar",
-        "oPaginate": {
-            "sNext": "Próximo",
-            "sPrevious": "Anterior",
-            "sFirst": "Primeiro",
-            "sLast": "Último"
-        },
-        "oAria": {
-            "sSortAscending": ": Ordenar colunas de forma ascendente",
-            "sSortDescending": ": Ordenar colunas de forma descendente"
-        }
-    }
 });
 
 $("#salvar_pendencia").click(function () {

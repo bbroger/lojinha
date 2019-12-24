@@ -123,10 +123,6 @@ $("#finalizar_pedido").click(function () {
     var entrega = $("#entrega");
     var obs = ($("#obs").val().length > 0) ? $("#obs").val() : null;
 
-    var valor_pago = $("#insere_valor_pago");
-    valor_pago.css({ border: "1px solid #ccc", color: "#737373" });
-    var valor_pago_real= (valor_pago.val().length > 0) ? valor_pago.val().replace(",","") : '0.00';
-
     var tipo_pag = ($("#pagcartao").is(':checked')) ? 'cartao' : 'dinheiro';
 
     var valid = true;
@@ -146,10 +142,9 @@ $("#finalizar_pedido").click(function () {
             url: url_ajax("Pedidos/finalizar_pedido"),
             type: 'Post',
             dataType: 'json',
-            data: { nome: nome.val(), endereco: endereco, entrega: entrega.val(), obs: obs, valor_pago: valor_pago_real, tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
+            data: { nome: nome.val(), endereco: endereco, entrega: entrega.val(), obs: obs, tipo_pag: tipo_pag, itens_produto: produtos_inseridos }
         }).done(function (data) {
             if (data.status) {
-                valor_pago.val("");
                 produtos_inseridos = [];
                 $("#tabela_produtos_inseridos").html("");
                 $("#mostra_valor_total").html("R$ 0,00");
@@ -160,7 +155,6 @@ $("#finalizar_pedido").click(function () {
                 $("#endereco").val("");
                 $("#entrega").val(moment().format('YYYY-MM-DD'));
                 $("#obs").val("");
-                $("#insere_valor_pago").val("");
                 
                 $("#msg_search_id_produto").html("");
                 $("#msg_search_quantidade").html("");
@@ -205,7 +199,7 @@ function calcula_todos_valores() {
     $("#mostra_valor_pago").html("R$ 0,00");
     $("#mostra_troco").html("R$ 0,00");
     if (produtos_inseridos.length > 0) {
-        var pega_valor_pago = parseFloat($("#insere_valor_pago").val().replace(",", ""));
+        var pega_valor_pago = 0;
         var valor_pago = ($.isNumeric(pega_valor_pago)) ? pega_valor_pago : 0;
         var valor_total = 0;
         $.each(produtos_inseridos, function (i, value) {
@@ -223,7 +217,6 @@ function calcula_todos_valores() {
             $("#mostra_troco").html("R$ 0,00");
         }
     } else {
-        $("#insere_valor_pago").val("");
     }
 }
 

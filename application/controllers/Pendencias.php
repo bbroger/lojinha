@@ -21,8 +21,8 @@ class Pendencias extends CI_Controller
     {
         $pendencias = $this->Pendencias_model->pendencias();
         if ($pendencias) {
-            usort($pendencias, function($a, $b) {
-                return $b['vencimento'] <=> $a['vencimento'];
+            usort($pendencias, function ($a, $b) {
+                return $a['vencimento'] <=> $b['vencimento'];
             });
             foreach ($pendencias as $key => $value) {
                 foreach ($value as $chave => $valor) {
@@ -43,18 +43,20 @@ class Pendencias extends CI_Controller
 
     public function tabela_historico()
     {
-        $historico = $this->Pendencias_model->tabela_historico();
-        if ($historico) {
-            foreach ($historico as $key => $value) {
+        $pendencias = $this->Pendencias_model->historico();
+        if ($pendencias) {
+            usort($pendencias, function ($a, $b) {
+                return $b['vencimento'] <=> $a['vencimento'];
+            });
+            foreach ($pendencias as $key => $value) {
                 foreach ($value as $chave => $valor) {
                     if ($chave == 'vencimento') {
-                        $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d ', $valor)->format('d/m');
+                        $data['data'][$key][$chave] = DateTime::createFromFormat('Y-m-d', $valor)->format('d/m');
                     } else {
                         $data['data'][$key][$chave] = $valor;
                     }
                 }
-                $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save" disabled><i class="fas fa-save"></i></button> 
-                    <button style="padding: 0 5px;" class="btn btn-warning edit"><i class="fas fa-edit"></i></button>';
+                $data['data'][$key]['button'] = '<button style="padding: 0 5px;" class="btn btn-success save"><i class="fas fa-check"></i>';
             }
 
             echo json_encode($data);
@@ -67,7 +69,7 @@ class Pendencias extends CI_Controller
     {
         $this->form_validation->set_rules("nome", "<b>Nome</b>", "trim|required|min_length[3]");
         $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|decimal|min_length[3]");
-        $this->form_validation->set_rules("vencimento", "<b>Vencimento</b>", "trim|required|exact_length[10]", ["exact_length"=> "Data inválida"]);
+        $this->form_validation->set_rules("vencimento", "<b>Vencimento</b>", "trim|required|exact_length[10]", ["exact_length" => "Data inválida"]);
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors();
@@ -90,11 +92,10 @@ class Pendencias extends CI_Controller
         }
     }
 
-    public function editar_valor_retirado()
+    public function tirar_pendencia()
     {
-        $this->form_validation->set_rules("id_movimentacao", "Movimentação", "trim|required|max_length[11]|combines[movimentacao.id_movimentacao]");
-        $this->form_validation->set_rules("valor", "Valor", "trim|required|decimal|min_length[3]");
-        $this->form_validation->set_rules("descricao", "Descrição", "trim|required|min_length[3]");
+        $this->form_validation->set_rules("tipo", "Tipo", "trim|required|in_list[pedido,lembrete]");
+        $this->form_validation->set_rules("id", "ID", "trim|required|integer|max_length[11]");
 
         if (!$this->form_validation->run()) {
             $data['msg'] = validation_errors(" ", " ");
@@ -103,60 +104,17 @@ class Pendencias extends CI_Controller
 
             return false;
         } else {
-            $id_movimentacao = $this->input->post("id_movimentacao");
-            $data['valor'] = $this->input->post("valor");
-            $data['descricao'] = $this->input->post("descricao");
+            $id = $this->input->post("id");
+            $tipo = $this->input->post("tipo");
+            if ($tipo == "lembrete") {
+                $tabela = "pendencias";
+                $id_tabela = "id_pendencia";
+            } else {
+                $tabela = "pedidos";
+                $id_tabela = "id_pedido";
+            }
 
-            $this->Pendencias_model->editar_valor_retirado($data, $id_movimentacao);
-            $data['status'] = true;
-            echo json_encode($data);
-        }
-    }
-
-    public function salvar_valor_inserido()
-    {
-        $this->form_validation->set_rules("valor", "<b>Valor</b>", "trim|required|decimal|min_length[3]");
-        $this->form_validation->set_rules("descricao", "<b>Nome Descrição</b>", "trim|required|min_length[3]");
-
-        if (!$this->form_validation->run()) {
-            $data['msg'] = validation_errors();
-            $data['status'] = false;
-            echo json_encode($data);
-
-            return false;
-        } else {
-            $data['valor'] = $this->input->post("valor");
-            $data['descricao'] = $this->input->post("descricao");
-            $data['tipo'] = 'inserido';
-
-            $this->Pendencias_model->salvar_valor_inserido($data);
-
-            $data['msg'] = "<p><b>Valor inserido registrado com sucesso!</b></p>";
-            $data['status'] = true;
-            echo json_encode($data);
-
-            return true;
-        }
-    }
-
-    public function editar_valor_inserido()
-    {
-        $this->form_validation->set_rules("id_movimentacao", "Movimentação", "trim|required|max_length[11]|combines[movimentacao.id_movimentacao]");
-        $this->form_validation->set_rules("valor", "Valor", "trim|required|decimal|min_length[3]");
-        $this->form_validation->set_rules("descricao", "Descrição", "trim|required|min_length[3]");
-
-        if (!$this->form_validation->run()) {
-            $data['msg'] = validation_errors(" ", " ");
-            $data['status'] = false;
-            echo json_encode($data);
-
-            return false;
-        } else {
-            $id_movimentacao = $this->input->post("id_movimentacao");
-            $data['valor'] = $this->input->post("valor");
-            $data['descricao'] = $this->input->post("descricao");
-
-            $this->Pendencias_model->editar_valor_inserido($data, $id_movimentacao);
+            $this->Pendencias_model->tirar_pendencia($id, $tabela, $id_tabela);
             $data['status'] = true;
             echo json_encode($data);
         }

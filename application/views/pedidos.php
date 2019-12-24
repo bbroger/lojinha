@@ -92,22 +92,12 @@
                             <input type="text" id="endereco" placeholder="Opcional" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="entrega">Data entrega</label>
+                            <label for="entrega">Data pagamento</label>
                             <input type="date" id="entrega" class="form-control" value="<?php echo date('Y-m-d'); ?>">
                         </div>
                         <div class="form-group">
                             <label for="obs">Observação</label>
                             <input type="text" id="obs" placeholder="Opcional" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="insere_valor_pago">Valor Pago (Opcional)</label>
-                            <input type="text" data-decimal="." id="insere_valor_pago" class="form-control" placeholder="Simular troco">
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" value="pagcartao" id="pagcartao">
-                                <label class="form-check-label" for="pagcartao" id="text-pagcartao">
-                                    Pagamento cartão
-                                </label>
-                            </div>
                         </div>
                         <small style="color: white; background: red; text-align: center" id="msg_finalizar_pedido"></small>
                         <button class="btn btn-primary" id="finalizar_pedido" style="width: 100%;">FINALIZAR PEDIDO</button>

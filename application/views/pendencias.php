@@ -6,9 +6,12 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Tipo</th>
                         <th scope="col">Nome</th>
                         <th scope="col">Valor</th>
-                        <th scope="col">Vencimento</th>
+                        <th scope="col">End</th>
+                        <th scope="col">Obs</th>
+                        <th scope="col">Venci</th>
                         <th scope="col">Ação</th>
                     </tr>
                 </thead>
@@ -17,15 +20,17 @@
             </table>
         </div>
         <div class="col-md-6">
-            <button type="button" class="btn btn-success my-3" data-toggle="modal" data-target="#historico"><i class="fas fa-plus-circle"></i> Histórico</button>
+            <button type="button" class="btn btn-success my-3" data-toggle="modal" data-target="#historico" disabled>Histórico</button>
             <table class="table table-striped text-center" id="mostra_historico">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Tipo</th>
                         <th scope="col">Nome</th>
                         <th scope="col">Valor</th>
-                        <th scope="col">Vencimento</th>
-                        <th scope="col">Ação</th>
+                        <th scope="col">End</th>
+                        <th scope="col">Obs</th>
+                        <th scope="col">Venci</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,7 +101,7 @@
                                 <input type="text" class="form-control" id="nome" value="" placeholder="" autocomplete="off">
                             </div>
                             <div class="row">
-                            <div class="col">
+                                <div class="col">
                                     <label for="descricao">Valor (opcional)</label>
                                     <input type="text" class="form-control" id="valor" data-decimal="." value="" placeholder="" autocomplete="off">
                                 </div>
