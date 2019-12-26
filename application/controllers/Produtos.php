@@ -7,12 +7,13 @@ class Produtos extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('Lembrete_Lib');
         $this->load->model('Produtos_model');
     }
 
     public function index()
     {
-        $this->load->view('head');
+        $this->load->view('head', ["lembretes"=> $this->lembrete_lib->consulta_pendencias()]);
         $this->load->view('cadastrar_produtos');
     }
 
